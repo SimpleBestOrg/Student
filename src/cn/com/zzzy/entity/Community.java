@@ -2,10 +2,12 @@ package cn.com.zzzy.entity;
 
 import java.util.Date;
 
+/**
+ * 社团表
+ * @author Admin
+ *
+ */
 public class Community {
-	/**
-	 * 社团申请表
-	 */
 	private int communityId;//社团ID
 	private String communityName;//社团的名称
 	private int communityPersonNum;//社团限制人数

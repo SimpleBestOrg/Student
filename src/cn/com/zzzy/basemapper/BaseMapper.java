@@ -8,17 +8,17 @@ import java.util.List;
  *
  */
 public interface BaseMapper {
-	
-	//根据条件查询
-	public List<Class> queryList(Integer id);
-	
-	//根据条件删除
-	public void delete(Object obj);
-	
-	//根据条件增加
-	public void  save(Object obj);
-	
-	//根据条件更新 
-	public void  update(Object obj); 
-	
+
+    // 根据条件查询
+    List<Class> queryList(Integer id);
+
+    // 根据条件删除
+    void delete(Object obj);
+
+    // 根据条件增加
+    void save(Object obj);
+
+    // 根据条件更新
+    void update(Object obj);
+
 }

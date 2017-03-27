@@ -16,5 +16,5 @@ public interface ActivityMapper extends BaseMapper {
      * 查询全部
      * @return 返回所有查询结果
      */
-    public List<Activity> queryList();
+    List<Activity> queryList();
 }

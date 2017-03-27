@@ -5,7 +5,6 @@ import java.util.Date;
 /**
  * 活动表
  * @author Admin
- *
  */
 public class Activity {
 	private int activityId;// 活动Id
