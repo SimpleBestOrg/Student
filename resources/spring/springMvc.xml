@@ -12,4 +12,12 @@
 		http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-4.2.xsd">
 	<context:component-scan base-package="cn.com.zzzy"></context:component-scan>
 	<mvc:annotation-driven></mvc:annotation-driven>
+	
+	<!--文件上传-->
+	<bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
+			<!--设置文件上传的最大尺寸为5MB   如果上传表单的type类型为multipart类型  则必须配置  否则绑定参数不成功-->
+			<property name="maxUploadSize">
+				<value>5242880</value>
+			</property>
+	</bean>
 </beans>

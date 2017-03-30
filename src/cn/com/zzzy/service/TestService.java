@@ -1,13 +1,17 @@
 package cn.com.zzzy.service;
 
+import java.io.IOException;
 import java.util.List;
 
-import cn.com.zzzy.entity.Activity;
+import org.springframework.web.multipart.MultipartFile;
+
+import cn.com.zzzy.entity.ActivityPhoto;
 /**
- * Test测试类接口
+ * 测试之后 可以删除
  * @author Admin
  *
  */
 public interface TestService {
-    List<Activity> queryList();
+    List<ActivityPhoto> queryList();
+    String  insertPhoto(ActivityPhoto ap) throws IllegalStateException, IOException;
 }

@@ -7,13 +7,13 @@ import java.util.List;
  * @author Admin
  *
  */
-public interface BaseMapper {
+public interface BaseMapper<T> {
 
     // 根据条件查询
-    List<Class> queryList(Integer id);
+    List<T> queryList(Integer id);
 
     // 根据条件删除
-    void delete(Object obj);
+    void delete(Integer id);
 
     // 根据条件增加
     void save(Object obj);
