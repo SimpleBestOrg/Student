@@ -1,4 +1,4 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8"
+`<%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
@@ -227,23 +227,19 @@
 										
 								</div>
 						</div>
-						<div class="jumbotron" >
-								<div class="jumbotronTop">
-								
-								</div>
-								<div class="jumbotronBottom">
-										
-								</div>
+						<div class="editor" >
+							
 						</div>						
 				</div>	
 				
 							
 	</div>
-	<!--底部模块 -->
-	<div  class="bootomInfo">
-				
-	</div>	
+
 </div>
 
 </body>
 </html>
+
+<script type="text/javascript">
+		$('#editor').wysiwyg();
+</script>

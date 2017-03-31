@@ -2,14 +2,12 @@ package cn.com.zzzy.controller;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.List;
 import java.util.UUID;
-
-import javax.annotation.Resource;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -65,4 +63,36 @@ public class handler {
 		view.setViewName("/front/view.jsp");
 		return view;
 	}
+	
+	@RequestMapping("queryJson")
+	@ResponseBody
+	public  Activity  queryJson(@RequestBody Activity ac){
+	    System.out.println("进入controller里面了");
+	    return ac;
+	}
+	@RequestMapping("responseJson")
+	@ResponseBody
+	public Activity responseJson(Activity ac){
+	    return ac;
+	}
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 }

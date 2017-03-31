@@ -45,8 +45,8 @@
 
 <body>
 <div class="container">
-	<div class="row clearfix top">
-		<div class="col-md-12 column">
+		<div class="row clearfix top">
+		 <div class="col-md-12 column">
 			<nav class="navbar navbar-default" role="navigation">
 				<div class="navbar-header">
 					 <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1"> <span class="sr-only">Toggle navigation</span><span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span></button> <a class="navbar-brand" href="#">AAA</a>
@@ -162,10 +162,11 @@
 							</ul>
 						</li>
 					</ul>
+					</div>
 			</nav>
 		</div>
-	</div>
-	<!-- 中间模块 -->
+	  </div>
+	<!-- 左侧模块 -->
 	<div class="leftInfo">
 			<div class="leftside">
 				<ul class="nav nav-pills nav-stacked">
@@ -178,6 +179,7 @@
 				</ul>
 			</div>	
 	</div>
+	
 	<!-- 右部模块  -->	
 	<div class="rightInfo">
 		<div class="jumbotron" >
@@ -185,23 +187,24 @@
 			    <div class="panel-heading">
 			        <h3 class="panel-title">活动</h3>
 			    </div>
-			    <div class="panel-body">
+			      <div class="panel-body">
 			      			<ul class="media-list">
 								<li class="media">
 	  							  <a class="pull-left" href="www.baidu.com">
-			                       <img class="media-object img" src="/Student/front/image/Capture001.png" alt="通用的占位符图像">
-									<div class="media-body">
-			                           <h4 class="media-heading">社团活动    网的女人</h4>
-			                           <h5>这是否第三季开发的时间里反对萨福多三范德萨范德萨范德萨范德萨发的卡发动机索拉卡范德萨这就发动机狂蜂浪蝶范德萨范德萨范德萨</h5>
-		                             </div>
+			                       <img class="media-object img" src="/Student/front/image/Capture001.png" alt="通用的占位符图像" />
+									  <div class="media-body">
+			                              <h4 class="media-heading">社团活动    网的女人</h4>
+			                              <h5>这是否第三季开发的时间里反对萨福多三范德萨范德萨范德萨范德萨发的卡发动机索拉卡范德萨这就发动机狂蜂浪蝶范德萨范德萨范德萨</h5>
+		                              </div>
 		                             <div class="container">
-		                            	<p><span class="glyphicon glyphicon-time"></span><span class="timespan">五天前</span></p>
+		                            	  <p><span class="glyphicon glyphicon-time"></span><span class="timespan">五天前</span></p>
 		                           	 </div>    				
 		                          </a>
 	                          </li>
                            </ul>
 			    </div>
-			    <div class="panel-body">
+
+			      <div class="panel-body">
 			      			<ul class="media-list">
 								<li class="media">
 	  							  <a class="pull-left" href="www.baidu.com">
@@ -217,7 +220,7 @@
 	                          </li>
                            </ul>
 			    </div>
-			    <div class="panel-body">
+			       <div class="panel-body">
 			      			<ul class="media-list">
 								<li class="media">
 	  							  <a class="pull-left" href="www.baidu.com">
@@ -233,9 +236,7 @@
 	                          </li>
                            </ul>
 			    </div>
-		    			    			    
 	       </div>
-	   	
 	  </div>      
 	  
 	  
@@ -248,7 +249,7 @@
 			      			<ul class="media-list">
 								<li class="media">
 	  							  <a class="pull-left" href="www.baidu.com">
-			                       <img class="media-object img" src="/Student/front/image/Capture001.png" alt="通用的占位符图像">
+			                       <img class="media-object img" src="/Student/front/image/Capture001.png" alt="通用的占位符图像" />
 									<div class="media-body">
 			                           <h4 class="media-heading">社团活动    网的女人</h4>
 			                           <h5>这是否第三季开发的时间里反对萨福多三范德萨范德萨范德萨范德萨发的卡发动机索拉卡范德萨这就发动机狂蜂浪蝶范德萨范德萨范德萨</h5>
@@ -295,7 +296,7 @@
 	       </div>
 	  </div>    
 	  
-	  	  	<div class="jumbotron " >
+	     <div class="jumbotron " >
 			<div class="panel panel-primary jumbotronbootom">
 			    <div class="panel-heading">
 			        <h3 class="panel-title">问吧</h3>
@@ -349,9 +350,9 @@
                            </ul>
 			    </div>		    			    
 	       </div>
-	  </div> 
-	  
-	  
+	     </div> 
+	</div>
+   	
 </div>
 
 </body>

@@ -11,10 +11,6 @@ import cn.com.zzzy.entity.Activity;
  *
  */
 
-public interface ActivityMapper extends BaseMapper {
-    /**
-     * 查询全部
-     * @return 返回所有查询结果
-     */
-    List<Activity> queryList();
+public interface ActivityMapper extends BaseMapper<Activity> {
+        
 }

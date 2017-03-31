@@ -11,9 +11,9 @@
 		<script  src="/Student/front/bootstrap/bootstrap.min.js"></script>
 </head>
 	<style type="text/css">
-		   .bootom{
-		   
-		   }
+		.leftside{
+			margin-top:15px;
+		}
 	</style>
 
 <body>
@@ -138,12 +138,25 @@
 		</div>
 	</div>
 	    
-	    
-	    <div class="bootom">
-	    		
-	    </div>
-		
-
+	<!-- 左侧模块 -->
+	<div class="leftInfo">
+			<div class="leftside">
+				<ul class="nav nav-pills nav-stacked">
+				  <li ><a href="#">首页</a></li>
+				  <li><a href="#">活动</a></li>
+				  <li><a href="#">问吧</a></li>
+				  <li class="active"><a href="#">说说</a></li>
+				  <li><a href="#">社团</a></li>
+				  <li><a href="#">个人主页</a></li>
+				</ul>
+			</div>	
+	</div>
+	
+	<!--说说右部模块-->
+	 <div class="rightInfo">
+	 					
+	 </div>   
+	
    </div>
 </body>
 </html>
