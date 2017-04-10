@@ -9,14 +9,19 @@
 		<link rel="stylesheet" type="text/css" href="/Student/front/bootstrap/bootstrap.min.css">
 		<link rel="stylesheet" type="text/css" href="/Student/front/bootstrap/layout.css">
 		<script  src="/Student/front/bootstrap/bootstrap.min.js"></script>
+		
 </head>
-	<style type="text/css">
-		.leftside{
-			margin-top:15px;
-		}
-	</style>
 
+<style type="text/css">
+	.lefeside{
+		margin-top:15px;
+	}
+	.img{
+		width:
+	}
+</style>
 <body>
+
   <div class="container">
 	    <div class="row clearfix top">
 		<div class="col-md-12 column">
@@ -140,7 +145,7 @@
 	    
 	<!-- 左侧模块 -->
 	<div class="leftInfo">
-			<div class="leftside">
+			<div class="lefeside">
 				<ul class="nav nav-pills nav-stacked">
 				  <li ><a href="#">首页</a></li>
 				  <li><a href="#">活动</a></li>

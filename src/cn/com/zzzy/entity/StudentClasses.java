@@ -6,14 +6,14 @@ package cn.com.zzzy.entity;
  *
  */
 public class StudentClasses {
-    private int ClassesId;// 班级ID
+    private Integer ClassesId;// 班级ID
     private String ClassesName;// 班级名称
 
-    public int getClassesId() {
+    public Integer getClassesId() {
         return ClassesId;
     }
 
-    public void setClassesId(int classesId) {
+    public void setClassesId(Integer classesId) {
         ClassesId = classesId;
     }
 

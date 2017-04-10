@@ -6,24 +6,24 @@ package cn.com.zzzy.entity;
  *
  */
 public class StudentRecommeFriend {
-    private int recommId;// 推荐ID
-    private int recommStduentId;// 推荐人的ID,给谁推荐
+    private Integer recommId;// 推荐ID
+    private Integer recommStduentId;// 推荐人的ID,给谁推荐
     private String recommRefereeStudentId;// 被推荐学生ID
-    private int recommReason;// 推荐原因
+    private Integer recommReason;// 推荐原因
 
-    public int getRecommId() {
+    public Integer getRecommId() {
         return recommId;
     }
 
-    public void setRecommId(int recommId) {
+    public void setRecommId(Integer recommId) {
         this.recommId = recommId;
     }
 
-    public int getRecommStduentId() {
+    public Integer getRecommStduentId() {
         return recommStduentId;
     }
 
-    public void setRecommStduentId(int recommStduentId) {
+    public void setRecommStduentId(Integer recommStduentId) {
         this.recommStduentId = recommStduentId;
     }
 
@@ -35,11 +35,11 @@ public class StudentRecommeFriend {
         this.recommRefereeStudentId = recommRefereeStudentId;
     }
 
-    public int getRecommReason() {
+    public Integer getRecommReason() {
         return recommReason;
     }
 
-    public void setRecommReason(int recommReason) {
+    public void setRecommReason(Integer recommReason) {
         this.recommReason = recommReason;
     }
 

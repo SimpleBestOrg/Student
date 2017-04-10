@@ -6,49 +6,49 @@ package cn.com.zzzy.entity;
  *
  */
 public class QuestionTuCao {
-    private int querstionTuCaoId;
-    private int questionId;// 问题的ID
-    private int questionTucaoStep;// 踩
-    private int questionTucaoPraise;// 赞
-    private int questionTucaoStudentId;// 对答案踩赞的学生ID
+    private Integer querstionTuCaoId;
+    private Integer questionId;// 问题的ID
+    private Integer questionTucaoStep;// 踩
+    private Integer questionTucaoPraise;// 赞
+    private Integer questionTucaoStudentId;// 对答案踩赞的学生ID
 
-    public int getQuerstionTuCaoId() {
+    public Integer getQuerstionTuCaoId() {
         return querstionTuCaoId;
     }
 
-    public void setQuerstionTuCaoId(int querstionTuCaoId) {
+    public void setQuerstionTuCaoId(Integer querstionTuCaoId) {
         this.querstionTuCaoId = querstionTuCaoId;
     }
 
-    public int getQuestionId() {
+    public Integer getQuestionId() {
         return questionId;
     }
 
-    public void setQuestionId(int questionId) {
+    public void setQuestionId(Integer questionId) {
         this.questionId = questionId;
     }
 
-    public int getQuestionTucaoStep() {
+    public Integer getQuestionTucaoStep() {
         return questionTucaoStep;
     }
 
-    public void setQuestionTucaoStep(int questionTucaoStep) {
+    public void setQuestionTucaoStep(Integer questionTucaoStep) {
         this.questionTucaoStep = questionTucaoStep;
     }
 
-    public int getQuestionTucaoPraise() {
+    public Integer getQuestionTucaoPraise() {
         return questionTucaoPraise;
     }
 
-    public void setQuestionTucaoPraise(int questionTucaoPraise) {
+    public void setQuestionTucaoPraise(Integer questionTucaoPraise) {
         this.questionTucaoPraise = questionTucaoPraise;
     }
 
-    public int getQuestionTucaoStudentId() {
+    public Integer getQuestionTucaoStudentId() {
         return questionTucaoStudentId;
     }
 
-    public void setQuestionTucaoStudentId(int questionTucaoStudentId) {
+    public void setQuestionTucaoStudentId(Integer questionTucaoStudentId) {
         this.questionTucaoStudentId = questionTucaoStudentId;
     }
 

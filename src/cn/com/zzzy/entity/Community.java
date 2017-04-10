@@ -8,19 +8,19 @@ import java.util.Date;
  *
  */
 public class Community {
-	private int communityId;//社团ID
+	private Integer communityId;//社团ID
 	private String communityName;//社团的名称
-	private int communityPersonNum;//社团限制人数
-	private int communityTeacherID;//老师的ID
+	private Integer communityPersonNum;//社团限制人数
+	private Integer communityTeacherID;//老师的ID
 	private Date communityCreateDate;//社团成立日期
-	private int communityAppliStudent;//社团申请学生的ID
+	private Integer communityAppliStudent;//社团申请学生的ID
 	private String communityAppliReason;//社团申请原因
 	private String communityAppliRespon;//社团的职责
-	private int communityFlag;//申请社团是否批准
-	public int getCommunityId() {
+	private Integer communityFlag;//申请社团是否批准
+	public Integer getCommunityId() {
 		return communityId;
 	}
-	public void setCommunityId(int communityId) {
+	public void setCommunityId(Integer communityId) {
 		this.communityId = communityId;
 	}
 	public String getCommunityName() {
@@ -29,16 +29,16 @@ public class Community {
 	public void setCommunityName(String communityName) {
 		this.communityName = communityName;
 	}
-	public int getCommunityPersonNum() {
+	public Integer getCommunityPersonNum() {
 		return communityPersonNum;
 	}
-	public void setCommunityPersonNum(int communityPersonNum) {
+	public void setCommunityPersonNum(Integer communityPersonNum) {
 		this.communityPersonNum = communityPersonNum;
 	}
-	public int getCommunityTeacherID() {
+	public Integer getCommunityTeacherID() {
 		return communityTeacherID;
 	}
-	public void setCommunityTeacherID(int communityTeacherID) {
+	public void setCommunityTeacherID(Integer communityTeacherID) {
 		this.communityTeacherID = communityTeacherID;
 	}
 	public Date getCommunityCreateDate() {
@@ -47,10 +47,10 @@ public class Community {
 	public void setCommunityCreateDate(Date communityCreateDate) {
 		this.communityCreateDate = communityCreateDate;
 	}
-	public int getCommunityAppliStudent() {
+	public Integer getCommunityAppliStudent() {
 		return communityAppliStudent;
 	}
-	public void setCommunityAppliStudent(int communityAppliStudent) {
+	public void setCommunityAppliStudent(Integer communityAppliStudent) {
 		this.communityAppliStudent = communityAppliStudent;
 	}
 	public String getCommunityAppliReason() {
@@ -65,10 +65,10 @@ public class Community {
 	public void setCommunityAppliRespon(String communityAppliRespon) {
 		this.communityAppliRespon = communityAppliRespon;
 	}
-	public int getCommunityFlag() {
+	public Integer getCommunityFlag() {
 		return communityFlag;
 	}
-	public void setCommunityFlag(int communityFlag) {
+	public void setCommunityFlag(Integer communityFlag) {
 		this.communityFlag = communityFlag;
 	}
 	

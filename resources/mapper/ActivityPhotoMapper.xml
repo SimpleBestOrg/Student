@@ -2,8 +2,29 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="cn.com.zzzy.basemapper.activitymapper.ActivityPhotoMapper">
+		<resultMap type="cn.com.zzzy.entity.ActivityPhoto" id="activityPhotoResult">
+			<id column="activity_PhotoId" property="activityPhotoId"></id>
+			<result column="activity_photo" property="activityPhoto"></result>
+			<association property="activityRecord" column="activity_recordId" javaType="cn.com.zzzy.entity.ActivityRecord" resultMap="activityRecordResult"></association>
+		</resultMap>
 		
+		<resultMap type="cn.com.zzzy.entity.ActivityRecord" id="activityRecordResult">
+				<id column="activity_recordId"  property="activityRecordId"></id>
+				<result column="activity_recordContent"  property="activityRecordContent"></result>
+		</resultMap>
+		
+		
+		
+			
+			
 		<insert id="insert" parameterType="cn.com.zzzy.entity.ActivityPhoto" >
 				insert into activity_photo(activity_recordId,activity_photo) values (#{activityRecordId},#{activityPhoto})
 		</insert>
+		
+		
+		<select id="queryActivityPhotoList" parameterType="Integer" resultMap="activityPhotoResult">
+				select a.* from activity_photo a where a.activity_recordId = #{recordId}
+		</select>
+		
+		
 </mapper>

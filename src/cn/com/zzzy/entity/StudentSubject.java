@@ -6,15 +6,15 @@ package cn.com.zzzy.entity;
  *
  */
 public class StudentSubject {
-    private int subjectId;// 科目ID
+    private Integer subjectId;// 科目ID
     private String subjectName;// 科目名称
-    private int subjectStageId;// 课程阶段ID
+    private Integer subjectStageId;// 课程阶段ID
 
-    public int getSubjectId() {
+    public Integer getSubjectId() {
         return subjectId;
     }
 
-    public void setSubjectId(int subjectId) {
+    public void setSubjectId(Integer subjectId) {
         this.subjectId = subjectId;
     }
 
@@ -26,11 +26,11 @@ public class StudentSubject {
         this.subjectName = subjectName;
     }
 
-    public int getSubjectStageId() {
+    public Integer getSubjectStageId() {
         return subjectStageId;
     }
 
-    public void setSubjectStageId(int subjectStageId) {
+    public void setSubjectStageId(Integer subjectStageId) {
         this.subjectStageId = subjectStageId;
     }
 

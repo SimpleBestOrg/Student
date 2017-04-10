@@ -6,14 +6,14 @@ package cn.com.zzzy.entity;
  *
  */
 public class TalkingAuthority {
-    private int talkingAuthorityId;// 说说可见性ID
+    private Integer talkingAuthorityId;// 说说可见性ID
     private String talkingAuthorityName;// 说说可见性名称
 
-    public int getTalkingAuthorityId() {
+    public Integer getTalkingAuthorityId() {
         return talkingAuthorityId;
     }
 
-    public void setTalkingAuthorityId(int talkingAuthorityId) {
+    public void setTalkingAuthorityId(Integer talkingAuthorityId) {
         this.talkingAuthorityId = talkingAuthorityId;
     }
 

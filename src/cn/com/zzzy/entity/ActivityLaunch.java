@@ -6,50 +6,41 @@ package cn.com.zzzy.entity;
  *
  */
 public class ActivityLaunch {
-	private int activityLaunchId;// 活动发起ID
-	private String activityId; // 活动ID
-	private String activityLaunchDesc;// 对发起的活动进行描述
-	private int activityPersonNum;// 互动人数限制
-	private String activityRegisterCond;// 活动申请条件
+    private Integer activityLaunchId;// 活动发起ID
+    private String activityLaunchDesc;// 对发起的活动进行描述
+    private Integer activityPersonNum;// 互动人数限制
+    private String activityRegisterCond;// 活动申请条件
 
-	public int getActivityLaunchId() {
-		return activityLaunchId;
-	}
+    public Integer getActivityLaunchId() {
+        return activityLaunchId;
+    }
 
-	public void setActivityLaunchId(int activityLaunchId) {
-		this.activityLaunchId = activityLaunchId;
-	}
+    public void setActivityLaunchId(Integer activityLaunchId) {
+        this.activityLaunchId = activityLaunchId;
+    }
 
-	public String getActivityId() {
-		return activityId;
-	}
+    public String getActivityLaunchDesc() {
+        return activityLaunchDesc;
+    }
 
-	public void setActivityId(String activityId) {
-		this.activityId = activityId;
-	}
+    public void setActivityLaunchDesc(String activityLaunchDesc) {
+        this.activityLaunchDesc = activityLaunchDesc;
+    }
 
-	public String getActivityLaunchDesc() {
-		return activityLaunchDesc;
-	}
+    public Integer getActivityPersonNum() {
+        return activityPersonNum;
+    }
 
-	public void setActivityLaunchDesc(String activityLaunchDesc) {
-		this.activityLaunchDesc = activityLaunchDesc;
-	}
+    public void setActivityPersonNum(Integer activityPersonNum) {
+        this.activityPersonNum = activityPersonNum;
+    }
 
-	public int getActivityPersonNum() {
-		return activityPersonNum;
-	}
+    public String getActivityRegisterCond() {
+        return activityRegisterCond;
+    }
 
-	public void setActivityPersonNum(int activityPersonNum) {
-		this.activityPersonNum = activityPersonNum;
-	}
-
-	public String getActivityRegisterCond() {
-		return activityRegisterCond;
-	}
-
-	public void setActivityRegisterCond(String activityRegisterCond) {
-		this.activityRegisterCond = activityRegisterCond;
-	}
+    public void setActivityRegisterCond(String activityRegisterCond) {
+        this.activityRegisterCond = activityRegisterCond;
+    }
 
 }

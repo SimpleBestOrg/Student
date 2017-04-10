@@ -6,40 +6,40 @@ package cn.com.zzzy.entity;
  *
  */
 public class StudentScore {
-    private int scoreId;// 成绩ID
-    private int scoreSubjectId;// 科目ID
-    private int scoreStudentId;// 学生ID
-    private int theScore;// 理论分数
+    private Integer scoreId;// 成绩ID
+    private Integer scoreSubjectId;// 科目ID
+    private Integer scoreStudentId;// 学生ID
+    private Integer theScore;// 理论分数
 
-    public int getScoreId() {
+    public Integer getScoreId() {
         return scoreId;
     }
 
-    public void setScoreId(int scoreId) {
+    public void setScoreId(Integer scoreId) {
         this.scoreId = scoreId;
     }
 
-    public int getScoreSubjectId() {
+    public Integer getScoreSubjectId() {
         return scoreSubjectId;
     }
 
-    public void setScoreSubjectId(int scoreSubjectId) {
+    public void setScoreSubjectId(Integer scoreSubjectId) {
         this.scoreSubjectId = scoreSubjectId;
     }
 
-    public int getScoreStudentId() {
+    public Integer getScoreStudentId() {
         return scoreStudentId;
     }
 
-    public void setScoreStudentId(int scoreStudentId) {
+    public void setScoreStudentId(Integer scoreStudentId) {
         this.scoreStudentId = scoreStudentId;
     }
 
-    public int getTheScore() {
+    public Integer getTheScore() {
         return theScore;
     }
 
-    public void setTheScore(int theScore) {
+    public void setTheScore(Integer theScore) {
         this.theScore = theScore;
     }
 

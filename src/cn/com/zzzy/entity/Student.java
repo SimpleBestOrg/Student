@@ -8,21 +8,21 @@ import java.util.Date;
  *
  */
 public class Student {
-    private int studentId;// 学生ID
+    private Integer studentId;// 学生ID
     private String studentName;// 学生的姓名
     private String studentSex;// 学生的性别
     private Date studentBirthday;// 学生的生日
     private String studentAddress;// 学生的地址
-    private int studentBirthPlace;// 籍贯 精确到县
-    private int studentClassId;// 学生的班级
-    private int studentCommunityId;// 学生参加的社团
+    private Integer studentBirthPlace;// 籍贯 精确到县
+    private Integer studentClassId;// 学生的班级
+    private Integer studentCommunityId;// 学生参加的社团
     private String studentPhoto;// 学生的个人照片
 
-    public int getStudentId() {
+    public Integer getStudentId() {
         return studentId;
     }
 
-    public void setStudentId(int studentId) {
+    public void setStudentId(Integer studentId) {
         this.studentId = studentId;
     }
 
@@ -58,27 +58,27 @@ public class Student {
         this.studentAddress = studentAddress;
     }
 
-    public int getStudentBirthPlace() {
+    public Integer getStudentBirthPlace() {
         return studentBirthPlace;
     }
 
-    public void setStudentBirthPlace(int studentBirthPlace) {
+    public void setStudentBirthPlace(Integer studentBirthPlace) {
         this.studentBirthPlace = studentBirthPlace;
     }
 
-    public int getStudentClassId() {
+    public Integer getStudentClassId() {
         return studentClassId;
     }
 
-    public void setStudentClassId(int studentClassId) {
+    public void setStudentClassId(Integer studentClassId) {
         this.studentClassId = studentClassId;
     }
 
-    public int getStudentCommunityId() {
+    public Integer getStudentCommunityId() {
         return studentCommunityId;
     }
 
-    public void setStudentCommunityId(int studentCommunityId) {
+    public void setStudentCommunityId(Integer studentCommunityId) {
         this.studentCommunityId = studentCommunityId;
     }
 

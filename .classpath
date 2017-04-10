@@ -41,5 +41,6 @@
 	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/jackson-annotations-2.8.7.jar"/>
 	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/jackson-core-2.8.7.jar"/>
 	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/jackson-databind-2.8.7.jar"/>
+	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/jstl-1.2.jar"/>
 	<classpathentry kind="output" path="WEB-INF/WebRoot/classes"/>
 </classpath>

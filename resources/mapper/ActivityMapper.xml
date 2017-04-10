@@ -2,7 +2,132 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="cn.com.zzzy.basemapper.activitymapper.ActivityMapper">
-		<select id="queryList" parameterType="Map" resultType="">
-				
+		<resultMap type="cn.com.zzzy.entity.Activity" id="activityResult">
+			<id column="activity_Id" property="activityId"></id>
+			<result column="activity_Name" property="activityName"></result>
+			<result column="activity_beginTime" property="activityBeginTime"></result>
+			<result column="activity_endTime"  property="activityEndTime"></result>
+			<result column="activity_Flag"   property="activityFlag"></result>
+			<result column="activity_appliReason" property="activityAppliReason"></result>
+			<result column="activity_appliTime" property="activityAppliTime"></result>
+			<association column="activity_typeId" property="activityType"  javaType="cn.com.zzzy.entity.ActivityType" resultMap="activityTypeResult"></association>
+			<association column="activity_appliStuId" property="student" javaType="cn.com.zzzy.entity.Student" resultMap="studentResult"></association>
+			<association column="activity_recordId" property="activityRecord"  javaType="cn.com.zzzy.entity.ActivityRecord"  resultMap="activityRecordResult"></association>
+			<association column="activity_launchId"  property="activityLaunch" javaType="cn.com.zzzy.entity.ActivityLaunch" resultMap="activityLaunchResult"></association>
+		</resultMap>
+		
+		<resultMap id="activityTypeResult" type="cn.com.zzzy.entity.ActivityType">
+				<id column="activity_typeId" property="activityTypeId"></id>
+				<result column="activity_typeName"  property="activityTypeName"></result>
+		</resultMap>
+		
+		<resultMap id="studentResult" type="cn.com.zzzy.entity.Student">
+				<id column="stu_Id" property="studentId"></id>
+				<result column="stu_Name" property="studentName"></result>
+				<result column="stu_Sex"  property="studentSex"></result>
+				<result column="stu_Birthday"  property="studentBirthday"></result>
+				<result column="stu_Address" property="studentAddress"></result>
+				<result column="stu_BirthPlace"  property="studentBirthPlace"></result>
+		</resultMap>
+		
+		<resultMap id="activityRecordResult" type="cn.com.zzzy.entity.ActivityRecord">
+				<id column="activity_recordId"  property="activityRecordId"></id>
+				<result column="activity_recordContent"  property="activityRecordContent"></result>
+				<collection property="activityPhotos" ofType="cn.com.zzzy.entity.ActivityPhoto">
+						<id column="activity_PhotoId" property="activityPhotoId"></id>
+						<result column="activity_photo" property="activityPhoto" />
+				</collection>
+		</resultMap>
+		
+		<resultMap id="activityLaunchResult" type="cn.com.zzzy.entity.ActivityLaunch">
+				<id column="activity_lanId" property="activityLaunchId"></id>
+				<result  column="activity_lanDesc"  property="activityLaunchDesc"/>
+				<result  column="activity_perNum"  property="activityPersonNum"/>
+				<result  column="activity_regisCon"  property="activityRegisterCond"/>
+		</resultMap>
+		
+		<!--根据 学生ID,活动状态,活动类型,活动名称 查询活动-->
+		<select id="queryActivityByCondition"  resultMap="activityResult">
+					select a.*,t.*,s.*,l.*,r.* from activity a  left join activity_type t
+						on t.activity_typeId = a.activity_typeId left join stu s
+						on s.stu_Id = a.activity_appliStuId  left  join activity_launch l
+						on l.activity_lanId = a.activity_launchId left join activity_record r
+						on r.activity_recordId = a.activity_recordId
+						<where>
+								<if test="aqv.activityInfo !=null and aqv.activityInfo.activityFlag!=null">
+										 a.activity_Flag = #{aqv.activityInfo.activityFlag}
+								</if>
+								<if test="aqv.activityInfo !=null  and aqv.activityInfo.studentId!=null">
+										  and a.activity_appliStuId  = #{aqv.activityInfo.studentId}
+								</if>
+								<if test="aqv.activityInfo !=null and aqv.activityInfo.activityTypeId">
+										  and a.activity_typeId = #{aqv.activityInfo.activityTypeId}
+								</if>
+								<if test="aqv.activityInfo !=null and aqv.activityInfo.activityName !=null">
+										  and a.activity_Name = #{aqv.activityInfo.activityName}
+								</if>
+						</where>
+						order by a.activity_Id 
+						limit #{param.startIndex},#{param.rows}
 		</select>
+		<!-- 根据学生ID,活动状态,活动类型,活动名称 查询活动的数量 -->
+		<select id="queryActivityAcountByCondition" >
+					select a.*,t.*,s.*,l.*,r.* from activity a  left join activity_type t
+				on t.activity_typeId = a.activity_typeId left join stu s
+				on s.stu_Id = a.activity_appliStuId  left  join activity_launch l
+				on l.activity_lanId = a.activity_launchId left join activity_record r
+				on r.activity_recordId = a.activity_recordId
+				<where>
+						<if test="aqv.activityInfo !=null and aqv.activityInfo.activityFlag!=null">
+								 a.activity_Flag = #{aqv.activityInfo.activityFlag}
+						</if>
+						<if test="aqv.activityInfo !=null  and aqv.activityInfo.studentId!=null">
+								  and a.activity_appliStuId  = #{aqv.activityInfo.studentId}
+						</if>
+						<if test="aqv.activityInfo !=null and aqv.activityInfo.activityTypeId">
+								  and a.activity_typeId = #{aqv.activityInfo.activityTypeId}
+						</if>
+						<if test="aqv.activityInfo !=null and aqv.activityInfo.activityName !=null">
+								  and a.activity_Name = #{aqv.activityInfo.activityName}
+						</if>
+			</where>			
+		</select>
+		
+		
+		
+		<!--查询朋友圈的活动 -->
+		<select id="queryActivityByFriendIds" resultMap="activityResult">
+				select  a.*,t.*,s.*,l.*,r.* from activity a  left join activity_type t
+						on t.activity_typeId = a.activity_typeId left join stu s
+						on s.stu_Id = a.activity_appliStuId  left  join activity_launch l
+						on l.activity_lanId = a.activity_launchId left join activity_record r
+						on r.activity_recordId = a.activity_recordId  
+						where   a.activity_Flag = 0   and   a.activity_appliStuId in
+						<foreach collection="aqv" item="stuId"  open="(" separator="," close=")">
+									#{stuId}
+						</foreach>
+						order by a.activity_Id 
+						limit #{param.startIndex},#{param.rows}
+		</select>
+		<!--查看朋友圈活动的数量-->
+		<select id="queryActivityCountByFriendIds"  resultType="Integer">
+				select  count(*) from activity a  left join activity_type t
+						on t.activity_typeId = a.activity_typeId left join stu s
+						on s.stu_Id = a.activity_appliStuId  left  join activity_launch l
+						on l.activity_lanId = a.activity_launchId left join activity_record r
+						on r.activity_recordId = a.activity_recordId  
+						where   a.activity_Flag = 0   and   a.activity_appliStuId in
+						<foreach collection="aqv" item="stuId"  open="(" separator="," close=")">
+									#{stuId}
+						</foreach>
+		</select>
+		
+		
+		
+		
+		<!--申请活动-->
+		<insert id="insertActivity"  parameterType="cn.com.zzzy.entity.ActivityQueryVo">
+			insert into activity(activity_Name,activity_beginTime,activity_endTime,activity_appliTime,activity_appliReason,activity_typeId,activity_appliStuId) values(#{obj.activityInfo.activityName},#{obj.activityInfo.activityBeginTime},#{obj.activityInfo.activityEndTime},NOW(),#{obj.activityInfo.activityAppliReason},#{obj.activityInfo.activityTypeId},#{obj.activityInfo.studentId})
+		</insert>
+		
 </mapper>

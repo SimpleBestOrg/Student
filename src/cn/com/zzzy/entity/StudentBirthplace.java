@@ -6,15 +6,15 @@ package cn.com.zzzy.entity;
  *
  */
 public class StudentBirthplace {
-    private int studentBirthplaceId;// 出生地ID
+    private Integer studentBirthplaceId;// 出生地ID
     private String studentBirthplace;// 籍贯名称
-    private int BirthplaceParentName;// 父籍贯名称
+    private Integer BirthplaceParentName;// 父籍贯名称
 
-    public int getStudentBirthplaceId() {
+    public Integer getStudentBirthplaceId() {
         return studentBirthplaceId;
     }
 
-    public void setStudentBirthplaceId(int studentBirthplaceId) {
+    public void setStudentBirthplaceId(Integer studentBirthplaceId) {
         this.studentBirthplaceId = studentBirthplaceId;
     }
 
@@ -26,11 +26,11 @@ public class StudentBirthplace {
         this.studentBirthplace = studentBirthplace;
     }
 
-    public int getBirthplaceParentName() {
+    public Integer getBirthplaceParentName() {
         return BirthplaceParentName;
     }
 
-    public void setBirthplaceParentName(int birthplaceParentName) {
+    public void setBirthplaceParentName(Integer birthplaceParentName) {
         BirthplaceParentName = birthplaceParentName;
     }
 

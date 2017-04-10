@@ -8,7 +8,7 @@ package cn.com.zzzy.entity;
 public class StudentLogin {
     private String studentLoginNo;// 学生登录ID
     private String studentLoginPwd;// 学生登录密码
-    private int studentId;// 学生ID
+    private Integer studentId;// 学生ID
 
     public String getStudentLoginNo() {
         return studentLoginNo;
@@ -26,11 +26,11 @@ public class StudentLogin {
         this.studentLoginPwd = studentLoginPwd;
     }
 
-    public int getStudentId() {
+    public Integer getStudentId() {
         return studentId;
     }
 
-    public void setStudentId(int studentId) {
+    public void setStudentId(Integer studentId) {
         this.studentId = studentId;
     }
 

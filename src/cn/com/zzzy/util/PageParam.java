@@ -17,7 +17,7 @@ public class PageParam {
 		this.page = page;
 		this.rows = rows;
 	}
-
+	//查询的起始下标
 	private int startIndex;
 
 	public Integer getPage() {

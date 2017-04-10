@@ -8,18 +8,18 @@ import java.util.Date;
  *
  */
 public class QuestionAnswer {
-    private int quesetionAnswerId;// 答案ID
+    private Integer quesetionAnswerId;// 答案ID
     private String quesetionAnswerContent;// 答案内容
-    private int quesetionAnswerQuestionId;// 问题ID
-    private int quesetionAnswerStudentId;// 回答问题的学生ID
+    private Integer quesetionAnswerQuestionId;// 问题ID
+    private Integer quesetionAnswerStudentId;// 回答问题的学生ID
     private Date quesetionAnswerDateTime;// 回答答案的时间
-    private int quesetionAnswerParentId;// 问题答案父ID(是回答问题的两个人聊天)
+    private Integer quesetionAnswerParentId;// 问题答案父ID(是回答问题的两个人聊天)
 
-    public int getQuesetionAnswerId() {
+    public Integer getQuesetionAnswerId() {
         return quesetionAnswerId;
     }
 
-    public void setQuesetionAnswerId(int quesetionAnswerId) {
+    public void setQuesetionAnswerId(Integer quesetionAnswerId) {
         this.quesetionAnswerId = quesetionAnswerId;
     }
 
@@ -31,19 +31,19 @@ public class QuestionAnswer {
         this.quesetionAnswerContent = quesetionAnswerContent;
     }
 
-    public int getQuesetionAnswerQuestionId() {
+    public Integer getQuesetionAnswerQuestionId() {
         return quesetionAnswerQuestionId;
     }
 
-    public void setQuesetionAnswerQuestionId(int quesetionAnswerQuestionId) {
+    public void setQuesetionAnswerQuestionId(Integer quesetionAnswerQuestionId) {
         this.quesetionAnswerQuestionId = quesetionAnswerQuestionId;
     }
 
-    public int getQuesetionAnswerStudentId() {
+    public Integer getQuesetionAnswerStudentId() {
         return quesetionAnswerStudentId;
     }
 
-    public void setQuesetionAnswerStudentId(int quesetionAnswerStudentId) {
+    public void setQuesetionAnswerStudentId(Integer quesetionAnswerStudentId) {
         this.quesetionAnswerStudentId = quesetionAnswerStudentId;
     }
 
@@ -55,11 +55,11 @@ public class QuestionAnswer {
         this.quesetionAnswerDateTime = quesetionAnswerDateTime;
     }
 
-    public int getQuesetionAnswerParentId() {
+    public Integer getQuesetionAnswerParentId() {
         return quesetionAnswerParentId;
     }
 
-    public void setQuesetionAnswerParentId(int quesetionAnswerParentId) {
+    public void setQuesetionAnswerParentId(Integer quesetionAnswerParentId) {
         this.quesetionAnswerParentId = quesetionAnswerParentId;
     }
 

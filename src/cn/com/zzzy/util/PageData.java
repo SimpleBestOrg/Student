@@ -3,7 +3,7 @@ package cn.com.zzzy.util;
 import java.util.List;
 
 /**
- * 
+ * 对查询出的总数和数据进行封装
  * @author Admin
  *
  */

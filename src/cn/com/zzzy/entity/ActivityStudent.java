@@ -7,23 +7,32 @@ package cn.com.zzzy.entity;
  *
  */
 public class ActivityStudent {
-	private int activityId;// 活动ID
-	private int studentId;// 学生ID
+    private Integer activityId;// 活动ID
+    private Integer studentId;// 学生ID
+    private Integer stu_activityFlag;// 学生申请加入活动的状态
 
-	public int getActivityId() {
-		return activityId;
-	}
+    public Integer getActivityId() {
+        return activityId;
+    }
 
-	public void setActivityId(int activityId) {
-		this.activityId = activityId;
-	}
+    public void setActivityId(Integer activityId) {
+        this.activityId = activityId;
+    }
 
-	public int getStudentId() {
-		return studentId;
-	}
+    public Integer getStudentId() {
+        return studentId;
+    }
 
-	public void setStudentId(int studentId) {
-		this.studentId = studentId;
-	}
+    public void setStudentId(Integer studentId) {
+        this.studentId = studentId;
+    }
+
+    public Integer getStu_activityFlag() {
+        return stu_activityFlag;
+    }
+
+    public void setStu_activityFlag(Integer stu_activityFlag) {
+        this.stu_activityFlag = stu_activityFlag;
+    }
 
 }

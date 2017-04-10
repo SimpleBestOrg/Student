@@ -6,14 +6,14 @@ package cn.com.zzzy.entity;
  *
  */
 public class ProjectSubjectStage {
-    private int stageId;// 学期阶段ID
+    private Integer stageId;// 学期阶段ID
     private String stageName;// 学期阶段的名称
 
-    public int getStageId() {
+    public Integer getStageId() {
         return stageId;
     }
 
-    public void setStageId(int stageId) {
+    public void setStageId(Integer stageId) {
         this.stageId = stageId;
     }
 

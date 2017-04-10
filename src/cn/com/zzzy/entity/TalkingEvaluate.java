@@ -8,26 +8,26 @@ import java.util.Date;
  *
  */
 public class TalkingEvaluate {
-    private int talkingToCaoId;// 说说评论的ID
-    private int talkingId;// 发表的说说ID
+    private Integer talkingToCaoId;// 说说评论的ID
+    private Integer talkingId;// 发表的说说ID
     private String talkingToCaoContext;// 说说评论的内容
-    private int talkingToCaoParentId;// 评论的父ID
-    private int talkingToCaoStudentID;// 评论的学生ID、
+    private Integer talkingToCaoParentId;// 评论的父ID
+    private Integer talkingToCaoStudentID;// 评论的学生ID、
     private Date talkingToCaoDateTime;// 评论的时间
 
-    public int getTalkingToCaoId() {
+    public Integer getTalkingToCaoId() {
         return talkingToCaoId;
     }
 
-    public void setTalkingToCaoId(int talkingToCaoId) {
+    public void setTalkingToCaoId(Integer talkingToCaoId) {
         this.talkingToCaoId = talkingToCaoId;
     }
 
-    public int getTalkingId() {
+    public Integer getTalkingId() {
         return talkingId;
     }
 
-    public void setTalkingId(int talkingId) {
+    public void setTalkingId(Integer talkingId) {
         this.talkingId = talkingId;
     }
 
@@ -39,19 +39,19 @@ public class TalkingEvaluate {
         this.talkingToCaoContext = talkingToCaoContext;
     }
 
-    public int getTalkingToCaoParentId() {
+    public Integer getTalkingToCaoParentId() {
         return talkingToCaoParentId;
     }
 
-    public void setTalkingToCaoParentId(int talkingToCaoParentId) {
+    public void setTalkingToCaoParentId(Integer talkingToCaoParentId) {
         this.talkingToCaoParentId = talkingToCaoParentId;
     }
 
-    public int getTalkingToCaoStudentID() {
+    public Integer getTalkingToCaoStudentID() {
         return talkingToCaoStudentID;
     }
 
-    public void setTalkingToCaoStudentID(int talkingToCaoStudentID) {
+    public void setTalkingToCaoStudentID(Integer talkingToCaoStudentID) {
         this.talkingToCaoStudentID = talkingToCaoStudentID;
     }
 

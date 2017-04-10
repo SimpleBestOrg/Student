@@ -8,18 +8,18 @@ import java.util.Date;
  *
  */
 public class Question {
-    private int quesetionId;// 问题表的ID
+    private Integer quesetionId;// 问题表的ID
     private String quesetionContent;// 问题内容
     private String quesetionTitle;// 题目的标题
-    private int quesetionTypeId;// 问题类型的ID
-    private int quesetionStudentId;// 提问问题的学生ID
+    private Integer quesetionTypeId;// 问题类型的ID
+    private Integer quesetionStudentId;// 提问问题的学生ID
     private Date quesetionDateTime;// 提问问题的时间；
 
-    public int getQuesetionId() {
+    public Integer getQuesetionId() {
         return quesetionId;
     }
 
-    public void setQuesetionId(int quesetionId) {
+    public void setQuesetionId(Integer quesetionId) {
         this.quesetionId = quesetionId;
     }
 
@@ -39,19 +39,19 @@ public class Question {
         this.quesetionTitle = quesetionTitle;
     }
 
-    public int getQuesetionTypeId() {
+    public Integer getQuesetionTypeId() {
         return quesetionTypeId;
     }
 
-    public void setQuesetionTypeId(int quesetionTypeId) {
+    public void setQuesetionTypeId(Integer quesetionTypeId) {
         this.quesetionTypeId = quesetionTypeId;
     }
 
-    public int getQuesetionStudentId() {
+    public Integer getQuesetionStudentId() {
         return quesetionStudentId;
     }
 
-    public void setQuesetionStudentId(int quesetionStudentId) {
+    public void setQuesetionStudentId(Integer quesetionStudentId) {
         this.quesetionStudentId = quesetionStudentId;
     }
 

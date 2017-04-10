@@ -8,17 +8,17 @@ import java.util.Date;
  *
  */
 public class Talking {
-    private int talkingId;// 说说的ID
+    private Integer talkingId;// 说说的ID
     private String talkingContent;// 发表说说的内容
-    private int talkingStudentId;// 发表的学生的ID
+    private Integer talkingStudentId;// 发表的学生的ID
     private Date talkingDateTime;// 发表说说的时间
-    private int talkingAuthorityId;// 说说权限ID
+    private Integer talkingAuthorityId;// 说说权限ID
 
-    public int getTalkingId() {
+    public Integer getTalkingId() {
         return talkingId;
     }
 
-    public void setTalkingId(int talkingId) {
+    public void setTalkingId(Integer talkingId) {
         this.talkingId = talkingId;
     }
 
@@ -30,11 +30,11 @@ public class Talking {
         this.talkingContent = talkingContent;
     }
 
-    public int getTalkingStudentId() {
+    public Integer getTalkingStudentId() {
         return talkingStudentId;
     }
 
-    public void setTalkingStudentId(int talkingStudentId) {
+    public void setTalkingStudentId(Integer talkingStudentId) {
         this.talkingStudentId = talkingStudentId;
     }
 
@@ -46,11 +46,11 @@ public class Talking {
         this.talkingDateTime = talkingDateTime;
     }
 
-    public int getTalkingAuthorityId() {
+    public Integer getTalkingAuthorityId() {
         return talkingAuthorityId;
     }
 
-    public void setTalkingAuthorityId(int talkingAuthorityId) {
+    public void setTalkingAuthorityId(Integer talkingAuthorityId) {
         this.talkingAuthorityId = talkingAuthorityId;
     }
 

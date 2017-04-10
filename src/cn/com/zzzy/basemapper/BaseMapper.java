@@ -2,6 +2,8 @@ package cn.com.zzzy.basemapper;
 
 import java.util.List;
 
+import org.apache.ibatis.annotations.Param;
+
 import cn.com.zzzy.util.PageParam;
 
 /**
@@ -13,10 +15,11 @@ public interface BaseMapper<T> {
 
     /**
      * 根据条件分页查询所有
+     * 注解方式传入参数
      * @param id
      * @return
      */
-    List<T> queryList(PageParam param,T t);
+    List<T> queryList(@Param("pageParam")PageParam param,@Param("obj")T t);
     
     /**
      * 根据条件查询得到的数据量

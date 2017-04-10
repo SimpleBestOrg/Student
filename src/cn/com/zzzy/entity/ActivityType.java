@@ -7,19 +7,21 @@ package cn.com.zzzy.entity;
  *
  */
 public class ActivityType {
-	 private int activityId;//活动ID
-	 private String activityName;//活动的名称
-	public int getActivityId() {
-		return activityId;
+	 private Integer activityTypeId;//活动ID
+	 private String activityTypeName;//活动的名称
+	
+	 
+	public Integer getActivityTypeId() {
+        return activityTypeId;
+    }
+    public void setActivityTypeId(Integer activityTypeId) {
+        this.activityTypeId = activityTypeId;
+    }
+    public String getActivityName() {
+		return activityTypeName;
 	}
-	public void setActivityId(int activityId) {
-		this.activityId = activityId;
-	}
-	public String getActivityName() {
-		return activityName;
-	}
-	public void setActivityName(String activityName) {
-		this.activityName = activityName;
+	public void setActivityName(String activityTypeName) {
+		this.activityTypeName = activityTypeName;
 	}
 	 
 }

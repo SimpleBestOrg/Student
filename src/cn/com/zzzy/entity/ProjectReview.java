@@ -6,40 +6,40 @@ package cn.com.zzzy.entity;
  *
  */
 public class ProjectReview {
-    private int projectReviewId;// 评审项目表的ID
-    private int projectTeacherId;// 评审老师的ID
-    private int projectId;// 项目的ID
-    private int projectScore;// 评审项目的分数
+    private Integer projectReviewId;// 评审项目表的ID
+    private Integer projectTeacherId;// 评审老师的ID
+    private Integer projectId;// 项目的ID
+    private Integer projectScore;// 评审项目的分数
 
-    public int getProjectReviewId() {
+    public Integer getProjectReviewId() {
         return projectReviewId;
     }
 
-    public void setProjectReviewId(int projectReviewId) {
+    public void setProjectReviewId(Integer projectReviewId) {
         this.projectReviewId = projectReviewId;
     }
 
-    public int getProjectTeacherId() {
+    public Integer getProjectTeacherId() {
         return projectTeacherId;
     }
 
-    public void setProjectTeacherId(int projectTeacherId) {
+    public void setProjectTeacherId(Integer projectTeacherId) {
         this.projectTeacherId = projectTeacherId;
     }
 
-    public int getProjectId() {
+    public Integer getProjectId() {
         return projectId;
     }
 
-    public void setProjectId(int projectId) {
+    public void setProjectId(Integer projectId) {
         this.projectId = projectId;
     }
 
-    public int getProjectScore() {
+    public Integer getProjectScore() {
         return projectScore;
     }
 
-    public void setProjectScore(int projectScore) {
+    public void setProjectScore(Integer projectScore) {
         this.projectScore = projectScore;
     }
 

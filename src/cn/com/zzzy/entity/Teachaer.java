@@ -6,15 +6,15 @@ package cn.com.zzzy.entity;
  *
  */
 public class Teachaer {
-    private int teacherId;// 老师ID（也是老师老师的登录ID）
+    private Integer teacherId;// 老师ID（也是老师老师的登录ID）
     private String teacherName;// 老师的名称
     private String teacherPwd;// 老师登录的密码
 
-    public int getTeacherId() {
+    public Integer getTeacherId() {
         return teacherId;
     }
 
-    public void setTeacherId(int teacherId) {
+    public void setTeacherId(Integer teacherId) {
         this.teacherId = teacherId;
     }
 

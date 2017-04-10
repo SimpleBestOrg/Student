@@ -6,22 +6,22 @@ package cn.com.zzzy.entity;
  *
  */
 public class StudentFriend {
-    private int studentId;// 学生ID
-    private int friend;// 朋友ID
+    private Integer studentId;// 学生ID
+    private Integer friend;// 朋友ID
 
-    public int getStudentId() {
+    public Integer getStudentId() {
         return studentId;
     }
 
-    public void setStudentId(int studentId) {
+    public void setStudentId(Integer studentId) {
         this.studentId = studentId;
     }
 
-    public int getFriend() {
+    public Integer getFriend() {
         return friend;
     }
 
-    public void setFriend(int friend) {
+    public void setFriend(Integer friend) {
         this.friend = friend;
     }
 
