@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.com.zzzy.basemapper.talkingmapper.TalkingMapper">
+		<resultMap type="cn.com.zzzy.entity.Talking" id="talkingResult">
+				<id column="talking_Id" property="talkingId" />
+				<result column="talking_Content" property="talkingContent"/>
+				<result column="talking_StudentId" property="talkingStudentId"/>
+				<result column="talking_Time" property="talkingDateTime"/>
+				<result column="talking_authorityId" property="talkingAuthorityId"/>
+				<result column="talking_thumCount" property="talkingThumCount"/>
+				<association column="talking_authorityId" property="talkingAuthority" resultMap="talkingAuthorityResult" jdbcType="cn.com.zzzy.entity.TalkingAuthority"></association>
+				<association column="talking_StudentId" property="stuId" resultMap="studentResult" jdbcType="cn.com.zzzy.entity.Student"></association>
+		</resultMap>
+		
+		<resultMap type="cn.com.zzzy.entity.TalkingAuthority" id="talkingAuthorityResult">
+				<id column="talking_authorityId"  property="talkingAuthorityId"/>
+				<result column="talking_tuthorityName" property="talkingAuthorityName"/>
+		</resultMap>
+		<resultMap type="cn.com.zzzy.entity.Student" id="studentResult">
+					<id column="stu_Id"  property="studentId"/>
+					<result column="stu_Name" property="studentName"/>
+					<result column="stu_Photo" property="studentPhoto"/>
+		</resultMap>
+		
+		
+		<select id="queryTalkingByFriendId"  resultMap="talkingResult">
+				select t.*,s.stu_Id,s.stu_Name,s.stu_Photo from  talking t left join stu s
+				on s.stu_Id = t.talking_StudentId
+				where t.talking_StudentId in
+				<foreach collection="friendId" item="friendId" open="(" separator="," close=")">
+						#{friendId}
+				</foreach>
+		</select>
+</mapper>

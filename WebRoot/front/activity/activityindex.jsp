@@ -73,12 +73,9 @@
         <a href="add.html" class="layui-btn jie-add">申请活动</a>
       </div>
       
-      <div  id="">
-      
+      <div  id="friendActivity">
+            
       </div>
-      
-         
-      
       <div style="text-align: center">
         <div class="laypage-main"><span class="laypage-curr">1</span><a href="/jie/page/2/">2</a><a href="/jie/page/3/">3</a><a href="/jie/page/4/">4</a><a href="/jie/page/5/">5</a><span>…</span><a href="/jie/page/148/" class="laypage-last" title="尾页">尾页</a><a href="/jie/page/2/" class="laypage-next">下一页</a></div>
       </div>
@@ -96,22 +93,33 @@
   </p>
 </div>
 <script src="/Student/front/res/layui/layui.js"></script>
-<script>
-layui.cache.page = 'jie';
-layui.cache.user = {
-  username: '游客'
-  ,uid: -1
-  ,avatar: '../../res/images/avatar/g'
-  ,experience: 83
-  ,sex: '男'
-};
-layui.config({
-  version: "2.0.0"
-  ,base: '../../res/mods/'
-}).extend({
-  fly: 'index'
-}).use('fly');
+<script src="/Student/js/jquery.min.js"></script>
+<script type="text/javascript">
+			$(function(){
+				$.post("/Student/queryAllFriendActivity.action",function(data){
+		    		 var div = "";
+		    		 var today =new Date()
+		    		 alert((today.toLocaleString().replace(/年|月/g,'-')).replace(/日/g,''))
+		    		 $.each(data,function(i,a){
+		    			 div += " <div  style='border:1px solid #5DADE2; height:170px; margin-top:10px;'><div  style='width:100%;height:auto;margin-top:20px;margin-left:50px;'><a href='#'>";
+		        		 div += "<img class='media-object img-circle ' style='width:150px;height:150px;float:left;' src='/Student/front/image/Capture001.jpg' alt='通用的占位符图像'/></a> ";
+		        		 div += " <span style='font-size:20px; display:inline-block; color:blue;'>【"+a.activityName+"】</span><div style='border:1px solid black;width:300px;height:100px;margin-left:150px;margin-top:10px;' ><ul style='list-style:none; line-height:25px ;margin-left:-200px;'>";
+		        		 div +="<li><span>开始时间:"+((new Date(a.activityBeginTime)).toLocaleString().replace(/年|月/g,'-')).replace(/日/g,'')+"</span></li> <li><span>结束时间:"+((new Date(a.activityEndTime)).toLocaleString().replace(/年|月/g,'-')).replace(/日/g,'')+"</span></li>";
+		            		 if(new Date(a.activityBeginTime)>today){
+		            			 div +="<li><span style='color:#999'>举行状态:火热报名中</span></li></ul></div></div>";
+		            			 div +="<button style='margin-left:600px;margin-top:-220px;'   class='layui-btn layui-btn-normal'>申请报名</button><button class='layui-btn layui-btn-normal' style='margin-left:800px;margin-top:-130px;'>查看详情</button>";
+		            		 }else if(new Date(a.activityEndTime)>today  && new Date(a.activityBeginTime)<=today){
+		            			 div +="<li><span style='color:#999'>举行状态:正在进行中</span></li></ul></div></div><button class='layui-btn layui-btn-normal' style='margin-left:800px;margin-top:-130px;'>查看详情</button>";
+		            		 }else {
+		            			 div +="<li><span style='color:#999'>举行状态:已结束</span></li></ul></div></div><button class='layui-btn layui-btn-normal' style='margin-left:800px;margin-top:-160px;'>查看详情</button>";	
+		            		 }
+		        		 div +="</div>";
+		    		 })
+		    		 div　+= "<div id='page'></div>";
+		    		 $('#friendActivity').html(div);
+		    	},"json");
+				
+			})
 </script>
-
 </body>
 </html>
