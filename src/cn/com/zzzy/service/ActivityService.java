@@ -57,7 +57,18 @@ public class ActivityService {
         }
         
     }
-
+    
+    /**
+     * 根据学生ID查询参加过的活动
+     * @param param
+     * @param stuId
+     * @return
+     */
+    public List<Activity>  queryMyJoinActivity(PageParam param,Integer  stuId){
+         return activityMapper.queryMyJoinActivity(param, stuId);
+    }
+    
+    
     /**
      * 添加活动申请
      * @param activityQueryVo

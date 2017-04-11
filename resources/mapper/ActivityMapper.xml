@@ -122,6 +122,11 @@
 						</foreach>
 		</select>
 		
+		<select id="queryMyJoinActivity" resultMap="activityResult">
+			select * from  activity  a
+			left join activity_student  s
+			on a.activity_Id  = s.activity_Id where s.stu_Id   = #{stuId}
+		</select>
 		
 		
 		

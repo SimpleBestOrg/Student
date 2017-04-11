@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 import cn.com.zzzy.entity.Activity;
+import cn.com.zzzy.entity.ActivityInfo;
 import cn.com.zzzy.entity.ActivityPhoto;
 import cn.com.zzzy.entity.ActivityQueryVo;
 import cn.com.zzzy.service.ActivityPhotoService;
@@ -37,11 +38,8 @@ public class ActivityController {
     @RequestMapping("queryActivityByCondition")
     @ResponseBody
     public List<Activity>  queryActivityByCondition(PageParam param,ActivityQueryVo activityQueryVo){
+        System.out.println("ID:"+activityQueryVo.getActivityInfo().getStudentId());
         List<Activity> list =  activityService.queryActivityByCondition(param, activityQueryVo);
-        System.out.println("活动数量:"+list.size());
-        for(int i=0;i<list.size();i++){
-            System.out.println(list.get(i).getActivityName()+"状态:"+list.get(i).getActivityFlag());
-        }
         return list;
     }
     
@@ -56,15 +54,12 @@ public class ActivityController {
                List<Integer> friendId = new ArrayList<Integer>();
                 friendId.add(2);
                 friendId.add(3);
-               
                List<Activity>    friendActivityList = activityService.queryAllFriendActivity(param, friendId);
                int  activityCount  = activityService.queryActivityCountByFriendIds(friendId);
                System.out.println("查询行数"+activityCount);
                System.out.println(friendActivityList.size());
                return friendActivityList;
     }
-    
-    
     
     
     /**
@@ -94,6 +89,20 @@ public class ActivityController {
         return modelAndView;
     }
     
+    /**
+     * 根据学生ID查询参加过的活动
+     * @param param
+     * @param stuId
+     * @return
+     */
+    @RequestMapping("queryMyJoinActivity")
+    @ResponseBody
+    public List<Activity>   queryMyJoinActivity(PageParam param,int stuId){
+        List<Activity> list =  activityService.queryMyJoinActivity(param, stuId);
+        System.out.println("我参加的活动的数量"+list.size());
+       // System.out.println(list.get(0).getActivityName());
+        return list;
+    }
     
     
     
@@ -103,17 +112,16 @@ public class ActivityController {
      * @param activity
      * @return
      */
-     @RequestMapping("insertApplyActivity")
-    public void  insertApplyActivity(HttpServletResponse response,ActivityQueryVo activityQueryVo){
+     @RequestMapping(value = "/insertApplyActivity", produces = {"text/html;charset=UTF-8;"})
+    public String  insertApplyActivity(ActivityQueryVo activityQueryVo){
+            String msg = "申请失败";
             try {
                  activityService.insertActivity(activityQueryVo);  
-                 PrintWriter out = response.getWriter();
-                 out.println("申请成功");
+                 msg = "申请成功";
             } catch (Exception e) {
                     e.printStackTrace();
             }
-           
-           
+            return   msg;
     }
     
 }
