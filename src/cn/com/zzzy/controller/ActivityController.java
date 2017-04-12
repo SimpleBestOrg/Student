@@ -1,10 +1,8 @@
 package cn.com.zzzy.controller;
 
-import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -13,7 +11,6 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 import cn.com.zzzy.entity.Activity;
-import cn.com.zzzy.entity.ActivityInfo;
 import cn.com.zzzy.entity.ActivityPhoto;
 import cn.com.zzzy.entity.ActivityQueryVo;
 import cn.com.zzzy.service.ActivityPhotoService;

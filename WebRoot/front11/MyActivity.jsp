@@ -151,6 +151,7 @@
 			alert(data);
 		})
 	}
+	
 
     $(function(){
     	//查询朋友圈的活动

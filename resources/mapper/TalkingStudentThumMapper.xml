@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.com.zzzy.basemapper.talkingmapper.TalkingStudentThumMapper">
+		
+		<select id="queryCount" resultType="Integer">
+			select count(*) from talking_stu_thum  where talking_Id =#{talkingId}  and stu_Id =#{studentId} 
+		</select>
+		
+		<insert id="save">
+			insert into talking_stu_thum(talking_Id,stu_Id) values(#{obj.talkingId},#{obj.studentId})
+		</insert>
+		
+</mapper>

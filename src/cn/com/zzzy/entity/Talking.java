@@ -10,9 +10,11 @@ import java.util.Date;
 public class Talking {
     private Integer talkingId;// 说说的ID
     private String talkingContent;// 发表说说的内容
-    private Student stuId;
+    private Student stuId;  //学生
+    private Integer talkingStudentId;// 发表的学生的ID
     private Date talkingDateTime;// 发表说说的时间
     private TalkingAuthority talkingAuthority;
+    private Integer talkingAuthorityId;// 说说权限ID
     private Integer talkingThumCount;  
     
     
@@ -40,6 +42,13 @@ public class Talking {
         this.talkingContent = talkingContent;
     }
 
+    public Integer getTalkingStudentId() {
+        return talkingStudentId;
+    }
+
+    public void setTalkingStudentId(Integer talkingStudentId) {
+        this.talkingStudentId = talkingStudentId;
+    }
 
     public Date getTalkingDateTime() {
         return talkingDateTime;
@@ -49,6 +58,13 @@ public class Talking {
         this.talkingDateTime = talkingDateTime;
     }
 
+    public Integer getTalkingAuthorityId() {
+        return talkingAuthorityId;
+    }
+
+    public void setTalkingAuthorityId(Integer talkingAuthorityId) {
+        this.talkingAuthorityId = talkingAuthorityId;
+    }
 
     public Student getStuId() {
         return stuId;

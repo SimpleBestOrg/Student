@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 
 import cn.com.zzzy.basemapper.talkingmapper.TalkingMapper;
 import cn.com.zzzy.entity.Talking;
+import cn.com.zzzy.entity.TalkingToCao;
 import cn.com.zzzy.util.PageParam;
 
 @Service
@@ -26,4 +27,57 @@ public class TalkingService {
         List<Talking>  talkingList = talkingMapper.queryTalkingByFriendId(param, stuId);
         return talkingList;
     }
+    
+    /**
+     * 根据朋友ID查询发表过的说说的数量
+     * @param stuId
+     * @return
+     */
+    public  int  queryTalkCountByFriId(List<Integer> stuId){
+         return   talkingMapper.queryTalkCountByFriId(stuId);
+    }
+    
+    /**
+     * 根據學生ID查詢所有説説
+     * @param param
+     * @param stuId
+     * @return
+     */
+    public List<Talking>  queryTalkingByStuId(PageParam param,Integer stuId){
+        return   talkingMapper.queryTalkingByStuId(param, stuId);
+    }
+    
+    /**
+     * 根据学生ID查询学生说说的数量
+     * @param stuId
+     * @return
+     */
+    public  int queryTalkCountByStuId(Integer stuId){
+          return  talkingMapper.queryTalkCountByStuId(stuId);
+    }
+    
+    
+    
+    /**
+     * 发表说说
+     * @param talking
+     */
+    public void insertTalking(Talking talking){
+        if(talking!=null  &&  talking.getTalkingStudentId()!=null  && talking.getTalkingContent()!=null && talking.getTalkingAuthorityId()!=null){
+            talkingMapper.save(talking);
+        }else{
+            System.out.println("说说信息填写不完整");
+        }
+    }
+    
+    /**
+     * 根据说说ID增加赞的次数
+     * @param talkingId
+     */
+    public void  updateTalkThum(Integer talkingId){
+        talkingMapper.updateTalkThum(talkingId);
+    }
+    
+    
+    
 }

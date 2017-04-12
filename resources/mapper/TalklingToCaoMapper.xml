@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.com.zzzy.basemapper.talkingmapper.TalkingToCaoMapper">
+			<resultMap type="cn.com.zzzy.entity.TalkingToCao" id="talkingToCaoResult">
+					<id column="talking_tocao_Id" property="talkingToCaoId"></id>
+					<result column="talking_tocao_Context" property="talkingToCaoContext"/>
+					<result column="talking_tocao_Time" property="talkingToCaoDateTime"/>
+					<result column="talking_tocao_parentId" property="talkingToCaoParentId"/>
+					<result column="talking_id"  property="talkingId"/>
+					<association column="talking_tocao_studentId" property="student" javaType="cn.com.zzzy.entity.Student" resultMap="studentResult"></association>
+			</resultMap>
+			<resultMap type="cn.com.zzzy.entity.Student" id="studentResult">
+						<id column="stu_Id"  property="studentId"/>
+						<result column="stu_Name" property="studentName"/>
+						<result column="stu_Photo" property="studentPhoto"/>
+			</resultMap>
+			
+			<!-- 根据活动ID查询出 该活动的评论 -->
+			<select id="queryTalkingToCaoList"  resultMap="talkingToCaoResult">
+					select t.*,s.stu_Id,s.stu_Name,s.stu_Photo from  talking_tocao  t
+						left join  stu  s on t.talking_tocao_studentId = s.stu_Id 
+						where t.talking_id = #{talkingId} or t.talking_tocao_parentId = #{talkingId}
+			</select>
+			
+			
+</mapper>

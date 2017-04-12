@@ -110,7 +110,7 @@
 						limit #{param.startIndex},#{param.rows}
 		</select>
 		<!--查看朋友圈活动的数量-->
-		<select id="queryActivityCountByFriendIds"  resultType="Integer">
+		<select id="queryActivityCountByFriendIds" resultType="Integer">
 				select  count(*) from activity a  left join activity_type t
 						on t.activity_typeId = a.activity_typeId left join stu s
 						on s.stu_Id = a.activity_appliStuId  left  join activity_launch l
