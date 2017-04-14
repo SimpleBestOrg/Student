@@ -37,6 +37,7 @@ public class ActivityController {
     public List<Activity>  queryActivityByCondition(PageParam param,ActivityQueryVo activityQueryVo){
         System.out.println("ID:"+activityQueryVo.getActivityInfo().getStudentId());
         List<Activity> list =  activityService.queryActivityByCondition(param, activityQueryVo);
+        System.out.println("長度:"+list);
         return list;
     }
     
@@ -64,26 +65,18 @@ public class ActivityController {
      * @param activityId   活动ID
      * @return
      */
-    @RequestMapping("activityDetail")
-    public ModelAndView queryActivityDetail(Integer activityId){
-        ModelAndView modelAndView =  new ModelAndView();
-        activityId = 1;
+    @RequestMapping("queryActivityDetail")
+    @ResponseBody
+    public Activity queryActivityDetail(Integer activityId){
+//        ModelAndView modelAndView =  new ModelAndView();
+//        activityId = 2; 
+        List<Activity>  activityList = new ArrayList<Activity>();
         Activity activity =  activityService.queryActivityDetail(activityId);
-        System.out.println("活动名称:"+activity.getActivityName());
-        System.out.println("活动记录ID"+activity.getActivityRecord().getActivityRecordContent());
-        /**
-         * 活动结束之后 判断该活动是否被记录  如果记录了  则查询出来记录的照片
-         */
-        if(activity.getActivityRecord().getActivityRecordId()!=null){
-            List<ActivityPhoto> activityPhotoList  = activityPhotoService.queryActivityPhotoList(activity.getActivityRecord().getActivityRecordId());
-            for(int i=0;i<activityPhotoList.size();i++){
-                System.out.println(activityPhotoList.get(i).getActivityPhoto());
-            }
-            modelAndView.addObject("activityPhotoList", activityPhotoList);
-        }
-        modelAndView.addObject("activity", activity);
-        modelAndView.setViewName("front/activityDetail.jsp");
-        return modelAndView;
+        activityList.add(activity);
+//        modelAndView.addObject("activity", activity);
+//        modelAndView.setViewName("front/activityDetail.jsp");
+//        return modelAndView;
+        return  activity;
     }
     
     /**
@@ -109,8 +102,14 @@ public class ActivityController {
      * @param activity
      * @return
      */
-     @RequestMapping(value = "/insertApplyActivity", produces = {"text/html;charset=UTF-8;"})
+     @RequestMapping(value = "/insertApplyActivity")
     public String  insertApplyActivity(ActivityQueryVo activityQueryVo){
+            System.out.println(activityQueryVo.getActivityInfo().getActivityName());
+            System.out.println(activityQueryVo.getActivityInfo().getActivityBeginTime());
+            System.out.println(activityQueryVo.getActivityInfo().getActivityEndTime());
+            System.out.println(activityQueryVo.getActivityInfo().getActivityAppliReason());
+            System.out.println(activityQueryVo.getActivityInfo().getActivityTypeId());
+            System.out.println(activityQueryVo.getActivityInfo().getStudentId());
             String msg = "申请失败";
             try {
                  activityService.insertActivity(activityQueryVo);  

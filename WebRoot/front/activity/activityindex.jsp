@@ -61,9 +61,9 @@
     <div class="content" style="margin-right:0">
       <div class="fly-tab">
         <span>
-          <a onclick="activityPage.friendActivity('/Student/queryActivityByCondition.action')" class="tab-this">朋友活动</a>
-          <a >我参加的活动</a>
-          <a >我申请的活动</a>
+          <a onclick="activityPage.friendActivity()" class="tab-this">朋友活动</a>
+          <a onclick="joinActivity()">我参加的活动</a>
+          <a onclick="applyActivity('/Student/queryActivityByCondition.action','1')">我申请的活动</a>
           <a >活动消息</a>
           
           
@@ -72,7 +72,7 @@
           <i class="iconfont icon-sousuo"></i>
           <input class="layui-input" autocomplete="off" placeholder="搜索内容，回车跳转" type="text" name="q">
         </form>
-        <a href="add.html" class="layui-btn jie-add">申请活动</a>
+        <a href="addactivity.jsp" class="layui-btn jie-add">申请活动</a>
       </div>
       
       <div  id="activity">
@@ -98,78 +98,107 @@
 <script src="/Student/js/jquery.min.js"></script>
 
 <script type="text/javascript">
-			var n = "/Student/queryAllFriendActivity.action";
-			$(function(n){
-				alert("弹框:"+n);
-				activityPage.init();
-			});
-
-			var activityPage = {
-					init :function(){
-						activityPage.friendActivity(n);
-					},
-					friendActivity:function(n){
-							alert(n);
-							$.post(n,function(data){
-					    		 var div = "";
-					    		 var today =new Date();
-					    		 $.each(data,function(i,a){
-					    			 div += " <div  style='border:1px solid #5DADE2; height:170px; margin-top:10px;'><div  style='width:100%;height:auto;margin-top:10px;margin-left:50px;'><a href='#'>";
-					        		 div += "<img class='media-object img-circle ' style='width:150px;height:150px;float:left;' src='/Student/front/image/Capture001.jpg' alt='通用的占位符图像'/></a> ";
-					        		 div += " <span style='font-size:20px; display:inline-block; color:blue;'>【"+a.activityName+"】</span><div style='border:1px solid black;width:300px;height:100px;margin-left:150px;margin-top:10px;' ><ul style='list-style:none; line-height:25px ;margin-left:-200px;'>";
-					        		 div +="<li><span>开始时间:"+((new Date(a.activityBeginTime)).toLocaleString().replace(/年|月/g,'-')).replace(/日/g,'')+"</span></li> <li><span>结束时间:"+((new Date(a.activityEndTime)).toLocaleString().replace(/年|月/g,'-')).replace(/日/g,'')+"</span></li>";
-					            		 if(new Date(a.activityBeginTime)>today){
-					            			 div +="<li><span style='color:#999'>举行状态:火热报名中</span></li></ul></div></div>";
-					            			 div +="<button style='margin-left:600px;margin-top:-220px;'   class='layui-btn layui-btn-normal'>申请报名</button><button class='layui-btn layui-btn-normal' style='margin-left:800px;margin-top:-130px;'>查看详情</button>";
-					            		 }else if(new Date(a.activityEndTime)>today  && new Date(a.activityBeginTime)<=today){
-					            			 div +="<li><span style='color:#999'>举行状态:正在进行中</span></li></ul></div></div><button class='layui-btn layui-btn-normal' style='margin-left:800px;margin-top:-130px;'>查看详情</button>";
-					            		 }else {
-					            			 div +="<li><span style='color:#999'>举行状态:已结束</span></li></ul></div></div><button class='layui-btn layui-btn-normal' style='margin-left:800px;margin-top:-160px;'>查看详情</button>";	
-					            		 }
-					        		 div +="</div>";
-					    		 })
-					    		 div　+= "<div id='page'></div>";
-					    		 $('#activity').html(div);
-					    	},"json");
-					},
-					applyActivity:function(){
-				    	
-				    		$.post("/Student/queryActivityByCondition.action","activityInfo.StudentId=1",function(data){
-					      		 var div = "";
-					   		 var today =new Date()
-					   		 $.each(data,function(i,a){
-					   			 div += " <div  style='border:1px solid #5DADE2; height:200px; margin-top:10px;'><div  style='border:1px solid white;width:50%;height:auto;margin-top:20px;margin-left:50px;'><a href='#'>";
-					       		 div += "<img  class='media-object img-circle ' style='width:150px;height:150px;float:left;' src='/Student/front/image/Capture001.jpg' alt='通用的占位符图像'/></a> ";
-					       		 div += " <span style='font-size:20px; display:inline-block; color:blue;'>【"+a.activityName+"】</span><div style='border:1px solid black;width:300px;height:100px;margin-left:150px;margin-top:10px;' ><ul style='list-style:none; line-height:25px ;margin-left:-200px;'>";
-					       		 div +="<li><span>开始时间:"+((new Date(a.activityBeginTime)).toLocaleString().replace(/年|月/g,'-')).replace(/日/g,'')+"</span></li> <li><span>结束时间:"+((new Date(a.activityEndTime)).toLocaleString().replace(/年|月/g,'-')).replace(/日/g,'')+"</span></li>";
-					       		 if(a.activityFlag==3){
-					           		 if(new Date(a.activityBeginTime)>today){
-					           			 div +="<li><span>状态:火热报名中</span></li></ul></div></div>";
-					           			 div +="<button style='margin-left:350px;margin-top:-40px;'   class='layui-btn layui-btn-normal'>申请报名</button><button class='layui-btn layui-btn-normal' style='margin-left:350px;margin-top:-90px;'>查看详情</button>";
-					           		 }else if(new Date(a.activityEndTime)>today  && new Date(a.activityBeginTime)<=today){
-					           			 div +="<li><span>状态:正在进行中</span></li></ul></div></div><button style='margin-left:350px;margin-top:-90px;' class='layui-btn layui-btn-normal'>查看详情</button>";
-					           		 }else {
-					           			 div +="<li><span>状态:已结束</span></li></ul></div></div>";
-					           			 div +="<button class='layui-btn layui-btn-normal' style='margin-left:350px;margin-top:-90px;'>记录活动</button>"
-					           		 }
-					       		 }else if(a.activityFlag==0){
-					        			div +="<li><span>申请状态:正在申请中</span></li></ul></div></div>";
-					        		}else  if(a.activityFlag==1){
-					        			div +="<li><span>申请状态:未发起</span></li></ul></div></div>";
-					        			div +="<button class='layui-btn layui-btn-normal' style='margin-left:350px;margin-top:-90px;'>立即发起</button>";
-					        		}else  if(a.activityFlag==2){
-					        			div +="<li><span>申请状态:被拒绝</span></li></ul></div></div>";
-					        		}
-					       		 div +="</div>";
-					   		 })
-					   		 div　+= "<div id='MyAppliActivityPage'></div>";
-					   		 $('#activity').html(div);		
-					       	},"json");						
-						},
-			}
-			function  applyActivity(){
-				activityPage.applyActivity();
-			}			
+            $(function(){
+            	activityPage.friendActivity();
+            });
+            var activityPage = {
+            		friendActivity:function(){
+            				$.post("/Student/queryAllFriendActivity.action",function(data){
+            		    		 var div = "";
+            		    		 var today =new Date();
+            		    		 $.each(data,function(i,a){
+            		    			 div += " <div  style='border:1px solid #5DADE2; height:170px; margin-top:10px;'><div  style='width:100%;height:auto;margin-top:10px;margin-left:50px;'><a href='#'>";
+            		        		 div += "<img class='media-object img-circle ' style='width:150px;height:150px;float:left;' src='/Student/front/image/Capture001.jpg' alt='通用的占位符图像'/></a> ";
+            		        		 div += " <span style='font-size:20px; display:inline-block; color:blue;'>【"+a.activityName+"】</span><div style='border:1px solid black;width:300px;height:100px;margin-left:150px;margin-top:10px;' ><ul style='list-style:none; line-height:25px ;margin-left:-200px;'>";
+            		        		 div +="<li><span>开始时间:"+((new Date(a.activityBeginTime)).toLocaleString().replace(/年|月/g,'-')).replace(/日/g,'')+"</span></li> <li><span>结束时间:"+((new Date(a.activityEndTime)).toLocaleString().replace(/年|月/g,'-')).replace(/日/g,'')+"</span></li>";
+            		            		 if(new Date(a.activityBeginTime)>today){
+            		            			 div +="<li><span style='color:#999'>举行状态:火热报名中</span></li></ul></div></div>";
+            		            			 div +="<button style='margin-left:600px;margin-top:-220px;' class='layui-btn layui-btn-normal'>申请报名</button>";
+            		            			 div +="<button class='layui-btn layui-btn-normal' onclick='detailActivity("+a.activityId+")' style='margin-left:800px;margin-top:-130px;'>查看详情</button>";
+            		            		 }else if(new Date(a.activityEndTime)>today  && new Date(a.activityBeginTime)<=today){
+            		            			 div +="<li><span style='color:#999'>举行状态:正在进行中</span></li></ul></div></div><button class='layui-btn layui-btn-normal' onclick='detailActivity("+a.activityId+")' style='margin-left:800px;margin-top:-130px;'>查看详情</button>";
+            		            		 }else {
+            		            			 div +="<li><span style='color:#999'>举行状态:已结束</span></li></ul></div></div><button class='layui-btn layui-btn-normal' onclick='detailActivity("+a.activityId+")'  style='margin-left:800px;margin-top:-160px;'>查看详情</button>";	
+            		            		 }
+            		        		 div +="</div>";
+            		    		 })
+            		    		 $('#activity').html(div);
+            		    	},"json");
+            		},
+            		applyActivity:function(){
+            	    		$.post("/Student/queryActivityByCondition.action","activityInfo.StudentId=1",function(data){
+            		      	 var div = "";
+            		   		 var today =new Date()
+            		   		 $.each(data,function(i,a){
+            		   			 div += " <div  style='border:1px solid #5DADE2; height:170px; margin-top:10px;'><div style='width:50%;height:auto;margin-top:10px;margin-left:50px;'><a href='#'>";
+            		       		 div += "<img  class='media-object img-circle ' style='width:150px;height:150px;float:left;' src='/Student/front/image/Capture001.jpg' alt='通用的占位符图像'/></a> ";
+            		       		 div += " <span style='font-size:20px; display:inline-block; color:blue;'>【"+a.activityName+"】</span><div style='border:1px solid black;width:300px;height:100px;margin-left:150px;margin-top:10px;' ><ul style='list-style:none; line-height:25px ;margin-left:-200px;'>";
+            		       		 div +="<li><span>开始时间:"+((new Date(a.activityBeginTime)).toLocaleString().replace(/年|月/g,'-')).replace(/日/g,'')+"</span></li> <li><span>结束时间:"+((new Date(a.activityEndTime)).toLocaleString().replace(/年|月/g,'-')).replace(/日/g,'')+"</span></li>";
+            		       		 if(a.activityFlag==3){
+            		           		 if(new Date(a.activityBeginTime)>today){
+            		           			 div +="<li><span>状态:火热报名中</span></li></ul></div></div>";
+            		           			 div +="<button style='margin-left:350px;margin-top:-40px;'   class='layui-btn layui-btn-normal'>申请报名</button><button class='layui-btn layui-btn-normal' onclick='detailActivity("+a.activityId+")' onclick='detailActivity("+a.activityId+")' style='margin-left:350px;margin-top:-90px;'>查看详情</button>";
+            		           		 }else if(new Date(a.activityEndTime)>today  && new Date(a.activityBeginTime)<=today){
+            		           			 div +="<li><span>状态:正在进行中</span></li></ul></div></div><button style='margin-left:350px;margin-top:-90px;' onclick='detailActivity("+a.activityId+")' class='layui-btn layui-btn-normal'>查看详情</button>";
+            		           		 }else {
+            		           			 div +="<li><span>状态:已结束</span></li></ul></div></div>";
+            		           			 div +="<button class='layui-btn layui-btn-normal' style='margin-left:550px;margin-top:-160px;'>记录活动</button>"
+            		           		 }
+            		       		 }else if(a.activityFlag==0){
+            		        			div +="<li><span>申请状态:正在申请中</span></li></ul></div></div>";
+            		        			div +="<button class='layui-btn layui-btn-normal' style='margin-left:550px;margin-top:-160px;'>发起活动</button>";
+            		        		}else  if(a.activityFlag==1){
+            		        			div +="<li><span>申请状态:未发起</span></li></ul></div></div>";
+            		        			div +="<button class='layui-btn layui-btn-normal' style='margin-left:550px;margin-top:-160px;'>发起活动</button>";
+            		        		}else  if(a.activityFlag==2){
+            		        			div +="<li><span>申请状态:被拒绝</span></li></ul></div></div>";
+            		        			div +="<button class='layui-btn layui-btn-normal' style='margin-left:550px;margin-top:-160px;'>发起活动</button>";
+            		        		}
+            		       		 div +="</div>";
+            		   		 })
+            		   		 $('#activity').html(div);		
+            		       	},"json");						
+            			},
+            			joinActivity:function(){
+            				alert("fdsa");
+            			   	$.post("/Student/queryMyJoinActivity.action","stuId="+1,function(data){
+            		    		 var div = "";
+            		    		 var today =new Date();
+            		    		 $.each(data,function(i,a){
+            		    			 div += " <div  style='border:1px solid #5DADE2; height:170px; margin-top:10px;'><div  style='width:50%;height:auto;margin-top:10px;margin-left:50px;'><a href='#'>";
+            		        		 div += "<img class='media-object img-circle ' style='width:150px;height:150px;float:left;' src='/Student/front/image/Capture001.jpg' alt='通用的占位符图像'/></a> ";
+            		        		 div += " <span style='font-size:20px; display:inline-block; color:blue;'>【"+a.activityName+"】</span><div style='border:1px solid black;width:300px;height:100px;margin-left:150px;margin-top:10px;' ><ul style='list-style:none; line-height:25px ;margin-left:-200px;'>";
+            		        		 div +="<li><span>开始时间:"+((new Date(a.activityBeginTime)).toLocaleString().replace(/年|月/g,'-')).replace(/日/g,'')+"</span></li> <li><span>结束时间:"+((new Date(a.activityEndTime)).toLocaleString().replace(/年|月/g,'-')).replace(/日/g,'')+"</span></li>";
+            		            		 if(new Date(a.activityBeginTime)>today){
+            		            			 div +="<li><span>举行状态:正在报名中</span></li><li><span>已报名</span></li></ul></div></div>";
+            		            			 div +="<button class='layui-btn layui-btn-normal' onclick='detailActivity("+a.activityId+")' style='margin-left:800px;margin-top:-160px;'>查看详情</button>";
+            		            		 }else if(new Date(a.activityEndTime)>today  && new Date(a.activityBeginTime)<=today){
+            		            			 div +="<li><span>举行状态:正在进行中</span></li></ul></div></div><button class='layui-btn layui-btn-normal' onclick='detailActivity("+a.activityId+")' style='margin-left:800px;margin-top:-160px;'>查看详情</button>";
+            		            		 }else {
+            		            			 div +="<li><span>举行状态:已结束</span></li></ul></div></div><button class='layui-btn layui-btn-normal' onclick='detailActivity("+a.activityId+")' style='margin-left:800px;margin-top:-160px;'>查看详情</button>";	
+            		            		 }
+            		        		 div +="</div>";
+            		    		 })
+            		    		 $('#activity').html(div);
+            		    	},"json");
+            			},
+            			//活动详情
+            			detailActivity:function(activityId){
+            					alert(activityId);
+            				    window.location.href="/Student/front/activity/activitydetail.jsp?activityId="+activityId;
+            			}
+            			
+            }
+            function  applyActivity(){
+            	activityPage.applyActivity();
+            }	
+            function  joinActivity(){
+            	activityPage.joinActivity();
+            }
+            function  detailActivity(activityId){
+            	alert(activityId);
+            	activityPage.detailActivity(activityId);
+            }
 </script>
 </body>
 </html>

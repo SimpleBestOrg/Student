@@ -1,6 +1,5 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
-
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
 <head><meta http-equiv="Content-Type" content="text/html; charset=utf-8" /><title>
@@ -92,7 +91,7 @@
             </div>
             <div class="layui-tab-item">
                     <div class="appliActivity" style="border:1px solid red;width:900px;height:600px;">
-                                                                                                  <form class="layui-form" style="display:inline-block;" id="applyActivity" action="insertApplyActivity.action" method="post">
+                                                                 <form class="layui-form" style="display:inline-block;" id="applyActivity"  method="post">
                                                                       <input type="hidden" value="3"  name="activityInfo.studentId"/>
                                                                       <div class="layui-form-item ptop">
                                                                             <label class="layui-form-label" style="width:200px">活动名称</label>

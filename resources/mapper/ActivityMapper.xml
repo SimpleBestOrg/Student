@@ -14,11 +14,18 @@
 			<association column="activity_appliStuId" property="student" javaType="cn.com.zzzy.entity.Student" resultMap="studentResult"></association>
 			<association column="activity_recordId" property="activityRecord"  javaType="cn.com.zzzy.entity.ActivityRecord"  resultMap="activityRecordResult"></association>
 			<association column="activity_launchId"  property="activityLaunch" javaType="cn.com.zzzy.entity.ActivityLaunch" resultMap="activityLaunchResult"></association>
+			<collection property="activityStudents" ofType="cn.com.zzzy.entity.ActivityStudent">
+						<id column="activity_studentId"  property="activityStudentsId"></id>
+						<result column="activity_Id" property="activityId"></result>
+						<result column="stus_Id" property="studentsId"></result>
+						<result column="stu_activityFlag" property="stuActivityFlag"></result>
+			</collection>
 		</resultMap>
 		
 		<resultMap id="activityTypeResult" type="cn.com.zzzy.entity.ActivityType">
 				<id column="activity_typeId" property="activityTypeId"></id>
 				<result column="activity_typeName"  property="activityTypeName"></result>
+				<association  column="community_Id" property="community"  resultMap="communityResult"></association>
 		</resultMap>
 		
 		<resultMap id="studentResult" type="cn.com.zzzy.entity.Student">
@@ -28,6 +35,7 @@
 				<result column="stu_Birthday"  property="studentBirthday"></result>
 				<result column="stu_Address" property="studentAddress"></result>
 				<result column="stu_BirthPlace"  property="studentBirthPlace"></result>
+				<result column="stu_Photo"  property="studentPhoto"></result>
 		</resultMap>
 		
 		<resultMap id="activityRecordResult" type="cn.com.zzzy.entity.ActivityRecord">
@@ -45,6 +53,13 @@
 				<result  column="activity_perNum"  property="activityPersonNum"/>
 				<result  column="activity_regisCon"  property="activityRegisterCond"/>
 		</resultMap>
+		
+		<resultMap id="communityResult" type="cn.com.zzzy.entity.Community">
+				<id column="community_Id"  property="communityId"></id>
+				<result  column="community_Name"  property="communityName"/>
+				<result  column="community_appliRespon"  property="communityAppliRespon" ></result>
+		</resultMap>
+		
 		
 		<!--根据 学生ID,活动状态,活动类型,活动名称 查询活动-->
 		<select id="queryActivityByCondition"  resultMap="activityResult">
@@ -122,10 +137,26 @@
 						</foreach>
 		</select>
 		
+		<!-- 查询学生参加的活动 -->
 		<select id="queryMyJoinActivity" resultMap="activityResult">
 			select * from  activity  a
 			left join activity_student  s
 			on a.activity_Id  = s.activity_Id where s.stu_Id   = #{stuId}
+		</select>
+		
+		<!-- 根据活动ID查询活动的详细信息 -->
+		<select id="queryActivityDetail" resultMap="activityResult">
+					select * from activity  a left join stu  s
+					on s.stu_Id = a.activity_appliStuId  left  join  activity_type
+					on activity_type.activity_typeId = a.activity_typeId  left join  community
+					on  activity_type.community_Id = community.community_Id left join activity_student
+					on activity_student.activity_Id = a.activity_Id left join activity_launch
+					on a.activity_launchId = activity_launch.activity_lanId left join activity_record
+					on a.activity_recordId = activity_record.activity_recordId  left join activity_photo
+					on a.activity_recordId = activity_photo.activity_recordId
+					<where>
+								a.activity_Id = #{activityId}
+					</where>
 		</select>
 		
 		

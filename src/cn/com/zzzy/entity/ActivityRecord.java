@@ -9,8 +9,7 @@ import java.util.Set;
  */
 public class ActivityRecord {
     private Integer activityRecordId;// 活动记录ID
-    private String activityRecordContent;// 活动记录内容
-    
+    private String  activityRecordContent;// 活动记录内容
     private Set<ActivityPhoto> activityPhotos;//一个活动多个照片
     
 

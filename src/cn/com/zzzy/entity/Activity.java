@@ -1,6 +1,7 @@
 package cn.com.zzzy.entity;
 
 import java.util.Date;
+import java.util.Set;
 
 /**
  * 活动表
@@ -17,10 +18,24 @@ public class Activity {
     private Student student;// 一个活动由一个学生申请 一个学生可以申请多个活动 学生--》活动 一对多
     private ActivityRecord activityRecord;// 活动记录 活动--》活动记录 一对一
     private ActivityLaunch activityLaunch;
+    private Set<ActivityStudent>  activityStudents;
     private Integer activityFlag;// 活动状态(0:正在申请中的状态 1:已经审批的活动并且同意了2:已经审批未同意的活动)
 
     public Activity() {
         // TODO Auto-generated constructor stub
+    }
+
+    
+    
+    
+
+
+    public Set<ActivityStudent> getActivityStudents() {
+        return activityStudents;
+    }
+
+    public void setActivityStudents(Set<ActivityStudent> activityStudents) {
+        this.activityStudents = activityStudents;
     }
 
     public Activity(String activityName) {
