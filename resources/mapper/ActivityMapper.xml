@@ -17,8 +17,8 @@
 			<collection property="activityStudents" ofType="cn.com.zzzy.entity.ActivityStudent">
 						<id column="activity_studentId"  property="activityStudentsId"></id>
 						<result column="activity_Id" property="activityId"></result>
-						<result column="stus_Id" property="studentsId"></result>
 						<result column="stu_activityFlag" property="stuActivityFlag"></result>
+						<association column="stus_Id"  property="students" resultMap="studentsResult" javaType="cn.com.zzzy.entity.Student"/>
 			</collection>
 		</resultMap>
 		
@@ -36,6 +36,11 @@
 				<result column="stu_Address" property="studentAddress"></result>
 				<result column="stu_BirthPlace"  property="studentBirthPlace"></result>
 				<result column="stu_Photo"  property="studentPhoto"></result>
+		</resultMap>
+		<resultMap id="studentsResult" type="cn.com.zzzy.entity.Student">
+				<id column="stusId" property="studentId"></id>
+				<result column="activityStuName" property="studentName"></result>
+				<result column="activityStudentPhoto"  property="studentPhoto"></result>
 		</resultMap>
 		
 		<resultMap id="activityRecordResult" type="cn.com.zzzy.entity.ActivityRecord">
@@ -117,7 +122,7 @@
 						on s.stu_Id = a.activity_appliStuId  left  join activity_launch l
 						on l.activity_lanId = a.activity_launchId left join activity_record r
 						on r.activity_recordId = a.activity_recordId  
-						where   a.activity_Flag = 0   and   a.activity_appliStuId in
+						where   a.activity_Flag = 3  and   a.activity_appliStuId in
 						<foreach collection="aqv" item="stuId"  open="(" separator="," close=")">
 									#{stuId}
 						</foreach>
@@ -141,19 +146,21 @@
 		<select id="queryMyJoinActivity" resultMap="activityResult">
 			select * from  activity  a
 			left join activity_student  s
-			on a.activity_Id  = s.activity_Id where s.stu_Id   = #{stuId}
+			on a.activity_Id  = s.activity_Id where s.stus_Id   = #{stuId}
 		</select>
 		
 		<!-- 根据活动ID查询活动的详细信息 -->
 		<select id="queryActivityDetail" resultMap="activityResult">
-					select * from activity  a left join stu  s
+	     select     a.*,s.*,activity_type.*,community.*,activity_student.*,activity_launch.*,activity_record.*,activity_photo.*
+	     			,ss.stu_Id as stusId,ss.stu_Name as activityStuName,ss.stu_Photo as activityStudentPhoto from activity  a left join stu  s
 					on s.stu_Id = a.activity_appliStuId  left  join  activity_type
 					on activity_type.activity_typeId = a.activity_typeId  left join  community
 					on  activity_type.community_Id = community.community_Id left join activity_student
-					on activity_student.activity_Id = a.activity_Id left join activity_launch
+					on activity_student.activity_Id = a.activity_Id   left join stu  ss 
+					on  ss.stu_Id = activity_student.stus_Id   left join activity_launch
 					on a.activity_launchId = activity_launch.activity_lanId left join activity_record
 					on a.activity_recordId = activity_record.activity_recordId  left join activity_photo
-					on a.activity_recordId = activity_photo.activity_recordId
+					on a.activity_recordId = activity_photo.activity_recordId 
 					<where>
 								a.activity_Id = #{activityId}
 					</where>

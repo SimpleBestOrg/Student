@@ -16,7 +16,7 @@
 						<result column="stu_Photo" property="studentPhoto"/>
 			</resultMap>
 			
-			<!-- 根据活动ID查询出 该活动的评论 -->
+			<!-- 根据说说ID查询出 该述说的评论 -->
 			<select id="queryTalkingToCaoList"  resultMap="talkingToCaoResult">
 					select t.*,s.stu_Id,s.stu_Name,s.stu_Photo from  talking_tocao  t
 						left join  stu  s on t.talking_tocao_studentId = s.stu_Id 

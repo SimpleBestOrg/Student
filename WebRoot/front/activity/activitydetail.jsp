@@ -79,27 +79,10 @@
                     </div>
                     <div  style="width:80%;height:auto;border:1px solid green;margin-left:50px;">
                                 <div id="activityDetailInfo" ></div>
-                                <div id="activityStudent"></div>
                                 <span style="font-size:20px;font-weight: bold;;margin-left:20px;">参加人员:</span>
-                                <div style="margin-left:100px;">
-                                    <div style="display:inline-block;">
-                                        <img src="" style="width:50px;height:50px;display: block;">
-                                            <span>李福光</span>
-                                    </div>
-                                    <div style="display:inline-block;">
-                                        <img src="" style="width:50px;height:50px;display: block;">
-                                        <span>李福光</span>
-                                    </div>        
-                                    <div style="display:inline-block;">
-                                        <img src="" style="width:50px;height:50px;display: block;">
-                                        <span>李福光</span>
-                                    </div>                                     
-                                </div>                                
+                                <div id="activityStudent" style="margin-left:100px;"></div>                                
                                 <span style="font-size:20px;font-weight: bold;;margin-left:20px;">活动描述:</span>
-                                <p style="margin-left:100px;">这个活动没毛病老铁发动发货价发动哦IE完了额无法看到了 范德萨范德萨进口量范德萨范德萨范德萨范德萨热武器换个
-                                                                                                        这个活动没毛病老铁发动发货价发动哦IE完了额无法看到了 范德萨范德萨进口量范德萨范德萨范德萨范德萨热武器换个这个活动没毛病老铁发动发货价发动哦IE完了额无法看到了 范德萨范德萨进口量范德萨范德萨范德萨范德萨热武器换个
-                                                                                                        这个活动没毛病老铁发动发货价发动哦IE完了额无法看到了 范德萨范德萨进口量范德萨范德萨范德萨范德萨热武器换个
-                                                                                                        这个活动没毛病老铁发动发货价发动哦IE完了额无法看到了 范德萨范德萨进口量范德萨范德萨范德萨范德萨热武器换个这个活动没毛病老铁发动发货价发动哦IE完了额无法看到了 范德萨范德萨进口量范德萨范德萨范德萨范德萨热武器换个
+                                <p id="activityDescription" style="margin-left:100px;">
                                 <p>
                                 <span style="font-size:20px;font-weight: bold;;margin-left:20px;">活动照片:</span>
                                 <div>
@@ -199,7 +182,19 @@
         					$.each(data.activityStudents,function(i,a){
         						alert(a.studentName);
         					})
-        					$("#activityStudent").html();
+        					alert(data.activityStudents);
+        					   //显示活动参与人员
+        					   var div ="";
+            					$.each(data.activityStudents,function(i,a){
+               						 if(a.students.studentName!=null){
+               							 div += "<div style='display:inline-block;margin-left:10px;' ><img src="+a.students.studentPhoto+" style='width:50px;height:50px;display: block;'>";
+               							 div += "<span>"+a.students.studentName+"</span></div>";               							 
+               						 }else{
+               							 div == "暂无参加人员";
+               						 }
+               					})
+               					$("#activityStudent").html(div);
+        						$("#activityDescription").html(data.activityRecord.activityRecordContent);	
         			},'json')
         		})
         </script>

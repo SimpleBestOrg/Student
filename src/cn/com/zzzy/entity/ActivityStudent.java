@@ -1,5 +1,7 @@
 package cn.com.zzzy.entity;
 
+import java.util.Set;
+
 /**
  * 活动表的学生
  * 
@@ -12,6 +14,7 @@ public class ActivityStudent {
     private Integer studentsId;// 学生ID
     private Integer stuActivityFlag;// 学生申请加入活动的状态
     private Activity  activity;
+    private Student  students;
 
     
     
@@ -54,6 +57,23 @@ public class ActivityStudent {
     public void setActivity(Activity activity) {
         this.activity = activity;
     }
+
+    public Integer getStudentsId() {
+        return studentsId;
+    }
+
+    public void setStudentsId(Integer studentsId) {
+        this.studentsId = studentsId;
+    }
+
+    public Student getStudents() {
+        return students;
+    }
+
+    public void setStudents(Student students) {
+        this.students = students;
+    }
+
 
     
 }
