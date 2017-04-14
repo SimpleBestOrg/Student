@@ -81,9 +81,20 @@
                                 <div id="activityDetailInfo" ></div>
                                 <div id="activityStudent"></div>
                                 <span style="font-size:20px;font-weight: bold;;margin-left:20px;">参加人员:</span>
-                                <p style="margin-left:100px;">
-                                                                                                                李福光  郇红芝
-                                <p>                                
+                                <div style="margin-left:100px;">
+                                    <div style="display:inline-block;">
+                                        <img src="" style="width:50px;height:50px;display: block;">
+                                            <span>李福光</span>
+                                    </div>
+                                    <div style="display:inline-block;">
+                                        <img src="" style="width:50px;height:50px;display: block;">
+                                        <span>李福光</span>
+                                    </div>        
+                                    <div style="display:inline-block;">
+                                        <img src="" style="width:50px;height:50px;display: block;">
+                                        <span>李福光</span>
+                                    </div>                                     
+                                </div>                                
                                 <span style="font-size:20px;font-weight: bold;;margin-left:20px;">活动描述:</span>
                                 <p style="margin-left:100px;">这个活动没毛病老铁发动发货价发动哦IE完了额无法看到了 范德萨范德萨进口量范德萨范德萨范德萨范德萨热武器换个
                                                                                                         这个活动没毛病老铁发动发货价发动哦IE完了额无法看到了 范德萨范德萨进口量范德萨范德萨范德萨范德萨热武器换个这个活动没毛病老铁发动发货价发动哦IE完了额无法看到了 范德萨范德萨进口量范德萨范德萨范德萨范德萨热武器换个
@@ -159,16 +170,23 @@
         						}
         					}else{  //朋友的活动
     							//发起过的活动  根据时间判断活动是否结束
+    							//声明count用来判断查看这个活动的学生是否参加了这个活动
+    							var count = 0;
     							if(new Date(data.activityBeginTime) > today ){
     								$("#activityStatus").html("状态:活动正在报名中");
     								//查询活动学生表中  学生的ID是否存在  如果存在 则表示学生 已经报过名了 
-									$.each(data.activityStudents,function(i,a){
-											if(a.studentId == stuId  ){
-												$("#joinInfo").html("已报名");
-											}else{
-												$("#applyButton").html("<button class='layui-btn' style='margin-left:400px;margin-top:-200px;'>申请报名</button>");
-											}
-									})    							
+    									$.each(data.activityStudents,function(i,a){
+    											if(a.studentId == stuId){
+    												 count ++;
+    											}
+    									})    		
+									//表示这个学生参加已经加入这个活动了
+									if(count==1){
+										$("#joinInfo").html("已申请报名");
+									}else{
+										var  applyButton = "<button style='margin-left:600px;margin-top:-220px;' class='layui-btn layui-btn-normal'>申请报名</button>";
+										$("#applyButton").html(applyButton);
+									}
     							}else if(new Date(data.activityBeginTime)>today && new Date(data.activityEnTime<today) <today ){
     								$("#activityStatus").html("状态:活动正在进行中");
     							}else if(new Date(data.activityEndTime) < today ){
@@ -177,6 +195,11 @@
         					}
         					$("#activityBeginTime").html("活动开始时间:"+((new Date(data.activityBeginTime)).toLocaleString().replace(/年|月/g,'-')).replace(/日/g,''));
         					$("#activityEndTime").html("活动结束时间:"+((new Date(data.activityEndTime)).toLocaleString().replace(/年|月/g,'-')).replace(/日/g,''));
+        					
+        					$.each(data.activityStudents,function(i,a){
+        						alert(a.studentName);
+        					})
+        					$("#activityStudent").html();
         			},'json')
         		})
         </script>
