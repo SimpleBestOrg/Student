@@ -85,12 +85,8 @@
                                 <p id="activityDescription" style="margin-left:100px;">
                                 <p>
                                 <span style="font-size:20px;font-weight: bold;;margin-left:20px;">活动照片:</span>
-                                <div>
-                                     <img src="" style="border:1px solid red;width:200px;height:200px;;margin-left:100px;"></img>
-                                     <img src="" style="border:1px solid red;width:200px;height:200px;;margin-left:100px;"></img>
-                                     <img src="" style="border:1px solid red;width:200px;height:200px;;margin-left:100px;"></img>
-                                     <img src="" style="border:1px solid red;width:200px;height:200px;;margin-left:100px;"></img>
-                                     <img src="" style="border:1px solid red;width:200px;height:200px;;margin-left:100px;"></img>
+                                <div id="activityPhotos">
+                                                 
                                 </div>
                                     
                     </div>
@@ -112,10 +108,9 @@
         		$(function(){
         			var stuId = 1;
         			var activityId = <%=request.getParameter("activityId")%>;
-        			alert(activityId);
+        			//alert(activityId);
         			var today = new Date();
         			$.post("/Student/queryActivityDetail.action",{"activityId":activityId},function(data){
-        					alert(data.activityName);
         					$("#activityName").html(data.activityName);	
         					$("#applyStudent").html("申请人:"+data.student.studentName);
         					//
@@ -127,7 +122,7 @@
         					$("#activityType").html("活动类型:"+data.activityType.activityTypeName);
         					//如果活动类型是社团活动则需要在页面显示社团的职责
         					if(data.activityType.activityTypeId != 1){
-        						alert(data.activityType.community.communityAppliRespon);
+        						//alert(data.activityType.community.communityAppliRespon);
                                 var span = "<span style='font-size:20px;font-weight: bold;;margin-left:20px;'>社团介绍:</span>";
                                 span +="<p style='margin-left:100px;'>"+data.activityType.community.communityAppliRespon+"<p>";
         						$("#activityDetailInfo").html(span);
@@ -179,22 +174,48 @@
         					$("#activityBeginTime").html("活动开始时间:"+((new Date(data.activityBeginTime)).toLocaleString().replace(/年|月/g,'-')).replace(/日/g,''));
         					$("#activityEndTime").html("活动结束时间:"+((new Date(data.activityEndTime)).toLocaleString().replace(/年|月/g,'-')).replace(/日/g,''));
         					
-        					$.each(data.activityStudents,function(i,a){
-        						alert(a.studentName);
-        					})
-        					alert(data.activityStudents);
+        				
         					   //显示活动参与人员
         					   var div ="";
+                   			if(data.activityStudents!=null){
             					$.each(data.activityStudents,function(i,a){
-               						 if(a.students.studentName!=null){
-               							 div += "<div style='display:inline-block;margin-left:10px;' ><img src="+a.students.studentPhoto+" style='width:50px;height:50px;display: block;'>";
-               							 div += "<span>"+a.students.studentName+"</span></div>";               							 
-               						 }else{
-               							 div == "暂无参加人员";
-               						 }
-               					})
+              					  if(a.students!=null){	
+                 						 if(a.students.studentName!=null){
+                 							 div += "<div style='display:inline-block;margin-left:10px;' ><img src="+a.students.studentPhoto+" style='width:50px;height:50px;display: block;'>";
+                 							 div += "<span>"+a.students.studentName+"</span></div>";               							 
+                 						 }else{
+                 							 div == "暂无参加人员";
+                 						 }
+              					  }else{
+              						  	 div = "暂无参加人员";
+              					  }	 
+                 				})	
+                   			}else{
+                   				div = "暂无参加人员";
+                   			}
                					$("#activityStudent").html(div);
-        						$("#activityDescription").html(data.activityRecord.activityRecordContent);	
+               					
+            					if(data.activityRecord!=null){
+            						$("#activityDescription").html(data.activityRecord.activityRecordContent);	
+            					}else{
+            						$("#activityDescription").html("暂无记录");
+            					}
+        						
+        						
+        					var Photo = "";
+        					 
+        					if(data.activityRecord!=null){
+            						if(data.activityRecord.activityPhotos.length!=0){
+            							$.each(data.activityRecord.activityPhotos,function(i,photos){
+            								Photo +="<img src='"+photos.activityPhoto+"' style='border:1px solid red;width:200px;height:200px;;margin-left:100px;'></img>";
+            							})
+            						}else{
+            							 Photo = "<p style='margin-left:100px;'>暂无照片<p>";
+            						}
+        					 }else if(data.activityRecord==null){
+        						 Photo = "<p style='margin-left:100px;'>暂无照片<p>";
+        					 }	
+        						$("#activityPhotos").html(Photo);
         			},'json')
         		})
         </script>

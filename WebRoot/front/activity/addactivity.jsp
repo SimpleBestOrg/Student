@@ -17,7 +17,7 @@
   <div class="main">
     <a class="logo" href="/" title="Fly">Fly社区</a>
         <div class="nav">
-      <a class="nav-this" href="jie/index.html">
+      <a class="nav-this" href="">
         <i class="iconfont icon-wenda"></i>问答
       </a>
       <a href="#" target="_blank">
@@ -33,7 +33,7 @@
     <div class="nav-user">      
       <!-- 登入后的状态 -->
       
-      <a class="avatar" href="../user/index.html">
+      <a class="avatar" href="../user/index.jsp">
         <img src="">
         <cite>贤心</cite>
         <i>VIP2</i>

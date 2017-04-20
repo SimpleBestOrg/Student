@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.com.zzzy.basemapper.studentmapper.StudentsMapper">
+			
+			
+			<resultMap type="cn.com.zzzy.entity.Student" id="StudentResult">
+				<id column="stuId" property="studentId"></id>
+				<result column="stuName"  property="studentName"   />
+				<result column="stuPhoto"  property="studentPhoto" />
+				<collection property="studentFriend" ofType="cn.com.zzzy.entity.StudentFriend">
+						<id column="stu_FriendId"  property="studentFriendId"></id>
+						<result  column="stu_friend_Flag"  property="stuFriendFlag"/>
+						<result column="frientId"     property="friend"></result>
+						<association  column="frientId"  property="student" javaType="cn.com.zzzy.entity.Student" resultMap="friendResult" />
+				</collection>
+			</resultMap>
+			
+		 <resultMap type="cn.com.zzzy.entity.Student" id="friendResult">
+		 		<id column="friendId" property="studentId"></id>
+		 		<result column="friendName" property="studentName"/>
+		 		<result column="friendPhoto" property="studentPhoto"/>
+		 		<result column="friendBirthday" property="studentBirthday"/>
+		 		<result column="friendBirthPlace" property="studentBirthPlace"/>
+		 		<result column="cla_Id" property="studentClassId"/>
+		 		<result column="friendCommun" property="studentCommunityId"/>
+		 		<result column="friendAddress" property="studentAddress"></result>
+		 		<association column="cla_Id" property="studentClasses" javaType="cn.com.zzzy.entity.StudentClasses" resultMap="classesResult"></association>
+		 </resultMap>
+		 
+		 <resultMap type="cn.com.zzzy.entity.StudentClasses" id="classesResult">
+		 		<id column="cla_Id" property="ClassesId"></id>
+		 		<id column="cla_Name" property="ClassesName"></id>
+		 </resultMap>
+			
+			
+
+
+			<!--根据学生ID查询学生朋友的信息 -->
+			 <select id="queryFriendInfo" resultMap="StudentResult">
+				SELECT
+						s.stu_Id stuId,s.stu_Name stuName ,s.stu_Photo stuPhoto,
+						stu_friend.stu_friend_Flag,stu_friend.frientId,
+						ss.stu_Id friendId ,ss.stu_Name friendName ,ss.stu_Photo friendPhoto,ss.stu_Birthday friendBirthday,ss.stu_BirthPlace friendBirthPlace,ss.stu_ClassId friendClass,ss.stu_CommunityId friendCommun,ss.stu_Address  friendAddress,
+						stu_classes.cla_Id,stu_classes.cla_Name
+					FROM
+						stu s
+					LEFT JOIN stu_friend ON s.stu_Id = stu_friend.stuId
+					LEFT JOIN stu ss ON ss.stu_Id = stu_friend.frientId
+					LEFT JOIN stu_classes ON ss.stu_ClassId = stu_classes.cla_Id
+					WHERE
+					   s.stu_Id = #{stuId}
+			</select>
+</mapper>

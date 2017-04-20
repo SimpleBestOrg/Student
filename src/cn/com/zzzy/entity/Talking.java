@@ -1,6 +1,7 @@
 package cn.com.zzzy.entity;
 
 import java.util.Date;
+import java.util.Set;
 
 /**
  * 说说表
@@ -10,14 +11,15 @@ import java.util.Date;
 public class Talking {
     private Integer talkingId;// 说说的ID
     private String talkingContent;// 发表说说的内容
-    private Student stuId;  //学生
+    private Student stuId; // 学生
     private Integer talkingStudentId;// 发表的学生的ID
     private Date talkingDateTime;// 发表说说的时间
     private TalkingAuthority talkingAuthority;
     private Integer talkingAuthorityId;// 说说权限ID
-    private Integer talkingThumCount;  
-    
-    
+    private Integer talkingThumCount;
+    private Set<TalkingPhoto> talkingPhotos;
+    private Set<TalkingToCao> talkingTocao;
+
     public Integer getTalkingThumCount() {
         return talkingThumCount;
     }
@@ -82,4 +84,21 @@ public class Talking {
         this.talkingAuthority = talkingAuthority;
     }
 
+    public Set<TalkingPhoto> getTalkingPhotos() {
+        return talkingPhotos;
+    }
+
+    public void setTalkingPhotos(Set<TalkingPhoto> talkingPhotos) {
+        this.talkingPhotos = talkingPhotos;
+    }
+
+    public Set<TalkingToCao> getTalkingTocao() {
+        return talkingTocao;
+    }
+
+    public void setTalkingTocao(Set<TalkingToCao> talkingTocao) {
+        this.talkingTocao = talkingTocao;
+    }
+    
+    
 }

@@ -78,9 +78,31 @@
       <div  id="activity">
             
       </div>
+      
+      
       <div style="text-align: center">
         <div class="laypage-main"><span class="laypage-curr">1</span><a href="/jie/page/2/">2</a><a href="/jie/page/3/">3</a><a href="/jie/page/4/">4</a><a href="/jie/page/5/">5</a><span>…</span><a href="/jie/page/148/" class="laypage-last" title="尾页">尾页</a><a href="/jie/page/2/" class="laypage-next">下一页</a></div>
       </div>
+      
+                  <!-- 记录活动模块 -->
+            <div id="recordInfo" style="width:798px;height:490px; display:none;">
+                            <!--<span style="margin-top:3000px;margin-left:350px;font-size:40px;">记录活动</span>-->
+                            <span style="margin-left:60px;margin-top:10px;display:block;font-size:20px;">活动名称:</span>
+                            <span style="margin-left:60px;margin-top:10px;display:block;font-size:20px;">活动类型:</span>
+                            <span style="margin-left:60px;margin-top:10px;display:block;font-size:20px;">活动开始时间:</span>
+                            <span style="margin-left:60px;margin-top:10px;display:block;font-size:20px;">活动结束时间:</span>
+                            <span style="margin-left:60px;margin-top:10px;display:block;font-size:20px;">活动参加人员:</span>
+                            <div style="margin-top:10px;margin-left:200px;">
+                                <img src="" style="width:81px;height:50px;display: block;">
+                            </div>
+                            <span style="margin-left:60px;margin-top:10px;display:block;font-size:20px;">记录活动:</span>
+                            <div  style="width:600px;margin-left:180px;">
+                                <textarea id="recordEdit"  style="margin-left:200px;"></textarea>   
+                            </div>
+            </div>
+      
+      
+      
       
     </div>
   </div>
@@ -94,8 +116,9 @@
     <a href="http://fly.layui.com/jie/2461.html" target="_blank">微信公众号</a>
   </p>
 </div>
-<script src="/Student/front/res/layui/layui.js"></script>
+
 <script src="/Student/js/jquery.min.js"></script>
+<script src="/Student/front/res/layui/layui.js"></script>
 
 <script type="text/javascript">
             $(function(){
@@ -142,7 +165,7 @@
             		           			 div +="<li><span>状态:正在进行中</span></li></ul></div></div><button style='margin-left:350px;margin-top:-90px;' onclick='detailActivity("+a.activityId+")' class='layui-btn layui-btn-normal'>查看详情</button>";
             		           		 }else {
             		           			 div +="<li><span>状态:已结束</span></li></ul></div></div>";
-            		           			 div +="<button class='layui-btn layui-btn-normal' style='margin-left:550px;margin-top:-160px;'>记录活动</button>"
+            		           			 div +="<button  onclick='openRecord("+a.activityId+")'   class='layui-btn layui-btn-normal' style='margin-left:550px;margin-top:-160px;'>记录活动</button>"
             		           		 }
             		       		 }else if(a.activityFlag==0){
             		        			div +="<li><span>申请状态:正在申请中</span></li></ul></div></div>";
@@ -199,6 +222,41 @@
             	alert(activityId);
             	activityPage.detailActivity(activityId);
             }
+            
+            layui.use(['layer','layedit'], function(){
+            	  var layer = layui.layer
+            	  ,layedit = layui.layedit;
+            	  layedit.build('recordEdit',{
+            		  tool:['face','image'],
+            		  height:130
+            	  });
+            	  
+            	});              
+            function openRecord(activityId){
+            		  alert(activityId);
+            		  $.post("/Student/queryActivityDetail.action",{"activityId":activityId},function(data){
+            			  
+            		  },"json")
+
+            		  layer.open({
+            		      type: 1 //Layer提供了5种层类型。可传入的值有：0（信息框，默认）1（页面层）2（iframe层）3（加载层）4（tips层）
+            		      ,title: '记录活动'
+            		      ,area: ['800px', '600px']
+            		      ,shade: 0.4
+            		      ,content: $("#recordInfo") //支持获取DOM元素
+            		      ,btn: ['提交', '关闭'] //按钮
+            		      ,scrollbar: false //屏蔽浏览器滚动条
+            		      ,yes: function(index){
+            		          layer.msg('yes');
+            		      }
+            		      ,btn2: function(){
+            		    	  
+            		      }
+            		  });
+            		  
+            }
+            	      
 </script>
 </body>
 </html>
+

@@ -91,7 +91,7 @@
 						limit #{param.startIndex},#{param.rows}
 		</select>
 		<!-- 根据学生ID,活动状态,活动类型,活动名称 查询活动的数量 -->
-		<select id="queryActivityAcountByCondition" >
+		<select id="queryActivityAcountByCondition"   resultMap="activityResult">
 					select a.*,t.*,s.*,l.*,r.* from activity a  left join activity_type t
 				on t.activity_typeId = a.activity_typeId left join stu s
 				on s.stu_Id = a.activity_appliStuId  left  join activity_launch l

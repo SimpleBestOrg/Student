@@ -1,6 +1,7 @@
 package cn.com.zzzy.entity;
 
 import java.util.Date;
+import java.util.Set;
 
 /**
  * 学生表
@@ -17,7 +18,9 @@ public class Student {
     private Integer studentClassId;// 学生的班级
     private Integer studentCommunityId;// 学生参加的社团
     private String studentPhoto;// 学生的个人照片
-
+    private StudentClasses studentClasses;
+    
+    
     public Integer getStudentId() {
         return studentId;
     }
@@ -90,4 +93,14 @@ public class Student {
         this.studentPhoto = studentPhoto;
     }
 
+    public StudentClasses getStudentClasses() {
+        return studentClasses;
+    }
+
+    public void setStudentClasses(StudentClasses studentClasses) {
+        this.studentClasses = studentClasses;
+    }
+
+
+    
 }

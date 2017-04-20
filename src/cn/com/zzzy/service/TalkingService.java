@@ -6,8 +6,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import cn.com.zzzy.basemapper.talkingmapper.TalkingMapper;
+import cn.com.zzzy.entity.StudentFriend;
 import cn.com.zzzy.entity.Talking;
-import cn.com.zzzy.entity.TalkingToCao;
 import cn.com.zzzy.util.PageParam;
 
 @Service
@@ -23,8 +23,8 @@ public class TalkingService {
      * @param stuId
      * @return
      */
-    public List<Talking> queryTalkingByFriendId(PageParam param,List<Integer> stuId){
-        List<Talking>  talkingList = talkingMapper.queryTalkingByFriendId(param, stuId);
+    public List<Talking> queryTalkingByFriendId(PageParam param,List<StudentFriend> friendInfo){
+        List<Talking>  talkingList = talkingMapper.queryTalkingByFriendId(param, friendInfo);
         return talkingList;
     }
     

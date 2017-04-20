@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.com.zzzy.basemapper.studentmapper.StudentFriendMapper">
+			<resultMap type="cn.com.zzzy.entity.StudentFriend" id="studentFriendResult">
+				<id  column="stu_FriendId" property="studentFriendId"></id>
+				<result  column="stuId"  property="studentId"/>
+				<result  column="frientId" property="friend"/>
+				<result column="stu_friend_Flag" property="stuFriendFlag"></result>
+				<collection property="students" column="frientId" ofType="cn.com.zzzy.entity.Student">
+					<id column="stu_Id" property="studentId" />
+					<result column="stu_Name"   property="studentName"/>
+					<result column="stu_Sex"   property="studentSex"/>
+					<result column="stu_Photo"   property="studentPhoto"/>
+					<result column="stu_Address"   property="studentAddress"/>
+					<result column="stu_ClassId"   property="studentClassId"/>
+					<association column="stu_ClassId" property="studentClasses" javaType="cn.com.zzzy.entity.StudentClasses" resultMap="studentClassesResult"></association>
+				</collection>
+			</resultMap>
+			
+			<resultMap type="cn.com.zzzy.entity.StudentClasses" id="studentClassesResult">
+					<id  column="stu_ClassId" property="ClassesId"></id>
+					<result column="cla_Name"  property="ClassesName"></result>
+			</resultMap>
+			
+			
+			<select id="queryFriendInfo" resultMap="studentFriendResult">
+					SELECT
+						sf.frientId,
+						sf.stuId,
+						sf.stu_friend_Flag,
+						s.stu_Id,
+						s.stu_Name,
+						s.stu_Sex,
+						s.stu_Photo,
+						s.stu_Address,
+						s.stu_ClassId,
+					  sc.cla_Name
+					FROM
+						stu s
+					LEFT JOIN stu_friend sf ON sf.frientId = s.stu_Id
+					LEFT JOIN stu_classes sc ON sc.cla_Id = s.stu_ClassId
+					WHERE
+						sf.stuId = 1
+			</select>
+</mapper>

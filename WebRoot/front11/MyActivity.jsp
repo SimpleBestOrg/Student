@@ -145,7 +145,7 @@
 
 <script  type="text/javascript">
 
-	function  applyActivity(id){
+	function  applyActivity(){
 		$.post("/Student/insertApplyActivity.action",$("#applyActivity").serialize(),function(data){
 			alert(data);
 		})

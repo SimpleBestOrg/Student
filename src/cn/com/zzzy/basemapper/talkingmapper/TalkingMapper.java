@@ -5,6 +5,7 @@ import java.util.List;
 import org.apache.ibatis.annotations.Param;
 
 import cn.com.zzzy.basemapper.BaseMapper;
+import cn.com.zzzy.entity.StudentFriend;
 import cn.com.zzzy.entity.Talking;
 import cn.com.zzzy.util.PageParam;
 
@@ -16,7 +17,7 @@ public interface TalkingMapper extends BaseMapper<Talking>{
      * @param stuId
      * @return
      */
-    List<Talking>  queryTalkingByFriendId(@Param("page")PageParam param,@Param("friendId") List<Integer> stuId);
+    List<Talking>  queryTalkingByFriendId(@Param("page")PageParam param,@Param("friendId") List<StudentFriend> friendInfo);
     /**
      * 根据学生ID查询出朋友说说的数量
      * @param param

@@ -11,6 +11,22 @@
 				<result column="talking_thumCount" property="talkingThumCount"/>
 				<association column="talking_authorityId" property="talkingAuthority" resultMap="talkingAuthorityResult" javaType="cn.com.zzzy.entity.TalkingAuthority"></association>
 				<association column="talking_StudentId" property="stuId" resultMap="studentResult" javaType="cn.com.zzzy.entity.Student"></association>
+				<collection property="talkingPhotos"  ofType="cn.com.zzzy.entity.TalkingPhoto">
+					<id  column="talkingPhotoId" property="talkingPhotoId"></id>
+					<result column="talkingId" property="talkingId"></result>
+					<result column="talkingPhoto" property="talkingPhoto"></result>
+				</collection>
+				<collection property="talkingTocao" ofType="cn.com.zzzy.entity.TalkingToCao">
+						<id      column="talking_tocao_Id" property="talkingToCaoId"></id>
+						<result  column="talking_tocao_Context"  property="talkingToCaoContext"></result>
+						<result  column="talking_tocao_Time"  property="talkingToCaoDateTime"></result>
+						<result  column="talking_tocao_parentId" property="talkingToCaoParentId"></result>
+						<association property="student" column="talking_tocao_studentId"   javaType="cn.com.zzzy.entity.Student">
+								<id column="stuId" property="studentId"></id>
+								<result column="stuName" property="studentName"></result>
+								<result column="stuPhoto" property="studentPhoto"></result>
+						</association>
+				</collection>
 		</resultMap>
 		
 		<resultMap type="cn.com.zzzy.entity.TalkingAuthority" id="talkingAuthorityResult">
@@ -23,13 +39,29 @@
 					<result column="stu_Photo" property="studentPhoto"/>
 		</resultMap>
 		
-		<!--根據朋友ID查詢所有的朋友的説説-->
+		<!-- 根据朋友ID查询朋友的说说 -->
 		<select id="queryTalkingByFriendId"  resultMap="talkingResult">
-				select t.*,s.stu_Id,s.stu_Name,s.stu_Photo from  talking t left join stu s
-				on s.stu_Id = t.talking_StudentId
-				where   t.talking_authorityId =1  and  t.talking_StudentId in
+			SELECT
+				t.*, s.stu_Id,
+				s.stu_Name,
+				s.stu_Photo,
+				tp.talkingId,
+				tp.talkingPhoto,
+				tp.talkingPhotoId,
+				tt.*,
+				ss.stu_Id   as  'stuId' ,
+				ss.stu_Name as  'stuName',
+				ss.stu_Photo  as 'stuPhoto'
+			FROM
+				talking t
+			LEFT JOIN stu s ON s.stu_Id = t.talking_StudentId
+			LEFT JOIN talking_photos tp ON tp.talkingId = t.talking_Id
+			LEFT JOIN talking_tocao tt ON tt.talking_id = t.talking_Id
+			Left JOIN stu ss on  ss.stu_Id = tt.talking_tocao_studentId 
+			WHERE
+				t.talking_authorityId = 1 and  t.talking_StudentId in
 				<foreach collection="friendId" item="friendId" open="(" separator="," close=")">
-						#{friendId}
+						#{friendId.friend}
 				</foreach>
 		</select>
 		<!--根学生朋友的ID查询朋友发表说说的数量-->
@@ -45,8 +77,19 @@
 		
 		<!--查詢學生ID所有的説説-->
 		<select id="queryTalkingByStuId"   resultMap="talkingResult">
-					select t.*,s.stu_Id,s.stu_Name,s.stu_Photo from  talking t left join stu s
-				on s.stu_Id = t.talking_StudentId where t.talking_StudentId = #{stuId}
+				SELECT
+						t.*, s.stu_Id,
+						s.stu_Name,
+						s.stu_Photo,
+						tp.talkingId,
+						tp.talkingPhoto,
+						tp.talkingPhotoId
+					FROM
+						talking t
+					LEFT JOIN stu s ON s.stu_Id = t.talking_StudentId 
+					LEFT JOIN talking_photos tp ON tp.talkingId = t.talking_Id
+					WHERE
+						t.talking_StudentId = #{stuId}
 		</select>
 		
 		<!--查詢學生ID查询发表说说的数量-->
