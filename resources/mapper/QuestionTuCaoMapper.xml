@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.com.zzzy.basemapper.questionmapper.QuestionTuCaoMapper">
+	<delete id="delete">
+		delete ques_tocao as QuestionTuCao 
+		where QuestionTuCao.ques_tocaoId=#{qid}
+	</delete>
+	<select id="select" resultType="map"> 
+		select QuestionTuCao.*  
+		from ques_tocao as QuestionTuCao where 
+		QuestionTuCao.questionId=#{qid}
+	</select>
+</mapper>

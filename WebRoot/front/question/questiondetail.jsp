@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <!DOCTYPE html>
 <html>
 <head>
@@ -33,87 +34,45 @@
         <a href="" onclick="layer.msg('正在通过QQ登入', {icon:16, shade: 0.1, time:0})" class="iconfont icon-qq" title="QQ登入"></a>
         <a href="" onclick="layer.msg('正在通过微博登入', {icon:16, shade: 0.1, time:0})" class="iconfont icon-weibo" title="微博登入"></a>
       </p>   
-      
-      <!-- 登入后的状态 -->
-      <!-- 
-      <a class="avatar" href="user/index.html">
-        <img src="http://tp4.sinaimg.cn/1345566427/180/5730976522/0">
-        <cite>贤心</cite>
-        <i>VIP2</i>
-      </a>
-      <div class="nav">
-        <a href="/user/set/"><i class="iconfont icon-shezhi"></i>设置</a>
-        <a href="/user/logout/"><i class="iconfont icon-tuichu" style="top: 0; font-size: 22px;"></i>退了</a>
-      </div> -->
-      
     </div>
   </div>
 </div>
+
 
 
 <div class="main layui-clear">
   <div class="wrap">
     <div class="content detail">
       <div class="fly-panel detail-box">
-        <h1>Fly Template v2.0，基于 layui 的轻量级社区模版</h1>
-        <div class="fly-tip fly-detail-hint" data-id="{{rows.id}}">
+      <c:forEach var="qs" items="${listselect}">
+        <h1>${qs.question_Title}</h1>
+        	<div class="fly-tip fly-detail-hint" data-id="{{rows.id}}">
           <span class="fly-tip-stick">置顶帖</span>
           <span class="fly-tip-jing">精帖</span>
-          
           <span>未结贴</span>
-          <!-- <span class="fly-tip-jie">已采纳</span> -->
-          
-          <!-- <span class="jie-admin" type="del" style="margin-left: 20px;">删除</span>
-          <span class="jie-admin" type="set" field="stick" rank="1">置顶</span> 
-          <span class="jie-admin" type="set" field="stick" rank="0" style="background-color:#ccc;">取消置顶</span>
-          <span class="jie-admin" type="set" field="status" rank="1">加精</span> 
-          <span class="jie-admin" type="set" field="status" rank="0" style="background-color:#ccc;">取消加精</span> -->
-          
           <div class="fly-list-hint"> 
-            <i class="iconfont" title="回答">&#xe60c;</i> 517
-            <i class="iconfont" title="人气">&#xe60b;</i> 98032
+            <i class="iconfont" title="回答">&#xe60c;</i>赞 ${qs.question_praise}
+            <i class="iconfont" title="人气">&#xe60b;</i> 踩 ${qs.question_step}
           </div>
         </div>
         <div class="detail-about">
           <a class="jie-user" href="">
             <img src="http://tp4.sinaimg.cn/1345566427/180/5730976522/0" alt="">
             <cite>
-              贤心
-              <em>1分钟前发布</em>
+             	${qs.stu_Name}
+              <em>${qs.question_DataTime}</em>
             </cite>
           </a>
           <div class="detail-hits" data-id="{{rows.id}}">
-            <span style="color:#FF7200">悬赏：20飞吻</span>
-            <span class="layui-btn layui-btn-mini jie-admin" type="edit"><a href="/jie/edit/{{rows.id}}">编辑此贴</a></span>
-            <span class="layui-btn layui-btn-mini jie-admin " type="collect" data-type="add">收藏</span>
+            <span class="layui-btn layui-btn-mini jie-admin" type="edit"><a href="/jie/edit/{{rows.id}}">${qs.que_typeName}</a></span>
             <!--<span class="layui-btn layui-btn-mini jie-admin  layui-btn-danger" type="collect" data-type="add">取消收藏</span>-->
           </div>
         </div>
-        
-        <div class="detail-body photos" style="margin-bottom: 20px;">
-          <p>
-            该模版由 layui官方社区（<a href="http://fly.layui.com/" target="_blank">fly.layui.com</a>）倾情提供，只为表明我们对 layui 执着的信念、以及对未来持续加强的承诺。该模版基于 layui 搭建而成，可作为简约型问答社区的页面支撑。
-          </p>
-          <p>更新日志：</p>
-<pre>
-# v2.0 2017-03-15
-* 采用 layui 1.0.9_rls 作为UI支撑
-* 所有页面更换为卡片式布局
-* 首页增加置顶板块
-* Detail页增加收藏按钮
-* 用户中心改造，增加左侧导航
-* 消息中心、登入、注册、找回密码等页面UI升级
-</pre>
-          <p>
-            码云：<a href="http://git.oschina.net/sentsin/fly" target="_blank">http://git.oschina.net/sentsin/fly</a>
-            <br>GitHub：<a href="https://github.com/layui/fly" target="_blank">https://github.com/layui/fly</a>
-          </p>
-          <p>
-            <img src="../../res/images/fly.jpg" alt="Fly社区">
-          </p>
+        <div class="" style="margin-bottom: 20px;">
+          <p>${qs.question_Content}</p>
         </div>
+  </c:forEach>
       </div>
-
       <div class="fly-panel detail-box" style="padding-top: 0;">
         <a name="comment"></a>
         <ul class="jieda photos" id="jieda">
@@ -176,7 +135,6 @@
               </div>
             </div>
           </li>
-          
           <!-- <li class="fly-none">没有任何回答</li> -->
         </ul>
         

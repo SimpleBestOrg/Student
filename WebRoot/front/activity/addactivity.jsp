@@ -1,5 +1,9 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+<%
+  String path = request.getContextPath();
+  request.setAttribute("path", path);
+%>
 <!DOCTYPE html>
 <html>
 <head>
@@ -16,17 +20,17 @@
 <div class="header">
   <div class="main">
     <a class="logo" href="/" title="Fly">Fly社区</a>
-        <div class="nav">
-      <a class="nav-this" href="">
+     <div class="nav">
+      <a  href="${path}/front/question/questionindex.jsp">
         <i class="iconfont icon-wenda"></i>问答
       </a>
-      <a href="#" target="_blank">
+      <a href="${path}/front/community/communityindex.jsp">
         <i class="layui-icon">&#xe617;</i>社团
       </a>
-      <a href="" target="_blank">
+      <a  class="nav-this" href="${path}/front/activity/activityindex.jsp">
         <i class="layui-icon">&#xe633;</i>活动 
       </a>
-            <a href="" target="_blank">
+      <a  href="${path}/front/talking/talkingindex.jsp">
         <i class="layui-icon">&#xe611;</i>说说
       </a>
     </div>
@@ -53,7 +57,7 @@
     
     <!--  <div class="fly-none">并无权限</div>--> 
 
-           <form class="layui-form" style="display:inline-block;" action="/Student/insertApplyActivity.action" method="post" id="applyActivity" >
+           <form class="layui-form" style="display:inline-block;" action="/Student/insertApplyActivity.action"  method="post"  >
               <input type="hidden" value="3"  name="activityInfo.studentId"/>
               <div class="layui-form-item ptop">
                     <label class="layui-form-label" style="width:200px">活动名称</label>
@@ -90,7 +94,7 @@
                     </div>
                  </div>
                 <center>
-                 <button class="layui-btn" lay-filter="demo1" lay-submit="" onclick="applyActivity1()">立即提交</button>
+                 <button class="layui-btn"  lay-submit="demo" onclick="applyActivity()">立即提交</button>
                 </center> 
         </form>
     </div>
@@ -107,7 +111,7 @@
 </div>
 <script src="/Student/front/res/layui/layui.js"></script>
 <script>
-			
+		   //layui模块
             layui.use(['form','laydate'],function(){
                  var form = layui.form()
                  ,laydate = layui.laydate();
@@ -152,10 +156,11 @@
                 		  }
                 	  },
                   });
-                  form.on('submit(demo1)', function(data){
-                	  		return false;
+                  form.on('submit(demo)', function(data){
+                	  		
                 	  });  
                })
+            
                
 </script>
           

@@ -93,9 +93,9 @@
             </form>    
        </div>
       
- <div class="talking"  id="talking" style="border:1px solid red;width:600px;">
-            
- </div>
+            <div class="talking"  id="talking" style="border:1px solid red;width:600px;">
+                   <!--说说显示 -->                    
+            </div>
       
       <div style="text-align: center">
         <div class="laypage-main">
@@ -300,21 +300,27 @@
 <script src="/Student/js/jquery.min.js"></script>
 <script>
 
-    layui.use(['layedit','form'], function(){
-    	  var layedit = layui.layedit
-    	  ,$ = layui.jquery
-    	  ,form = layui.form();
-    	  //构建一个默认的编辑器
-    	  var index = layedit.build('publishTalking');
-        layedit.build('publishTalking', {
-            tool: ['face', 'image']
-            ,height: 100
-          })	
-    	});
+
 	
     
     $(function(){
     			talkingPage.friendTalking();
+    		    layui.use(['layedit','form'], function(){
+    		    	  var layedit = layui.layedit
+    		    	  ,$ = layui.jquery
+    		    	  ,form = layui.form();
+    		    	  //构建一个默认的编辑器
+    		    	  var index = layedit.build('publishTalking');
+    		    	  var index = layedit.build('publishTalking1');
+    		          layedit.build('publishTalking', {
+    		            tool: ['face', 'image']
+    		            ,height: 100
+    		          })	
+    		          layedit.build('publishTalking1', {
+      		            tool: ['face', 'image']
+      		            ,height: 100
+      		          })	    		          
+    		    	});
     })
     
     var talkingPage = {
@@ -380,7 +386,7 @@
 									 
 									 div += "<div style='border:1px solid green;'><i class='iconfont icon-iconfontpraise'></i></div>"                                                
 	                                 //说说评论
-									 div += "</div></div>";
+									 div += "<form class='layui-form' action=''><div style='width:690px;'><textarea id='publishTalking1' ></textarea></div></div></div>";
     				       })
     				       $("#talking").html(div);
     				})

@@ -26,6 +26,13 @@
 								<result column="stuName" property="studentName"></result>
 								<result column="stuPhoto" property="studentPhoto"></result>
 						</association>
+						<association property="talkingToCao" column="talking_tocao_parentId" javaType="cn.com.zzzy.entity.TalkingToCao">
+								<id column="" property=""></id>
+								<result column="" property=""/>
+								<result column="" property=""/>
+								<result column="" property=""/>
+								<result column="" property=""/>
+						</association>
 				</collection>
 		</resultMap>
 		

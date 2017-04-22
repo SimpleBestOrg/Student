@@ -11,9 +11,9 @@ public class Community {
 	private Integer communityId;//社团ID
 	private String communityName;//社团的名称
 	private Integer communityPersonNum;//社团限制人数
-	private Integer communityTeacherID;//老师的ID
+	private Teacher communityTeacherID;//老师的ID
 	private Date communityCreateDate;//社团成立日期
-	private Integer communityAppliStudent;//社团申请学生的ID
+	private Student communityAppliStudent;//社团申请学生的ID
 	private String communityAppliReason;//社团申请原因
 	private String communityAppliRespon;//社团的职责
 	private Integer communityFlag;//申请社团是否批准
@@ -35,23 +35,11 @@ public class Community {
 	public void setCommunityPersonNum(Integer communityPersonNum) {
 		this.communityPersonNum = communityPersonNum;
 	}
-	public Integer getCommunityTeacherID() {
-		return communityTeacherID;
-	}
-	public void setCommunityTeacherID(Integer communityTeacherID) {
-		this.communityTeacherID = communityTeacherID;
-	}
 	public Date getCommunityCreateDate() {
 		return communityCreateDate;
 	}
 	public void setCommunityCreateDate(Date communityCreateDate) {
 		this.communityCreateDate = communityCreateDate;
-	}
-	public Integer getCommunityAppliStudent() {
-		return communityAppliStudent;
-	}
-	public void setCommunityAppliStudent(Integer communityAppliStudent) {
-		this.communityAppliStudent = communityAppliStudent;
 	}
 	public String getCommunityAppliReason() {
 		return communityAppliReason;
@@ -71,5 +59,17 @@ public class Community {
 	public void setCommunityFlag(Integer communityFlag) {
 		this.communityFlag = communityFlag;
 	}
+    public Teacher getCommunityTeacherID() {
+        return communityTeacherID;
+    }
+    public void setCommunityTeacherID(Teacher communityTeacherID) {
+        this.communityTeacherID = communityTeacherID;
+    }
+    public Student getCommunityAppliStudent() {
+        return communityAppliStudent;
+    }
+    public void setCommunityAppliStudent(Student communityAppliStudent) {
+        this.communityAppliStudent = communityAppliStudent;
+    }
 	
 }

@@ -6,14 +6,14 @@ package cn.com.zzzy.entity;
  *
  */
 public class QuestionType {
-    private Integer quesetionTypeId;// 问题类型ID
+    private int quesetionTypeId;// 问题类型ID
     private String quesetionTypeName;// 类型的名称
 
-    public Integer getQuesetionTypeId() {
+    public int getQuesetionTypeId() {
         return quesetionTypeId;
     }
 
-    public void setQuesetionTypeId(Integer quesetionTypeId) {
+    public void setQuesetionTypeId(int quesetionTypeId) {
         this.quesetionTypeId = quesetionTypeId;
     }
 

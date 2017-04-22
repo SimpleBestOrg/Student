@@ -25,11 +25,6 @@ public class Activity {
         // TODO Auto-generated constructor stub
     }
 
-    
-    
-    
-
-
     public Set<ActivityStudent> getActivityStudents() {
         return activityStudents;
     }

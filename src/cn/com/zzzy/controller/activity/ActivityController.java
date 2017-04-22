@@ -98,7 +98,7 @@ public class ActivityController {
      * @param activity
      * @return
      */
-     @RequestMapping(value = "/insertApplyActivity")
+    @RequestMapping(value = "/insertApplyActivity")
     public String  insertApplyActivity(ActivityQueryVo activityQueryVo){
             System.out.println(activityQueryVo.getActivityInfo().getActivityName());
             System.out.println(activityQueryVo.getActivityInfo().getActivityBeginTime());
@@ -111,9 +111,9 @@ public class ActivityController {
                  activityService.insertActivity(activityQueryVo);  
                  msg = "申请成功";
             } catch (Exception e) {
-                    e.printStackTrace();
+                e.printStackTrace();
             }
-            return   msg;
+            return "front/activity/activityindex.jsp";
     }
     
 }

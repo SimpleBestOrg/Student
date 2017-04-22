@@ -17,7 +17,6 @@ public class TalkingToCao {
     private Student student;  //学生表
     private Integer talkingToCaoStudentID;// 评论的学生ID、
     private Date talkingToCaoDateTime;// 评论的时间
-
     
     
     

@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.com.zzzy.basemapper.questionmapper.QuestionTypeMapper">
+	<!-- 查询所有类型 -->	
+	<select id="selecall" resultType="Map">
+		select que_typeId as quesetionTypeId,que_typeName 
+		as quesetionTypeName from ques_type as QuestionType 
+	</select>
+	<!-- 根据问题类型查询问题 -->
+	<select id="selecttype" resultType="map" parameterType="int">
+		 select quesetion_Id as quesetionId,question_Title
+		  as quesetionTitle from ques_type as QuestionType LEFT JOIN ques as Question
+		  on Question.question_typeId=QuestionType.que_typeId 
+		  where QuestionType.que_typeId=#{tid}
+	</select>
+</mapper>

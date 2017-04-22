@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.com.zzzy.basemapper.communitymapper.CommunityMapper">
+ 	<resultMap type="cn.com.zzzy.entity.CommunityVo" id="CommunityResult">
+		<id column="community_Id" property="communityId"></id>
+		<result column="community_Name" property="communityName"/>
+		<result column="community_perNum" property="communityPersonNum"/>
+		<result column="community_createDate" property="communityCreateDate"/>
+		<result column="community_appliReason" property="communityAppliReason"/>
+		<result column="community_appliRespon" property="communityAppliRespon"/>
+		<result column="community_flag" property="communityFlag"/>
+		<result column="community_photo" property="communityPhoto"/>
+		<association column="community_TeacherId" property="communityTeacherID" resultMap="teacherResult" javaType="cn.com.zzzy.entity.Teacher"/>
+		<association column="community_appliStu" property="communityAppliStudent" resultMap="studentResult" javaType="cn.com.zzzy.entity.Student"/>
+	</resultMap>
+	<resultMap type="cn.com.zzzy.entity.Teacher" id="teacherResult">
+		<id column="tea_id" property="teacherId"></id>
+		<result column="tea_name" property="teacherName"/>
+	</resultMap>
+	<resultMap type="cn.com.zzzy.entity.Student" id="studentResult">
+		<id column="stu_Id" property="studentId"></id>
+		<result column="stu_Name" property="studentName"/>
+	</resultMap>
+	
+	<select id="select" resultMap="CommunityResult">
+		select c.community_Id,c.community_Name,c.community_perNum,t.tea_name,c.community_createDate,s.stu_Name,c.community_appliReason,c.community_appliRespon,c.community_flag,c.community_photo from community c left join teacher t 
+		on c.community_TeacherId =t.tea_id left join stu s
+		on c.community_appliStu = s.stu_Id;
+	</select>
+	<select id="selectById" resultMap="CommunityResult">
+		select c.community_Name,c.community_perNum,t.tea_name,c.community_createDate,s.stu_Name,c.community_appliReason,c.community_appliRespon,c.community_flag from community c left join teacher t 
+		on c.community_TeacherId =t.tea_id left join stu s
+		on c.community_appliStu = s.stu_Id where c.community_Id = #{selectById};
+	</select>
+	<insert id="insert" parameterType="cn.com.zzzy.entity.Community">
+		insert into community(community.community_Name,community.community_perNum,community.community_TeacherId,community.community_createDate,community.community_appliStu,community.community_appliReason,community.community_appliRespon,community.community_photo) 
+		values(#{communityName},#{communityPersonNum},#{teacherId},NOW(),#{studentId},#{communityAppliReason},#{communityAppliRespon},#{communityPhoto})
+	</insert>
+	<select id="queryById" resultMap="CommunityResult">
+		select c.community_Name,c.community_perNum,t.tea_name,c.community_createDate,s.stu_Name,c.community_appliReason,c.community_appliRespon,c.community_flag from community c left join teacher t 
+		on c.community_TeacherId =t.tea_id left join stu s
+		on c.community_appliStu = s.stu_Id where s.stu_Id = {#queryById}
+	</select>
+</mapper> 

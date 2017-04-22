@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- 一对多映射  -->
+<mapper namespace="cn.com.zzzy.basemapper.questionmapper.QuestionMapper">
+	<resultMap type="cn.com.zzzy.entity.Question" id="questionResult">
+		<id column="question_Id" property="quesetionId"></id>
+		<result column="question_Content" property="quesetionContent"></result>
+		<result column="question_Title" property="quesetionTitle"></result>
+		<result column="question_DataTime" property="quesetionDateTime"></result>
+		<result column="question_step" property="questionStep"></result>
+		<result column="question_praise" property="questionPraise"></result>
+		<association column="question_typeId" property="quesetionTypeId" resultMap="questionTypeResult" javaType="cn.com.zzzy.entity.QuestionType"></association>
+		<association column="question_StudentId" property="quesetionStudentId" resultMap="questionStudentResult" javaType="cn.com.zzzy.entity.Student"></association>
+		<collection property="questionAnswer" ofType="cn.com.zzzy.entity.QuestionAnswer">
+		</collection>
+	</resultMap>
+	<resultMap type="cn.com.zzzy.entity.QuestionType" id="questionTypeResult">
+		<id column="que_typeId" property="quesetionTypeId"></id>
+		<result column="quesetionTypeName" property="que_typeName"></result>
+	</resultMap>
+	<resultMap type="cn.com.zzzy.entity.Student" id="questionStudentResult">
+		<id column="stu_Id" property="studentId"></id>
+		<result column="stu_Name" property="studentName"></result>
+		<result column="stu_Sex" property="studentSex"></result>
+		<result column="stu_Address" property="studentAddress"></result>
+		<result column="stu_BirthPlace" property="studentName"></result>
+		<result column="stu_Photo" property="studentPhoto"></result>
+	</resultMap>
+	<!-- 根据学生id查询问题 -->
+	<select id="stuquerylist" resultType="Map" >
+		select * from stu Student RIGHT JOIN ques Question 
+		on Student.stu_Id=Question.question_StudentId LEFT JOIN ques_type QuestionType 
+		on Question.question_typeId=QuestionType.que_typeId where Student.stu_Id=#{sid}
+	</select>
+	<!-- 根据问题id查询问题详细信息  -->
+	<select id="selectname"    resultMap="questionResult">
+		select q.question_Title,q.question_Content,sq.stu_Name,sq.stu_Photo,q.question_DataTime, 
+		qt.que_typeName,q.question_step,q.question_praise,sa.stu_Name,sa.stu_Photo,qa.ques_answer_DataTime 
+		from  ques q left join stu sq 
+		on sq.stu_Id  = q.question_StudentId left join ques_answer qa 
+		on  q.question_Id = qa.ques_answer_questionId  left join stu sa 
+		on qa.ques_answer_studentId  = sa.stu_Id left join ques_type qt 
+		on q.question_typeId=qt.que_typeId where q.question_id=#{qid}
+	</select>   
+	<!-- 查询问题的 -->
+	<select id="squestion" resultType="Map">
+		select * from stu Student RIGHT JOIN ques Question 
+		on Student.stu_Id=Question.question_StudentId LEFT JOIN ques_type QuestionType 
+		on Question.question_typeId=QuestionType.que_typeId
+	</select>  
+	
+	<!-- 添加问题 -->
+	<insert id="insertadd" parameterType="cn.com.zzzy.entity.Question">
+		insert into ques(question_Content,question_Title,question_typeId,question_StudentId) Question values (#{quesetionContent},#{quesetionTitle},#{quesetionTypeId.quesetionTypeId},#{quesetionStudentId.studentId})
+	</insert>
+	<!-- 删除问题 -->
+	<delete id="delete">
+	</delete>
+</mapper>

@@ -1,5 +1,9 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+<%
+  String path = request.getContextPath();
+  request.setAttribute("path", path);
+%>
 <!DOCTYPE html>
 <html>
 <head>
@@ -16,17 +20,17 @@
 <div class="header">
   <div class="main">
     <a class="logo" href="/" title="Fly">Fly社区</a>
-    <div class="nav">
-      <a class="nav-this" href="jie/index.html">
+     <div class="nav">
+      <a  href="${path}/front/question/questionindex.jsp">
         <i class="iconfont icon-wenda"></i>问答
       </a>
-      <a href="#" target="_blank">
+      <a href="${path}/front/community/communityindex.jsp">
         <i class="layui-icon">&#xe617;</i>社团
       </a>
-      <a href="" target="_blank">
+      <a  class="nav-this" href="${path}/front/activity/activityindex.jsp">
         <i class="layui-icon">&#xe633;</i>活动 
       </a>
-            <a href="" target="_blank">
+      <a  href="${path}/front/talking/talkingindex.jsp">
         <i class="layui-icon">&#xe611;</i>说说
       </a>
     </div>
@@ -72,7 +76,7 @@
           <i class="iconfont icon-sousuo"></i>
           <input class="layui-input" autocomplete="off" placeholder="搜索内容，回车跳转" type="text" name="q">
         </form>
-        <a href="addactivity.jsp" class="layui-btn jie-add">申请活动</a>
+        <a href="/Student/front/activity/addactivity.jsp" class="layui-btn jie-add">申请活动</a>
       </div>
       
       <div  id="activity">
@@ -86,7 +90,6 @@
       
                   <!-- 记录活动模块 -->
             <div id="recordInfo" style="width:798px;height:490px; display:none;">
-                            <!--<span style="margin-top:3000px;margin-left:350px;font-size:40px;">记录活动</span>-->
                             <span style="margin-left:60px;margin-top:10px;display:block;font-size:20px;">活动名称:</span>
                             <span style="margin-left:60px;margin-top:10px;display:block;font-size:20px;">活动类型:</span>
                             <span style="margin-left:60px;margin-top:10px;display:block;font-size:20px;">活动开始时间:</span>
@@ -149,7 +152,7 @@
             		    	},"json");
             		},
             		applyActivity:function(){
-            	    		$.post("/Student/queryActivityByCondition.action","activityInfo.StudentId=1",function(data){
+            	    		$.post("/Student/queryActivityByCondition.action","activityInfo.StudentId=3",function(data){
             		      	 var div = "";
             		   		 var today =new Date()
             		   		 $.each(data,function(i,a){
@@ -231,11 +234,11 @@
             		  height:130
             	  });
             	  
-            	});              
+            	});           
+            //记录活动
             function openRecord(activityId){
-            		  alert(activityId);
             		  $.post("/Student/queryActivityDetail.action",{"activityId":activityId},function(data){
-            			  
+            			  	
             		  },"json")
 
             		  layer.open({
