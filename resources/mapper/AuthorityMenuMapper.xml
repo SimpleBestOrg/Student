@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.com.zzzy.basemapper.authoritymapper.AuthorityMenuMapper">
+	
+	
+	
+	<!-- 查询登陆用户的权限 -->
+		<resultMap type="cn.com.zzzy.entity.AuthorityMenu" id="AccountMenu">
+				<id column="menu_id" property="menuId" />
+				<result column="menu_name" property="menuName"/>
+				<result column="menu_parent_id" property="menuParentId"/>
+				<result column="menu_url" property="menuUrl"/>
+		</resultMap>
+		
+		<!-- 查询登陆用户的权限 -->
+		<select id="queryAccountMenu" parameterType="Integer" resultMap="AccountMenu">
+			select 
+				menu_id,
+				menu_name,
+				menu_parent_id,
+				menu_url 
+				from authority_menu 
+				where menu_id in(
+				
+				select 
+					menu_id 
+					from authority_menu_bridge 
+					where authority_id in(
+				
+					select 
+						authority_id 
+						from authority_account_bridge 
+						where authority_account_id =#{_parameter}
+				)
+			)
+		</select>
+		<!-- 查询所有的菜单 -->
+		<select id="queryAuthorityMenu"  resultMap="AccountMenu">
+			select 
+					menu_id,
+					menu_name,
+					menu_parent_id,
+					menu_url 
+					from authority_menu 
+		</select>
+		<!-- 查询主菜单 -->
+		<select id="queryAuthorityParentMenu"  resultMap="AccountMenu">
+			select 
+					menu_id,
+					menu_name,
+					menu_parent_id,
+					menu_url 
+					from authority_menu 
+					where menu_parent_id = 0 
+		</select>
+		
+		<!-- 添加权限菜单 -->
+		<insert id="insertAuthorityMenu" parameterType="cn.com.zzzy.entity.AuthorityMenu">
+			insert 
+				into authority_menu
+				(menu_name,
+				 menu_parent_id,
+				 menu_url) 
+				values(#{menuName},#{menuParentId},#{menuUrl})
+		</insert>
+		
+		<!-- 修改权限菜单 -->
+		<update id="updateAuthorityMenu" parameterType="cn.com.zzzy.entity.AuthorityMenu">
+			update 
+			authority_menu 
+			set menu_name = #{menuName},
+			 	menu_parent_id=#{menuParentId},
+			 	menu_url =#{menuUrl} 
+			where menu_id = #{menuId}
+		</update>
+		
+		<!-- 删除权限菜单 -->
+		<delete id="deleteAuthorityMenu" parameterType="Integer">
+			delete 
+				from authority_menu
+				where menu_id = #{menuId}
+		</delete>
+		
+		
+		<!-- 删除菜单时验证该菜单下是否有子菜单 -->
+		<select  id="queryDeleteAuthorityParentMenu" parameterType="Integer" resultType="Integer">
+			select 
+				count(*) 
+				from authority_menu menus,
+				(select menu_parent_id from authority_menu) menu 
+				
+				where menus.menu_id=menu.menu_parent_id and menus.menu_id = #{_parameter}
+		</select>
+		
+		<!-- 删除菜单时验证该菜单是否被权限占用 -->
+		<select id="queryDeleteAuthoritytMenu" parameterType="Integer" resultType="Integer">
+			select count(*) 
+				from authority_menu_bridge 
+				where menu_id = #{_parameter}
+		</select>
+		
+		<!-- 查询某一权限的菜单 -->
+		<select id="queryOneAuthoritytMenu" parameterType="Integer" resultType="Integer">
+			select 
+				menu_id as 'menuId'
+				from authority_menu_bridge 
+				where authority_id =#{_parameter}
+		</select>
+		
+		<!-- 对某一权限 进行修改 先执行删除  -->
+		<delete id="deleteOneAuthorityMenu" parameterType="Integer">
+			delete 
+				from authority_menu_bridge 
+				where authority_id = #{_parameter}
+		</delete>
+		<!-- 对某一权限 进行修改 再进行添加  -->
+		<insert id="insertOneAuthorityMenu" parameterType="cn.com.zzzy.entity.AuthorityMenuBridge">
+			insert
+				into authority_menu_bridge (authority_id,menu_id)
+				values(#{authorityId},#{menuId})
+		</insert>
+</mapper>

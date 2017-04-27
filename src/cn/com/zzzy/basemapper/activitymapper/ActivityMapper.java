@@ -33,7 +33,7 @@ public interface ActivityMapper extends BaseMapper<Activity> {
     Activity queryActivityDetail(@Param("activityId") Integer activityId);
     
     /**
-     *  根据ID查询参加过的活动
+     *  根据学生ID查询参加过的活动
      * @return
      */
     List<Activity>   queryMyJoinActivity(@Param("param")  PageParam param,@Param("stuId")Integer stuId);
@@ -41,7 +41,7 @@ public interface ActivityMapper extends BaseMapper<Activity> {
     
     /**
      * 通过条件分页查询所有的活动 
-     * @param activityQueryVo   被包装的活动
+     * @param activityQueryVo   
      * @return
      */
     List<Activity> queryActivityByCondition(@Param("param") PageParam param,@Param("aqv") ActivityQueryVo activityQueryVo);

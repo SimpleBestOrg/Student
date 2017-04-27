@@ -9,6 +9,7 @@ public class PageParam {
 
 	private Integer page;
 	private Integer rows;
+	private String  keyWord;
 
 	public PageParam() {
 	}
@@ -39,4 +40,13 @@ public class PageParam {
 	public int getStartIndex() {
 		return (getPage() - 1) * getRows();
 	}
+
+    public String getKeyWord() {
+        return keyWord;
+    }
+
+    public void setKeyWord(String keyWord) {
+        this.keyWord = keyWord;
+    }
+	
 }

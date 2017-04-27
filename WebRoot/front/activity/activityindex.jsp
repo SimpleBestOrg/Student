@@ -125,6 +125,10 @@
 
 <script type="text/javascript">
             $(function(){
+            	var stuId = <%=session.getAttribute("Account")%>;
+            	if(stuId==null){
+            		window.location="/Student/login.jsp?loginInfo="+1;
+            	}
             	activityPage.friendActivity();
             });
             var activityPage = {
@@ -186,8 +190,7 @@
             		       	},"json");						
             			},
             			joinActivity:function(){
-            				alert("fdsa");
-            			   	$.post("/Student/queryMyJoinActivity.action","stuId="+1,function(data){
+            			   	$.post("/Student/queryMyJoinActivity.action",function(data){
             		    		 var div = "";
             		    		 var today =new Date();
             		    		 $.each(data,function(i,a){

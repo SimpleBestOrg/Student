@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.com.zzzy.basemapper.authoritymapper.AuthorityAccountMapper">
+
+		<!-- 登陆验证 -->
+		<resultMap type="cn.com.zzzy.entity.AuthorityAccount" id="AccountLanding">
+			<id column="account_id" property="accountId"/>
+			<result column="student_id" property="studentId"/>
+			<result column="teacher_id" property="teacherId"/>
+			<result column="account_name" property="accountName"/>
+		</resultMap>
+		
+		<!-- 验证登陆用户 -->
+		<select id="queryAccountLanding" parameterType="cn.com.zzzy.entity.AuthorityAccount" resultMap="AccountLanding">
+			select 
+				account_id,
+				student_id,
+				teacher_id,
+				account_name
+				from authority_account 
+				where account_name =#{accountName} and account_pwd = #{accountPwd}
+		</select>
+		
+		<!-- 模糊查询学生 -->
+		<select id="queryVagueAccStudent" parameterType="cn.com.zzzy.util.AuthorityAccountUtil" resultType="cn.com.zzzy.util.AuthorityAccountUtil">
+			select 
+				a.account_id as 'accountId',
+				stu_Name as 'stuName'
+				from stu s,authority_account a 
+				where s.stu_Id=a.student_id and stu_Name like CONCAT('%',#{stuName},'%') limit #{total},#{rows}
+		</select>
+		
+		<!-- 模糊查询学生总人数 -->
+		<select id="queryVagueAccStudentcount" parameterType="cn.com.zzzy.util.AuthorityAccountUtil" resultType="int">
+			select 
+				count(*) 
+				from stu s,authority_account a 
+				where s.stu_Id=a.student_id and stu_Name like CONCAT('%',#{stuName},'%')
+		</select>
+		
+		<!-- 模糊查询老师 -->
+		<select id="queryVagueAccTeacher" parameterType="cn.com.zzzy.util.AuthorityAccountUtil" resultType="cn.com.zzzy.util.AuthorityAccountUtil">
+			select 
+				account_id as 'accountId',
+				tea_name as 'teaName'
+				from teacher t,authority_account a 
+				where t.tea_id=a.teacher_id and tea_name like CONCAT('%',#{teaName},'%') limit #{total},#{rows}
+		</select>
+		
+		<!-- 模糊查询老师总人数-->
+		<select id="queryVagueAccTeachercount" parameterType="cn.com.zzzy.util.AuthorityAccountUtil" resultType="int">
+			select 
+				count(*) 
+				from teacher t,authority_account a 
+				where t.tea_id=a.teacher_id and tea_name like CONCAT('%',#{teaName},'%')
+		</select>
+		<!-- 添加登录账户 -->
+		<insert id="insertAuthorityAccount"  parameterType="cn.com.zzzy.entity.AuthorityAccount">
+					insert into  authority_account(student_id,teacher_id,account_name,account_pwd)   values(#{obj.studentId},#{obj.teacherId},#{obj.accountName},#{obj.accountPwd});
+		</insert>
+</mapper>

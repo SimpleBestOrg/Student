@@ -19,8 +19,8 @@
 			</resultMap>
 			
 			<resultMap type="cn.com.zzzy.entity.StudentClasses" id="studentClassesResult">
-					<id  column="stu_ClassId" property="ClassesId"></id>
-					<result column="cla_Name"  property="ClassesName"></result>
+					<id  column="stu_ClassId" property="classesId"></id>
+					<result column="cla_Name"  property="className"></result>
 			</resultMap>
 			
 			
@@ -41,6 +41,7 @@
 					LEFT JOIN stu_friend sf ON sf.frientId = s.stu_Id
 					LEFT JOIN stu_classes sc ON sc.cla_Id = s.stu_ClassId
 					WHERE
-						sf.stuId = 1
+					 sf.stu_friend_Flag = 2
+						and sf.stuId = #{stuId}
 			</select>
 </mapper>

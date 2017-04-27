@@ -11,7 +11,7 @@ import java.util.Set;
 public class Student {
     private Integer studentId;// 学生ID
     private String studentName;// 学生的姓名
-    private String studentSex;// 学生的性别
+    private Integer studentSex;// 学生的性别
     private Date studentBirthday;// 学生的生日
     private String studentAddress;// 学生的地址
     private Integer studentBirthPlace;// 籍贯 精确到县
@@ -19,8 +19,8 @@ public class Student {
     private Integer studentCommunityId;// 学生参加的社团
     private String studentPhoto;// 学生的个人照片
     private StudentClasses studentClasses;
-    
-    
+    private Set<Student> studentFriend;
+
     public Integer getStudentId() {
         return studentId;
     }
@@ -35,14 +35,6 @@ public class Student {
 
     public void setStudentName(String studentName) {
         this.studentName = studentName;
-    }
-
-    public String getStudentSex() {
-        return studentSex;
-    }
-
-    public void setStudentSex(String studentSex) {
-        this.studentSex = studentSex;
     }
 
     public Date getStudentBirthday() {
@@ -101,6 +93,20 @@ public class Student {
         this.studentClasses = studentClasses;
     }
 
+    public Set<Student> getStudentFriend() {
+        return studentFriend;
+    }
 
-    
+    public void setStudentFriend(Set<Student> studentFriend) {
+        this.studentFriend = studentFriend;
+    }
+
+    public Integer getStudentSex() {
+        return studentSex;
+    }
+
+    public void setStudentSex(Integer studentSex) {
+        this.studentSex = studentSex;
+    }
+
 }

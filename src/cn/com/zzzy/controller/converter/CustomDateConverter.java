@@ -22,11 +22,17 @@ public class CustomDateConverter implements Converter<String,Date>{
 		
 		//实现 将日期串转成日期类型(格式是yyyy-MM-dd HH:mm:ss)
 		
+	    System.out.println("日期类型的长度:"+source.length());
 		SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-		
+		SimpleDateFormat simpleDateFormat1 = new SimpleDateFormat("yyyy-MM-dd");
 		try {
 			//转成直接返回
-			return simpleDateFormat.parse(source);
+			
+			if(source.length()==10){
+			    return simpleDateFormat1.parse(source);    
+			}else{
+			    return simpleDateFormat.parse(source);
+			}
 		} catch (ParseException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

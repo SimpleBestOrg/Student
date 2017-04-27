@@ -26,13 +26,6 @@
 								<result column="stuName" property="studentName"></result>
 								<result column="stuPhoto" property="studentPhoto"></result>
 						</association>
-						<association property="talkingToCao" column="talking_tocao_parentId" javaType="cn.com.zzzy.entity.TalkingToCao">
-								<id column="" property=""></id>
-								<result column="" property=""/>
-								<result column="" property=""/>
-								<result column="" property=""/>
-								<result column="" property=""/>
-						</association>
 				</collection>
 		</resultMap>
 		
@@ -92,11 +85,11 @@
 						tp.talkingPhoto,
 						tp.talkingPhotoId
 					FROM
-						talking t
-					LEFT JOIN stu s ON s.stu_Id = t.talking_StudentId 
-					LEFT JOIN talking_photos tp ON tp.talkingId = t.talking_Id
-					WHERE
-						t.talking_StudentId = #{stuId}
+							talking t
+							LEFT JOIN stu s ON s.stu_Id = t.talking_StudentId 
+							LEFT JOIN talking_photos tp ON tp.talkingId = t.talking_Id
+						WHERE
+							t.talking_StudentId = #{stuId}
 		</select>
 		
 		<!--查詢學生ID查询发表说说的数量-->

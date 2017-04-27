@@ -11,11 +11,11 @@ import cn.com.zzzy.entity.Question;
  * */
 public interface QuestionMapper{
 	//查询每个学生提的问题
-	public List stuquerylist(Integer sid);
+	public List<Question> stuquerylist(Integer sid);
 	//根据问题ID查询详细信息
-	public List selectname(Integer qid);
+	public List<Question> selectname(Integer qid);
 	//查询所有问题
-	public List squestion();
+	public List<Question> squestion();
 	//根据问题ID删除问题
 	public void delete(Integer deid);
 	//添加问题

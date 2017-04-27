@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.com.zzzy.basemapper.studentmapper.StudentClassMapper">
+		<resultMap type="cn.com.zzzy.entity.StudentClasses" id="StudentClassesResult">
+				<id column="cla_Id" property="classesId"></id>
+				<result column="cla_Name" property="className"></result>
+		</resultMap>
+		
+		<!-- 查找所有班级 -->
+		<select id="queryAllClasses"  resultMap="StudentClassesResult" >
+				select cla_Id,cla_Name from  stu_classes
+		</select>	
+</mapper>

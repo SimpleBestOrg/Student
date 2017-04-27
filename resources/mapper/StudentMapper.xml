@@ -4,16 +4,15 @@
 <mapper namespace="cn.com.zzzy.basemapper.studentmapper.StudentsMapper">
 			
 			
-			<resultMap type="cn.com.zzzy.entity.Student" id="StudentResult">
-				<id column="stuId" property="studentId"></id>
-				<result column="stuName"  property="studentName"   />
-				<result column="stuPhoto"  property="studentPhoto" />
-				<collection property="studentFriend" ofType="cn.com.zzzy.entity.StudentFriend">
-						<id column="stu_FriendId"  property="studentFriendId"></id>
-						<result  column="stu_friend_Flag"  property="stuFriendFlag"/>
-						<result column="frientId"     property="friend"></result>
-						<association  column="frientId"  property="student" javaType="cn.com.zzzy.entity.Student" resultMap="friendResult" />
-				</collection>
+		  <resultMap type="cn.com.zzzy.entity.Student" id="StudentResult">
+				<id column="stu_Id" property="studentId"></id>
+				<result column="stu_Name"  property="studentName"   />
+				<result column="stu_Photo"  property="studentPhoto" />
+				<result column="stu_Birthday" property="studentBirthday"></result>
+				<result column="stu_Address" property="studentAddress"></result>
+				<result column="stu_Sex" property="studentSex"></result>
+				<association property="studentClasses" javaType="cn.com.zzzy.entity.StudentClasses" resultMap="classesResult">
+				</association>
 			</resultMap>
 			
 		 <resultMap type="cn.com.zzzy.entity.Student" id="friendResult">
@@ -29,9 +28,10 @@
 		 </resultMap>
 		 
 		 <resultMap type="cn.com.zzzy.entity.StudentClasses" id="classesResult">
-		 		<id column="cla_Id" property="ClassesId"></id>
-		 		<id column="cla_Name" property="ClassesName"></id>
+		 		<id column="cla_Id" property="classesId"></id>
+		 		<id column="cla_Name" property="className"></id>
 		 </resultMap>
+		
 			
 			
 
@@ -51,4 +51,52 @@
 					WHERE
 					   s.stu_Id = #{stuId}
 			</select>
+			
+			<!-- 根据学生ID查询学生的详细细信息 -->
+			<select id="queryStudentInfoById"  resultMap="StudentResult">
+					SELECT
+						stu_Id,
+						stu_Name,
+						stu_Sex,
+						stu_Birthday,
+						stu_Address,
+						stu_Birthday,
+						stu_Photo,
+						sc.cla_Name
+					FROM
+						stu
+					LEFT JOIN stu_classes sc ON sc.cla_Id = stu.stu_ClassId
+					WHERE
+						stu_Id = 1
+			</select>
+			<!-- 查询所有学生 -->
+			<select id="queryAllStudent" resultType="map">
+						select stu_Id,stu_Name,stu_Sex,stu_Birthday,stu_Address,stu_BirthPlace.pla_Name,stu_classes.cla_Name,community.community_Name,stu_Photo from stu left join stu_birthplace
+						on stu.stu_BirthPlace = stu_BirthPlace.pla_Id left join stu_classes
+						on stu.stu_ClassId = stu_classes.cla_Id left join community
+						on stu.stu_CommunityId = community_Id
+						  <where> 
+							<if test="page!=null and  page.keyWord!=null">
+								 	stu_Name  like concat('%',concat(#{page.keyWord},'%')) or stu_Address like concat('%',concat(#{page.keyWord},'%')) or stu_classes.cla_Name like concat('%',concat(#{page.keyWord},'%')) 
+							</if>
+						  </where>	
+						LIMIT #{page.startIndex},#{page.rows}
+			</select>
+			<!-- 查询学生人数总数量  -->
+			<select id="queryAllStudentCount" resultType="Integer">
+						select count(*) from stu left join stu_birthplace
+						on stu.stu_BirthPlace = stu_BirthPlace.pla_Id left join stu_classes
+						on stu.stu_ClassId = stu_classes.cla_Id left join community
+						on stu.stu_CommunityId = community_Id	
+					  <where> 
+						<if test="page!=null and  page.keyWord!=null">
+							 	stu_Name  like concat('%',concat(#{page.keyWord},'%'))  or stu_Address like concat('%',concat(#{page.keyWord},'%')) or stu_classes.cla_Name like concat('%',concat(#{page.keyWord},'%'))
+						</if>
+					  </where>									
+			</select>
+			
+			<!-- 添加学生 -->
+			<insert id="addStudent" parameterType="cn.com.zzzy.entity.Student" useGeneratedKeys="true" keyProperty="studentId">
+						insert into  stu(stu_Name,stu_Sex,stu_Birthday,stu_Address,stu_ClassId,stu_Photo)  values(#{studentName},#{studentSex},#{studentBirthday},#{studentAddress},#{studentClasses.classesId},#{studentPhoto})
+			</insert>	
 </mapper>

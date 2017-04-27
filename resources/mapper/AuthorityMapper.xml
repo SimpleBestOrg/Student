@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.com.zzzy.basemapper.authoritymapper.AuthorityMapper">
+	
+	<!-- 根据用户查权限 -->
+	<select id="queryAccountAuthority" parameterType="Integer" resultType="cn.com.zzzy.entity.Authority">
+		select  
+			authority_id  as 'authorityId'
+			from authority_account_bridge 
+			where authority_account_id =#{_parameter} 
+	</select>
+		
+	<!-- 查询所有的权限 -->
+	<select id="queryAuthority" resultType="cn.com.zzzy.entity.Authority">
+		select 
+			authority_id as 'authorityId',
+			authority_name as 'authorityName'
+			from authority
+	</select>
+	
+	<!-- 用户权限名称修改 -->
+	<update id="updateAuthority" parameterType="cn.com.zzzy.entity.Authority">
+		update
+			authority 
+			set authority_name = #{authorityName} 
+			where authority_id = #{authorityId}
+	</update>
+	
+	<!-- 添加用户权限名称 -->
+	<insert id="insertAuthority"  parameterType="cn.com.zzzy.entity.Authority">
+		insert 
+			into authority(authority_name) 
+			values(#{authorityName})
+	</insert>
+	
+	<!-- 查询某个已占用权限数量 -->
+	<select id="queryAuthorityCount" parameterType="Integer" resultType="Integer">
+		SELECT 
+			count(*) 
+			FROM authority_account_bridge 
+			where authority_id = #{_parameter}
+	</select>
+	
+	<!-- 删除权限名称 -->
+	<delete id="deleteAuthority" parameterType="Integer">
+		delete 
+			from authority 
+			where authority_id = #{authorityId}
+	</delete>
+	
+	<!-- 用户权限添加 -->
+	<insert id="insertAccountAuthority" parameterType="cn.com.zzzy.entity.AuthorityAccountBridge">
+		insert 
+			into authority_account_bridge
+			(authority_id,
+			authority_account_id) 
+			values(#{authorityId},#{authorityAccountId})
+	</insert>
+	
+	
+	
+	<!-- 删除用户权限 -->
+	<delete id="deleteAccountAuthority" parameterType="Integer">
+		delete 
+			from authority_account_bridge
+			where authority_account_id = #{_parameter} 
+	</delete>
+	
+</mapper>

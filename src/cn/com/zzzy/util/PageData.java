@@ -9,8 +9,8 @@ import java.util.List;
  */
 public class PageData {
 
-	private int total;
-	private List rows;
+	private int total; //分页的总条数
+	private List rows; //从数据库中提取的数量
 	public PageData(){}
 	public PageData(int n ,List rows){
 		this.total= n;

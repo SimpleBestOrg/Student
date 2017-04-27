@@ -43,11 +43,17 @@ public class TalkingController {
      */
     @RequestMapping("queryTalkingByFriendId")
     @ResponseBody
-    public List<Talking> queryTalkingByFriendId(PageParam param,Integer stuId) {
+    public List<Talking> queryTalkingByFriendId(PageParam param) {
+        Integer stuId = 1;
         // 根据学生ID查询朋友信息 得到朋友信 息
         List<StudentFriend> friendInfo = studentFriendService.queryFriendInfo(param, stuId);
-        // 通过朋友信息的ID得到对所有人可见的说说
-        List<Talking> talkingList = talkingService.queryTalkingByFriendId(param, friendInfo);
+        System.out.println("朋友数量:"+friendInfo.size());
+        
+        List<Talking> talkingList = null;
+        if(friendInfo.size()!=0){
+            // 通过朋友信息的ID得到对所有人可见的说说
+             talkingList = talkingService.queryTalkingByFriendId(param, friendInfo);
+        }
         return talkingList;
     }
 
