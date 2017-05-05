@@ -62,7 +62,7 @@
 			$.post("/stuManager/isNullUser.bb",function(data){
 				alert(data);;
 			});
-			window.location="login.jsp";
+			window.location="/Student/login.jsp";
 		});
 	});
 	function addMenu(title,info){
@@ -77,7 +77,7 @@
 			$('#tab').tabs('select',title);
 		}else{
 			$('#tab').tabs('add',{    
-			    title:title,    
+			    title:title,     
 			    content:"<iframe src='"+url+"' width='100%' height='100%' frameborder='0' ></iframe>",    
 			    closable:true,    
 			});  

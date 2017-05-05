@@ -11,6 +11,7 @@
 				<result column="stu_Birthday" property="studentBirthday"></result>
 				<result column="stu_Address" property="studentAddress"></result>
 				<result column="stu_Sex" property="studentSex"></result>
+				<result column="stu_signature" property="studentSignature"></result>
 				<association property="studentClasses" javaType="cn.com.zzzy.entity.StudentClasses" resultMap="classesResult">
 				</association>
 			</resultMap>
@@ -49,7 +50,7 @@
 					LEFT JOIN stu ss ON ss.stu_Id = stu_friend.frientId
 					LEFT JOIN stu_classes ON ss.stu_ClassId = stu_classes.cla_Id
 					WHERE
-					   s.stu_Id = #{stuId}
+					  stu_friend.stu_friend_Flag=1 and s.stu_Id = #{stuId}
 			</select>
 			
 			<!-- 根据学生ID查询学生的详细细信息 -->
@@ -62,6 +63,7 @@
 						stu_Address,
 						stu_Birthday,
 						stu_Photo,
+						stu_signature,
 						sc.cla_Name
 					FROM
 						stu

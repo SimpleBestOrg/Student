@@ -16,4 +16,9 @@ public interface TalkingToCaoMapper  extends BaseMapper<TalkingToCao>{
        */
       List<TalkingToCao>   queryTalkingToCaoList(@Param("talkingId") Integer talkingId);
       
+      /**
+       * 添加评论
+       * @param talkingToCao
+       */
+      void  insertTalkingToCao(TalkingToCao talkingToCao);
 }

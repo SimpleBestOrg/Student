@@ -16,6 +16,8 @@
 						<result column="stu_Photo" property="studentPhoto"/>
 			</resultMap>
 			
-			
+			<insert  id="insertTalkingToCao">
+					insert into talking_tocao(talking_id,talking_tocao_Context,talking_tocao_parentId,talking_tocao_studentId,talking_tocao_Time) values (#{talkingId},#{talkingToCaoContext},#{talkingToCaoParentId},#{talkingToCaoStudentID},now())
+			</insert>
 			
 </mapper>

@@ -51,7 +51,7 @@ public interface ActivityMapper extends BaseMapper<Activity> {
      * @param activityQueryVo
      * @return
      */
-    int queryActivityAcountByCondition(@Param("aqv") ActivityQueryVo activityQueryVo);
+    int queryActivityAcountByCondition(@Param("param") PageParam param,@Param("aqv") ActivityQueryVo activityQueryVo);
      
     
     /**
@@ -67,4 +67,11 @@ public interface ActivityMapper extends BaseMapper<Activity> {
     * @return
     */
     int queryActivityCountByFriendIds(@Param("aqv") List<Integer> friendId);
+    
+    /**
+     * 更新活动状态
+     * @param activity
+     */
+    void  updateActivityFlag(@Param("aqv")Activity activity);
+    
 }

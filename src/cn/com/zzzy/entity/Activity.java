@@ -20,7 +20,8 @@ public class Activity {
     private ActivityLaunch activityLaunch;
     private Set<ActivityStudent>  activityStudents;
     private Integer activityFlag;// 活动状态(0:正在申请中的状态 1:已经审批的活动并且同意了2:已经审批未同意的活动)
-
+    private Integer activityApplyStuId;
+    
     public Activity() {
         // TODO Auto-generated constructor stub
     }
@@ -126,4 +127,12 @@ public class Activity {
         this.activityRecord = activityRecord;
     }
 
+    public Integer getActivityApplyStuId() {
+        return activityApplyStuId;
+    }
+
+    public void setActivityApplyStuId(Integer activityApplyStuId) {
+        this.activityApplyStuId = activityApplyStuId;
+    }
+    
 }

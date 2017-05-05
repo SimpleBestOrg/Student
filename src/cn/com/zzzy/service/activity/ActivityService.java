@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import cn.com.zzzy.basemapper.activitymapper.ActivityMapper;
 import cn.com.zzzy.entity.Activity;
 import cn.com.zzzy.entity.ActivityQueryVo;
+import cn.com.zzzy.util.PageData;
 import cn.com.zzzy.util.PageParam;
 
 @Service
@@ -23,9 +24,25 @@ public class ActivityService {
      * @return
      */
     public List<Activity>  queryActivityByCondition(PageParam param,ActivityQueryVo activityQueryVo){
-              return activityMapper.queryActivityByCondition(param, activityQueryVo);
+              List<Activity> listActivity = activityMapper.queryActivityByCondition(param, activityQueryVo);
+              System.out.println("长度:"+listActivity.size());
+              return  listActivity;
     }
     
+    /**
+     * 根据条件查询活动数量
+     * @param param
+     * @param activityQueryVo
+     * @return
+     */
+    public  int  queryActivityCountByCondition(PageParam param,ActivityQueryVo activityQueryVo){
+             int count =   activityMapper.queryActivityAcountByCondition(param,activityQueryVo);
+             System.out.println("数量:"+count);
+              return count;
+    }
+    
+    
+
     /**
      * 根据朋友ID查询朋友圈的活动
      * @param param
@@ -81,6 +98,14 @@ public class ActivityService {
                  }else{
                       return  2;
                  }
+    }
+    
+    /**
+     * 更新活动状态
+     * @param activity
+     */
+    public void updateActivityFlag(Activity activity){
+        activityMapper.updateActivityFlag(activity);
     }
     
     

@@ -83,11 +83,17 @@
 						s.stu_Photo,
 						tp.talkingId,
 						tp.talkingPhoto,
-						tp.talkingPhotoId
+						tp.talkingPhotoId,
+						tt.*,
+						st.stu_Id   as  'stuId' ,
+						st.stu_Name as  'stuName',
+						st.stu_Photo  as 'stuPhoto'
 					FROM
 							talking t
 							LEFT JOIN stu s ON s.stu_Id = t.talking_StudentId 
 							LEFT JOIN talking_photos tp ON tp.talkingId = t.talking_Id
+							LEFT JOIN talking_tocao  tt on tt.talking_id = t.talking_Id 
+						  LEFT JOIN stu st on tt.talking_tocao_studentId = st.stu_Id
 						WHERE
 							t.talking_StudentId = #{stuId}
 		</select>

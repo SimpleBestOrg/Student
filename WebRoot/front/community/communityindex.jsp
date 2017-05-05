@@ -90,8 +90,7 @@
       <div class="fly-tab">
         <span>
           <a class="tab-this">全部社团</a>
-          <a onclick="myCommunityDetail(1)">我的社团</a> 
-          <a href="">申请建立社团</a>
+          <a onclick="myCommunityDetail()">我的社团</a> 
           <a href="">我的消息</a>
         </span>
         <form action="http://cn.bing.com/search" class="fly-search">
@@ -186,13 +185,12 @@
 					});
 				}); 
 		}	
-			//传的是社团详细的ID，上面用onclick调用
+			//传的是社团ID，上面用onclick调用
 		  function communityDetail(communityId){
 				 window.location.href="${path}/getCommunity.action?id="+communityId;
 			}
-		  function myCommunityDetail(stuId){
-			  alert(stuId);
-			  window.location.href="${path}/getCommunity.action?stuId="+stuId;
+		  function myCommunityDetail(){
+			  window.location.href="${path}/queryById.action";
 		  }	 
 		
 			

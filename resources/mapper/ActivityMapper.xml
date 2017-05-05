@@ -74,42 +74,60 @@
 						on l.activity_lanId = a.activity_launchId left join activity_record r
 						on r.activity_recordId = a.activity_recordId
 						<where>
-								<if test="aqv.activityInfo !=null and aqv.activityInfo.activityFlag!=null">
-										 a.activity_Flag = #{aqv.activityInfo.activityFlag}
+						       1 = 1 
+								<if test="aqv!=null  and  aqv.activityInfo !=null and aqv.activityInfo.activityFlag!=null">
+									 and	 a.activity_Flag = #{aqv.activityInfo.activityFlag}
 								</if>
-								<if test="aqv.activityInfo !=null  and aqv.activityInfo.studentId!=null">
+								<if test=" aqv!=null  and  aqv.activityInfo !=null  and aqv.activityInfo.studentId!=null">
 										  and a.activity_appliStuId  = #{aqv.activityInfo.studentId}
 								</if>
-								<if test="aqv.activityInfo !=null and aqv.activityInfo.activityTypeId">
+								<if test="aqv!=null  and  aqv.activityInfo !=null and aqv.activityInfo.activityTypeId !=null">
 										  and a.activity_typeId = #{aqv.activityInfo.activityTypeId}
 								</if>
-								<if test="aqv.activityInfo !=null and aqv.activityInfo.activityName !=null">
+								<if test="aqv!=null  and  aqv.activityInfo !=null and aqv.activityInfo.activityName !=null">
 										  and a.activity_Name = #{aqv.activityInfo.activityName}
 								</if>
+								<!-- 后台根据活动状态查询 -->
+								<if test="param!=null and param.flag!=null">
+									 and	a.activity_Flag = #{param.flag}
+								</if>	
+								<!-- 后台模糊查询使用 -->
+								<if test="param!=null and param.keyWord!=null">
+									and (a.activity_Name like concat('%',concat(#{param.keyWord},'%')) or t.activity_typeName like concat('%',concat(#{param.keyWord},'%')) or s.stu_Name like concat('%',concat(#{param.keyWord},'%'))) 
+								</if>
+								
 						</where>
 						order by a.activity_Id 
 						limit #{param.startIndex},#{param.rows}
 		</select>
 		<!-- 根据学生ID,活动状态,活动类型,活动名称 查询活动的数量 -->
-		<select id="queryActivityAcountByCondition"   resultMap="activityResult">
-					select a.*,t.*,s.*,l.*,r.* from activity a  left join activity_type t
+		<select id="queryActivityAcountByCondition"    resultType="Integer">
+					select count(*) from activity a  left join activity_type t
 				on t.activity_typeId = a.activity_typeId left join stu s
 				on s.stu_Id = a.activity_appliStuId  left  join activity_launch l
 				on l.activity_lanId = a.activity_launchId left join activity_record r
-				on r.activity_recordId = a.activity_recordId
+				on r.activity_recordId = a.activity_recordId 
 				<where>
-						<if test="aqv.activityInfo !=null and aqv.activityInfo.activityFlag!=null">
-								 a.activity_Flag = #{aqv.activityInfo.activityFlag}
+				     1 = 1
+						<if test=" aqv!=null and aqv.activityInfo !=null and aqv.activityInfo.activityFlag!=null">
+								 and a.activity_Flag = #{aqv.activityInfo.activityFlag}
 						</if>
-						<if test="aqv.activityInfo !=null  and aqv.activityInfo.studentId!=null">
+						<if test=" aqv!=null and aqv.activityInfo !=null  and aqv.activityInfo.studentId!=null">
 								  and a.activity_appliStuId  = #{aqv.activityInfo.studentId}
 						</if>
-						<if test="aqv.activityInfo !=null and aqv.activityInfo.activityTypeId">
+						<if test=" aqv!=null and  aqv.activityInfo !=null and aqv.activityInfo.activityTypeId">
 								  and a.activity_typeId = #{aqv.activityInfo.activityTypeId}
 						</if>
-						<if test="aqv.activityInfo !=null and aqv.activityInfo.activityName !=null">
+						<if test=" aqv!=null and  aqv.activityInfo !=null and aqv.activityInfo.activityName !=null">
 								  and a.activity_Name = #{aqv.activityInfo.activityName}
 						</if>
+						<if test="param!=null and param.flag!=null">
+								 and a.activity_Flag = #{param.flag}
+						</if>						
+						<if test="param!=null and param.keyWord!=null">
+								and (a.activity_Name like concat('%',concat(#{param.keyWord},'%')) or t.activity_typeName like concat('%',concat(#{param.keyWord},'%')) or s.stu_Name like concat('%',concat(#{param.keyWord},'%'))) 
+						</if>	
+						
 			</where>			
 		</select>
 		
@@ -172,5 +190,10 @@
 		<insert id="insertActivity"  parameterType="cn.com.zzzy.entity.ActivityQueryVo">
 			insert into activity(activity_Name,activity_beginTime,activity_endTime,activity_appliTime,activity_appliReason,activity_typeId,activity_appliStuId) values(#{obj.activityInfo.activityName},#{obj.activityInfo.activityBeginTime},#{obj.activityInfo.activityEndTime},NOW(),#{obj.activityInfo.activityAppliReason},#{obj.activityInfo.activityTypeId},#{obj.activityInfo.studentId})
 		</insert>
+		
+		<!-- 更新活动状态  -->
+		<update id="updateActivityFlag">
+		   update activity a set a.activity_Flag = #{aqv.activityFlag} WHERE a.activity_Id =#{aqv.activityId}
+		</update>
 		
 </mapper>

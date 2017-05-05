@@ -14,14 +14,28 @@ public class TalkingToCaoService {
         private  TalkingToCaoMapper  talkingToCaoMapper;
         
         /**
-         * 根据说说ID查询所有的说说
+         * 根据说说ID查询所有说说的评论
          * @param talkingToCaoId
          * @return
          */
         public  List<TalkingToCao>  queryTalkingToCaoList(Integer talkingId){
              return talkingToCaoMapper.queryTalkingToCaoList(talkingId);
         }
-
-      
+        
+        /**
+         * 添加回复
+         * @param talkingToCao
+         */
+        public String  insertTalkingToCao(TalkingToCao talkingToCao){
+            String msg = "回复失败";
+            try {
+                talkingToCaoMapper.insertTalkingToCao(talkingToCao);
+                msg = "回复成功";
+            } catch (Exception e) {
+                 msg = "回复失败";
+            }
+            return msg;
+        }
+        
         
 }

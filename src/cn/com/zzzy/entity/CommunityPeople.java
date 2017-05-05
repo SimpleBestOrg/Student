@@ -6,50 +6,42 @@ package cn.com.zzzy.entity;
  *
  */
 public class CommunityPeople {
-    private Integer comunityPeopleId;// 申请加入社团表ID
-    private Integer communityId;// 申请进入社团id社团成员的ID
-    private Integer communityStudentID;// 社团成员的学生的ID
+    private int comunityPeopleId;// 申请加入社团表ID
+    private Community community;// 申请进入社团id社团的ID（外键）
+    private Student student;// 社团成员的学生的ID
     private String communityPosition;// 部门中的职位
-    private String communityPeoFlag;// 学生申请加入这个社团的状态(0:正在申请加入这个社团1:经过审批并同意的已经成为这个社团的人员2:经过审批为同意的)
-
-    public Integer getComunityPeopleId() {
+    private Integer communityPeoFlag;// 学生申请加入这个社团的状态(0:正在申请加入这个社团1:经过审批并同意的已经成为这个社团的人员2:经过审批为同意的)
+    public int getComunityPeopleId() {
         return comunityPeopleId;
     }
-
-    public void setComunityPeopleId(Integer comunityPeopleId) {
+    public void setComunityPeopleId(int comunityPeopleId) {
         this.comunityPeopleId = comunityPeopleId;
     }
-
-    public Integer getCommunityId() {
-        return communityId;
+    public Community getCommunity() {
+        return community;
     }
-
-    public void setCommunityId(Integer communityId) {
-        this.communityId = communityId;
+    public void setCommunity(Community community) {
+        this.community = community;
     }
-
-    public Integer getCommunityStudentID() {
-        return communityStudentID;
+    public Student getStudent() {
+        return student;
     }
-
-    public void setCommunityStudentID(Integer communityStudentID) {
-        this.communityStudentID = communityStudentID;
+    public void setStudent(Student student) {
+        this.student = student;
     }
-
     public String getCommunityPosition() {
         return communityPosition;
     }
-
     public void setCommunityPosition(String communityPosition) {
         this.communityPosition = communityPosition;
     }
-
-    public String getCommunityPeoFlag() {
+    public Integer getCommunityPeoFlag() {
         return communityPeoFlag;
     }
-
-    public void setCommunityPeoFlag(String communityPeoFlag) {
+    public void setCommunityPeoFlag(Integer communityPeoFlag) {
         this.communityPeoFlag = communityPeoFlag;
     }
-
+   
+    
+    
 }

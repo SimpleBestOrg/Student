@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.apache.ibatis.annotations.Param;
 
+import cn.com.zzzy.entity.Student;
 import cn.com.zzzy.entity.StudentFriend;
 import cn.com.zzzy.util.PageParam;
 
@@ -15,5 +16,5 @@ public interface StudentFriendMapper {
      * @param stuId
      * @return
      */
-    List<StudentFriend>  queryFriendInfo(PageParam param,@Param("stuId") Integer stuId);
+    List<Student>  queryFriendInfo(PageParam param,@Param("stuId") Integer stuId);
 }

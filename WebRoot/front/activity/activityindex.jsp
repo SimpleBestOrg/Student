@@ -125,7 +125,7 @@
 
 <script type="text/javascript">
             $(function(){
-            	var stuId = <%=session.getAttribute("Account")%>;
+            	var stuId = <%=session.getAttribute("StuId")%>;
             	if(stuId==null){
             		window.location="/Student/login.jsp?loginInfo="+1;
             	}

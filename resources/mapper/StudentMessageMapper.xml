@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.com.zzzy.basemapper.studentmapper.StudentMessageMapper">
+	<resultMap type="cn.com.zzzy.entity.StudentMessage" id="studentMessageResult">
+			<id column="stu_messageId" property="stuMessageId"></id>
+			<result column="stu_Id" property="studentId"></result>
+			<result column="stu_message" property="messageContext"></result>
+			<result column="stu_messageTime" property="messageTime"></result>
+	</resultMap>
+	
+	<select id='queryAllMessage'  resultMap="studentMessageResult">
+			select  stu_messageId,stu_Id,stu_message from  stu_message where stu_Id  = #{stuId}
+	</select>
+	
+	<insert id="insertMessage" parameterType="cn.com.zzzy.entity.StudentMessage">
+			insert into stu_message(stu_Id,stu_message,stu_messageTime) values(#{studentId},#{messageContext},now())
+	</insert>
+	
+</mapper>

@@ -2,44 +2,135 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="cn.com.zzzy.basemapper.communitymapper.CommunityMapper">
- 	<resultMap type="cn.com.zzzy.entity.CommunityVo" id="CommunityResult">
+	<!-- 社团实体类结果集的映射类型 -->
+ 	<resultMap  type="cn.com.zzzy.entity.Community" id="CommunityResult">
 		<id column="community_Id" property="communityId"></id>
 		<result column="community_Name" property="communityName"/>
 		<result column="community_perNum" property="communityPersonNum"/>
 		<result column="community_createDate" property="communityCreateDate"/>
+		<result column="community_appliDate" property="communityAppliDate"/>
 		<result column="community_appliReason" property="communityAppliReason"/>
 		<result column="community_appliRespon" property="communityAppliRespon"/>
 		<result column="community_flag" property="communityFlag"/>
 		<result column="community_photo" property="communityPhoto"/>
-		<association column="community_TeacherId" property="communityTeacherID" resultMap="teacherResult" javaType="cn.com.zzzy.entity.Teacher"/>
-		<association column="community_appliStu" property="communityAppliStudent" resultMap="studentResult" javaType="cn.com.zzzy.entity.Student"/>
-	</resultMap>
-	<resultMap type="cn.com.zzzy.entity.Teacher" id="teacherResult">
-		<id column="tea_id" property="teacherId"></id>
-		<result column="tea_name" property="teacherName"/>
+		<association column="community_appliSt" property="communityAppliStudent" resultMap="studentResult" javaType="cn.com.zzzy.entity.Student"/>
+		<collection property="communityPeoples" ofType="cn.com.zzzy.entity.CommunityPeople">
+							<id  column="community_PeopleId" property="comunityPeopleId"></id>
+							<result column="community_position" property="communityPosition"></result>
+							<result column="community_peoFlag" property="communityPeoFlag"></result>
+							<association column="community_stuId" property="student"  javaType="cn.com.zzzy.entity.Student">
+								<id column="studentId" property="studentId"></id>
+								<result column="studentName" property="studentName"></result>
+								<result column="studentPhoto" property="studentPhoto"></result>
+							</association>
+		</collection>
 	</resultMap>
 	<resultMap type="cn.com.zzzy.entity.Student" id="studentResult">
-		<id column="stu_Id" property="studentId"></id>
-		<result column="stu_Name" property="studentName"/>
+		<id column="applyStuId" property="studentId"></id>
+		<result column="applyStuName" property="studentName"/>
+		<result column="applyStuPhoto" property="studentPhoto"></result>
 	</resultMap>
 	
+
+	<!-- 分页查询所有社团 -->
+	<select id="queryAllCommunity" resultMap="CommunityResult">
+		SELECT
+			community_Id,
+			community_Name,
+			community_perNum,
+			community_appliReason,
+			community_appliRespon,
+			community_appliDate,
+			community_flag,
+			community_photo,
+			community_appliStu,
+			s.stu_Id  applyStuId,
+			s.stu_Name applyStuName,
+			s.stu_Photo applyStuPhoto
+		FROM
+			community c
+		LEFT JOIN stu s ON c.community_appliStu = s.stu_Id
+		<where> 
+				1  = 1 
+				<if test="param!=null and param.flag!=null">
+				   and c.community_flag = #{param.flag}
+				</if>
+				<if test="param!=null and param.keyWord!=null">
+					and  (c.community_Name like concat('%',concat(#{param.keyWord},'%')) or  c.community_appliRespon like concat('%',concat(#{param.keyWord},'%')) or s.stu_Name like concat('%',concat(#{param.keyWord},'%')))
+				</if>
+		</where>
+		limit #{param.startIndex},#{param.rows}
+	</select>
+	<!-- 查询所有社团的数量 -->
+	<select id="queryCountAllCommunity" resultType="Integer">
+		SELECT
+			count(*)
+		FROM
+			community c
+			LEFT JOIN stu s ON c.community_appliStu = s.stu_Id
+		<where> 
+				1  = 1 
+				<if test="param!=null and param.flag!=null">
+				   and c.community_flag = #{param.flag}
+				</if>
+				<if test="param!=null and param.keyWord!=null">
+					and  (c.community_Name like concat('%',concat(#{param.keyWord},'%')) or  c.community_appliRespon like concat('%',concat(#{param.keyWord},'%')) or s.stu_Name like concat('%',concat(#{param.keyWord},'%')))
+				</if>
+		</where>
+		
+	</select>	
+ 	<!-- 根据flag（状态）来查询出来所有的社团 -->
 	<select id="select" resultMap="CommunityResult">
-		select c.community_Id,c.community_Name,c.community_perNum,t.tea_name,c.community_createDate,s.stu_Name,c.community_appliReason,c.community_appliRespon,c.community_flag,c.community_photo from community c left join teacher t 
-		on c.community_TeacherId =t.tea_id left join stu s
-		on c.community_appliStu = s.stu_Id;
+		select c.community_Id,c.community_Name,c.community_perNum,c.community_createDate,s.stu_Name,c.community_appliReason,c.community_appliRespon,c.community_flag,c.community_photo from community c left join stu s
+		on c.community_appliStu = s.stu_Id where c.community_flag = 1
 	</select>
+	<!-- 根据社团的Id来查询出来社团的详细信息 -->
 	<select id="selectById" resultMap="CommunityResult">
-		select c.community_Name,c.community_perNum,t.tea_name,c.community_createDate,s.stu_Name,c.community_appliReason,c.community_appliRespon,c.community_flag from community c left join teacher t 
-		on c.community_TeacherId =t.tea_id left join stu s
-		on c.community_appliStu = s.stu_Id where c.community_Id = #{selectById};
+		select c.community_Id,c.community_Name,c.community_perNum,c.community_createDate,c.community_appliReason,c.community_appliRespon,c.community_flag from community c left join stu s
+on 		c.community_appliStu = s.stu_Id where c.community_Id = #{selectById};
 	</select>
-	<insert id="insert" parameterType="cn.com.zzzy.entity.Community">
-		insert into community(community.community_Name,community.community_perNum,community.community_TeacherId,community.community_createDate,community.community_appliStu,community.community_appliReason,community.community_appliRespon,community.community_photo) 
-		values(#{communityName},#{communityPersonNum},#{teacherId},NOW(),#{studentId},#{communityAppliReason},#{communityAppliRespon},#{communityPhoto})
-	</insert>
+	<!-- 根据登录者的Id来查询自己社团的详细信息 -->
 	<select id="queryById" resultMap="CommunityResult">
-		select c.community_Name,c.community_perNum,t.tea_name,c.community_createDate,s.stu_Name,c.community_appliReason,c.community_appliRespon,c.community_flag from community c left join teacher t 
-		on c.community_TeacherId =t.tea_id left join stu s
-		on c.community_appliStu = s.stu_Id where s.stu_Id = {#queryById}
+			SELECT
+				c.community_Id,
+				c.community_Name,
+				c.community_createDate,
+				c.community_perNum,
+				c.community_flag,
+				c.community_appliRespon,
+				c.community_photo,				
+			  s1.stu_Id  applyStuId,
+			  s1.stu_Name applyStuName,
+			  s1.stu_Photo applyStuPhoto,
+				cp.community_position,
+				cp.community_peoFlag,
+				s.stu_Id studentId,
+				s.stu_Name studentName,
+				s.stu_Photo studentPhoto
+			FROM
+				community_people cp
+			LEFT JOIN community c  left join  stu s1 
+			on  s1.stu_Id = c.community_appliStu
+			 ON c.community_Id = cp.community_Id
+			LEFT JOIN community_people cp1 ON cp1.community_Id = c.community_Id
+			LEFT JOIN stu s ON s.stu_Id = cp1.community_stuId
+			WHERE  cp.community_stuId = 2
 	</select>
+	<select id="MyCommunityInfo" resultType="map">
+		select s.stu_Id,s.stu_Name from community_people c left join stu s
+		on c.community_stuId = s.stu_Id where c.community_Id = 1 and c.community_peoFlag = 1;
+	</select>
+	<insert id="insertAppli" parameterType="cn.com.zzzy.entity.CommunityPeopleVo">
+		insert into community_people(community_Id,community_stuId) values(#{communityId},#{studentId})
+	</insert>
+	<!-- 申请建立社团 -->
+	<insert id="insert" parameterType="cn.com.zzzy.entity.Community">
+		insert into community(community.community_Name,community.community_perNum,community.community_appliDate,community.community_appliStu,community.community_appliReason,community.community_appliRespon,community.community_photo) 
+		values(#{communityName},#{communityPersonNum},now(),#{studentId},#{communityAppliReason},#{communityAppliRespon},#{communityPhoto})
+	</insert>
+	
+	<!-- 更新社团状态 -->
+ 	<update id="updateCommunityFlag">
+			update  community  c  set c.community_flag = #{param.communityFlag} where c.community_Id =#{param.communityId}
+	</update>
 </mapper> 

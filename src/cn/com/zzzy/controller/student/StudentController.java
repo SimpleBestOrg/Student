@@ -34,17 +34,6 @@ public class StudentController {
     private StudentFriendService studentFriendService;
     
 
-    /**
-     * 根据学生ID查询学生朋友的信息
-     * @param param
-     * @param stuId  学生ID
-     * @return
-     */
-    @RequestMapping("queryFriendInfo")
-    @ResponseBody
-    public List<StudentFriend> queryFriendInfo(PageParam param, Integer stuId) {
-        return studentFriendService.queryFriendInfo(param, stuId);
-    }
 
     /**
      * 根据学生ID查询学生的详细信息
@@ -55,6 +44,7 @@ public class StudentController {
     public ModelAndView queryStudentInfoById(HttpServletRequest request) {
         AuthorityAccount account = (AuthorityAccount) request.getSession().getAttribute("Account");
         System.out.println("登录学生ID:" + account.getStudentId());
+        request.getSession().setAttribute("StuId", account.getStudentId());
         Student student = studentService.queryStudentInfoById(account.getStudentId());
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.addObject("student", student);

@@ -1,10 +1,6 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8"
+ <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
-    <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<%
-  String path = request.getContextPath();
-  request.setAttribute("path", path);
-%>
+<%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -14,36 +10,8 @@
   <meta name="keywords" content="fly,layui,前端社区">
   <meta name="description" content="Fly社区是模块化前端UI框架Layui的官网社区，致力于为web开发提供强劲动力">
   <link rel="stylesheet" href="/Student/front/res/layui/css/layui.css">
-  <link rel="stylesheet" href="/Student/front/res/css/global.css">
+  <link rel="stylesheet" href="/Student/front/res/css/global.css">  
 </head>
-<style type="text/css">
-	.right{
-		border: 1px solid red;
-		width:480px;
-		height: 700px;
-		margin-left: 730px;
-		background: no-repeat;
-		background-image: url("${path}/front/image/11.jpg");
-		background-size: 100%;
-	}
-	<!-- 浮动塌陷 -->
-	.clear{
-  clear:both;
-}
-.pre-size{
-	font-size: 18px;
-	display: block;
-}
-	.p-img{
-	display: inline-block;		
-}
-	#divcss5{ margin:10px auto} 
-	#divcss5 img{ 
-	border-radius:50%;
-	width:150px;
-	height: 200px;
-} 
-</style>
 <body>
 
 <div class="header">
@@ -86,36 +54,36 @@
 
 <div class="main layui-clear">
   <div class="wrap">
-    <div class="content detail">
-      <div class="fly-panel detail-box">
-      <p class="p-img" class="avatar">
-      <div id="divcss5" class="p-img"><img src="${path}/front/image/41.jpg" /></div> 
-        <h1 class="p-img" style="margin-left: 50px;">${listCommunity.communityName}</h1>
-        <button class="layui-btn" style="margin-left:600px; margin-top:-70px;" onclick="communityAppli(${listCommunity.communityId})">申请入团</button>
-          <pre class="pre-size">
-	<span>人数：	   ${listCommunity.communityPersonNum }</span>
-	<span>负责人：	   ${listCommunity.communityTeacherID.teacherName }</span>
-	<span>创建日期：  ${listCommunity.communityCreateDate }</span>
-	<span>申请人：    ${listCommunity.communityAppliStudent.studentName }</span>
-	<span>职责：      ${listCommunity.communityAppliRespon }</span>
-</pre>
+    <c:forEach items="${listFriendInfo.studentFriend}" var="friendInfo" begin="1" end="20">
+        <div style="width:680px;height:80px;margin-top:5px;">
+            <a>
+                    <img src="/pic/${friendInfo.studentPhoto}" style='width:100px;height:78px;'/>
+            </a>        
+                    <span style="display:block;font-size:20px;margin-top:-75px;margin-left:110px;">${friendInfo.studentName}</span>
+                    <span style="margin-left:110px;margin-top:-20px;">班级:${friendInfo.studentClasses.className}</span>
+                    <span style="display:block;font-size:15px;margin-left:110px;margin-top:0px;">${friendInfo.studentSignature}</span>
+                    <input type="button" style="margin-left:500px;margin-top:-92px;"  class="layui-btn layui-btn-normal" value="他的主页"></input>
         </div>
-        <div class="detail-body photos" style="margin-bottom: 20px;">
-        </div>
-      </div>
+     </c:forEach>  
+  </div>
+  <div class="edge">
+    <dl class="fly-panel fly-list-one"> 
+    </dl>
+    
+    <dl class="fly-panel fly-list-one"> 
+    </dl>
+  </div>
 </div>
 
-<div class="right">
-	<!-- 浮动塌陷 -->
-	<div class="clear"></div>
+
+<div class="footer">
+  <p><a href="http://fly.layui.com/">Fly社区</a> 2017 &copy; <a href="http://www.layui.com/">layui.com</a></p>
+  <p>
+    <a href="http://fly.layui.com/auth/get" target="_blank">产品授权</a>
+    <a href="http://fly.layui.com/jie/8157.html" target="_blank">获取Fly社区模版</a>
+    <a href="http://fly.layui.com/jie/2461.html" target="_blank">微信公众号</a>
+  </p>
 </div>
-</div>
- <script src="${path}/front/res/layui/layui.js"></script>
-<script type="text/javascript">
- 	function communityAppli(community){
- 			alert(community);
- 			window.location.href="${path}/InsertAppli.action?id="+community;
- 	}
-</script>
+
 </body>
 </html>

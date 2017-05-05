@@ -62,8 +62,8 @@
     <div class="content">
       <div class="fly-tab fly-tab-index">
         <span>
-          <a id="allTalking">全部说说</a>
-          <a id="mytalking">我的说说</a>
+          <a id="allTalking"  onclick="talkingPage.friendTalking('/Student/queryTalkingByFriendId.action')">全部说说</a>
+          <a id="mytalking"   onclick="talkingPage.friendTalking('/Student/queryTalkingByStuId.action')">我的说说</a>
           <a>朋友说说</a>
         </span>
         <form action="http://cn.bing.com/search" class="fly-search">
@@ -89,7 +89,7 @@
                     </div>
                   </div>
                 <div id="publish" style="display: inline-block;" >
-                     <button class="layui-btn site-demo-layedit"  id="speakTalking" data-type="content">发说说</button>
+                     <button class="layui-btn site-demo-layedit"   data-type="content">发说说</button>
                 </div>
                </div> 
             </form>    
@@ -306,22 +306,27 @@
 	
     
     $(function(){
-    			talkingPage.friendTalking();
+    			talkingPage.friendTalking('/Student/queryTalkingByFriendId.action');
     		    layui.use(['layedit','form'], function(){
     		    	  var layedit = layui.layedit
     		    	  ,$ = layui.jquery
     		    	  ,form = layui.form();
+    		    	  layedit.set({
+    		    		  uploadImage: {
+    		    		    url: '' //接口url
+    		    		    ,type: 'post' //默认post、
+    		    		    
+    		    		  }
+    		    		});
     		    	  //构建一个默认的编辑器
-    		    	  var index = layedit.build('publishTalking');
-    		          layedit.build('publishTalking', {
-    		            tool: ['face', 'image']
-    		            ,height: 100
-    		          })
-    		          
+    		    	  var index = layedit.build('publishTalking', {
+        		            tool: ['face', 'image']
+        		            ,height: 100
+        		          });
     		            //编辑器外部操作
                           var active = {
                             content: function(){
-                              alert(layedit.getContent(index)); //获取编辑器内容
+                              alert(layedit.getText(index)); //获取编辑器内容
                             }
                             ,text: function(){
                               alert(layedit.getText(index)); //获取编辑器纯文本内容
@@ -330,21 +335,24 @@
                               alert(layedit.getSelection(index));
                             }
                           };
-    		          
-    		          	$('.site-demo-layedit').on('click', function(){
+
+          		          
+    		          $('.site-demo-layedit').on('click', function(){
+    		          		  alert("你好");
     		        	  	  var type = $(this).data('type');
+    		        	  	  alert("类型:"+type);
     		        	  	  active[type] ? active[type].call(this) : '';
     		        	  });
     		    	});
     })
     
     var talkingPage = {
-    		friendTalking:function(){
-    				$.post("/Student/queryTalkingByFriendId.action",function(data){
+    		friendTalking:function(action){
+    				$.post(action,function(data){
     					   var div ="";
     					  if(data.length!=0){ 
     				       $.each(data,function(i,a){
-    				    	   	     div += " <div  style='width:600px;'>";
+    				    	   		 div += " <div  style='width:600px;'>";
     				    	   		 div += "<img class='media-object img-circle ' style='width:60px;height:60px;float:left;' src='"+a.stuId.studentPhoto+"' alt='通用的占位符图像'/>";
     				    	   		 div += "<span style='font-size:20px;display:block;margin-top:10px;'>"+a.stuId.studentName+"</span>";
 									 div += "<span style='color:#c0c0c0;font-size:10px;'>"+((new Date(a.talkingDateTime)).toLocaleString().replace(/年|月/g,'-')).replace(/日/g,'')+"</span>";
@@ -362,126 +370,109 @@
 												}
 											})
 									 }
-									 
 									 //如果说说的评论不是空  则显示说说评论的内容
-									 
 									 if(a.talkingTocao.length!=0){
 										  div += "<div style='border:1px solid green; background-color:green;'>";
+										  
 										  	 //一条说说被评论(主评论和回复)的条数
-										    var toCaoLength = a.talkingTocao.length;
-										  	
+										//    var toCaoLength = a.talkingTocao.length;
+										//  	alert("评论数量:"+toCaoLength);
 										 	$.each(a.talkingTocao,function(i,t){
+										 		//找出主评论  
 										 		if(t.talkingToCaoParentId==null){
- 										 			 div += "<div style='border:1px solid black;'><img src='"+t.student.studentPhoto+"' style='height:40px;width:40px;float:left;'/>";
+										 		//	toCaoLength = toCaoLength-1; 
+ 										 			 div += "<div  id='append"+t.talkingToCaoId+"'  onclick='appendHuifu("+t.talkingToCaoId+")' style='border:2px solid black;'><div style='border:1px solid black;'><img src='"+t.student.studentPhoto+"' style='height:40px;width:40px;float:left;'/>";
+ 										 			 div += "<input type='hidden' id='talkingIdhidden"+t.talkingToCaoId+"' value='"+a.talkingId+"'></input>";
 										 			 div += "<span style='font-size:15px;display:block;margin-top:5px;'><font style='color:red'>"+t.student.studentName+"</font>&nbsp;&nbsp;:&nbsp;&nbsp;"+t.talkingToCaoContext+"</span>";
 													 div += "<span style='color:#c0c0c0;font-size:10px;'>"+((new Date(t.talkingToCaoDateTime)).toLocaleString().replace(/年|月/g,'-')).replace(/日/g,'')+"</span>";
+													 div += "<input type='hidden' value='"+t.talkingToCaoId+"'/>";
 													 div += "</div>"; 
 	    										 		$.each(a.talkingTocao,function(y,parent){
 	    										 			if(parent.talkingToCaoParentId==t.talkingToCaoId){
 	    	 										 			 div += "<div style='border:1px solid black;margin-left:40px;'><img src='"+parent.student.studentPhoto+"' style='height:40px;width:40px;float:left;'/>";
 	    											 			 div += "<span style='font-size:15px;display:block;margin-top:5px;'><font style='color:red'>"+parent.student.studentName+"</font>&nbsp;<font style='color:black'>回复&nbsp;</font><font style='color:red'>"+t.student.studentName+":</font>&nbsp;&nbsp;:&nbsp;&nbsp;"+parent.talkingToCaoContext+"</span>";
 	    														 div += "<span style='color:#c0c0c0;font-size:10px;'>"+((new Date(parent.talkingToCaoDateTime)).toLocaleString().replace(/年|月/g,'-')).replace(/日/g,'')+"</span>";
+	    														 div += "<input type='hidden' value='"+parent.talkingToCaoId+"'/>";
 	    														 div += "</div>";
 	    														 $.each(a.talkingTocao,function(z,child){
 	    															 if(child.talkingToCaoParentId==parent.talkingToCaoId){
 	    	    	 										 			 div += "<div style='border:1px solid black;margin-left:40px;'><img src='"+child.student.studentPhoto+"' style='height:40px;width:40px;float:left;'/>";
 	    	    											 			 div += "<span style='font-size:15px;display:block;margin-top:5px;'><font style='color:red'>"+child.student.studentName+"</font>&nbsp;回复<font style='color:red'>"+parent.student.studentName+"</font>&nbsp;&nbsp;&nbsp;&nbsp;"+child.talkingToCaoContext+"</span>";
 	    	    														 div += "<span style='color:#c0c0c0;font-size:10px;'>"+((new Date(child.talkingToCaoDateTime)).toLocaleString().replace(/年|月/g,'-')).replace(/日/g,'')+"</span>";
-	    	    														 div += "</div>";		
+	    	    														 //回复人的ID
+	    	    														 div += "<input type='hidden' value='"+child.talkingToCaoId+"'/>";
+	    	    														 div += "</div>";
+	    	    														 $.each(a.talkingTocao,function(h,grandson){
+	    	    															  if(grandson.talkingToCaoParentId==child.talkingToCaoId){
+	    		    	    	 										 			 div += "<div style='border:1px solid black;margin-left:40px;'><img src='"+grandson.student.studentPhoto+"' style='height:40px;width:40px;float:left;'/>";
+	    		    	    											 			 div += "<span style='font-size:15px;display:block;margin-top:5px;'><font style='color:red'>"+grandson.student.studentName+"</font>&nbsp;回复<font style='color:red'>"+child.student.studentName+"</font>&nbsp;&nbsp;&nbsp;&nbsp;"+grandson.talkingToCaoContext+"</span>";
+	    		    	    														 div += "<span style='color:#c0c0c0;font-size:10px;'>"+((new Date(grandson.talkingToCaoDateTime)).toLocaleString().replace(/年|月/g,'-')).replace(/日/g,'')+"</span>";
+	    		    	    														 div += "<input type='hidden' value='"+grandson.talkingToCaoId+"'/>";
+	    		    	    														 div += "</div>";	    	    																  
+	    	    															  }
+	    	    														 })
 	    															 }
 	    														 })
 	    										 			}
 	    										 		})
+	    										 		div+="</div>";
 										 		}
-
 										 	})
 										 	div +="</div>";
 									 }
-									 
-									 
 									 div += "<div style='border:1px solid green;'><i class='iconfont icon-iconfontpraise'></i></div>"                                                
 	                                 //说说评论
 									 div += "</div></div></div>";
     				       })
     					  }else{
-    						  div +='<h1>暂无说说';
+    						  div +='暂无说说';
     					  } 
-    				       $("#talking").html(div);
+    					  $("#talking").html(div);
     				})
+    			   
     			}
     
     }
     
-    
-    $("#mytalking").click(
-    	
-    	function(){
-				$.post("/Student/queryTalkingByStuId.action",function(data){
-					   var div ="";
-				       $.each(data,function(i,a){
-				    	   	     div += " <div  style='width:600px;'>";
-				    	   		 div += "<img class='media-object img-circle ' style='width:60px;height:60px;float:left;' src='"+a.stuId.studentPhoto+"' alt='通用的占位符图像'/>";
-				    	   		 div += "<span style='font-size:20px;display:block;margin-top:10px;'>"+a.stuId.studentName+"</span>";
-								 div += "<span style='color:#c0c0c0;font-size:10px;'>"+((new Date(a.talkingDateTime)).toLocaleString().replace(/年|月/g,'-')).replace(/日/g,'')+"</span>";
-								 div += "<div style='border:1px solid red;width:600px;margin-top:10px;'>";
-								 div += "<div style='border:1px solid blue;'>"+a.talkingContent+"</div>";
-								 
-								 //如果说说中有照片 则显示照片
-								 if(a.talkingPhotos.length!=0){
-										$.each(a.talkingPhotos,function(i,p){
-											//照片数量为1时  照片宽度
-											if(a.talkingPhotos.length==1){
-												div  +=  "<img src='"+p.talkingPhoto+"' style='width:500px;height:500px;'/>";													
-											}else{
-												div  +=  "<img src='"+p.talkingPhoto+"' style='width:150px;height:150px;'/>";
-											}
-										})
-								 }
-								 
-								 //如果说说的评论不是空  则显示说说评论的内容
-								 
-								 if(a.talkingTocao.length!=0){
-									  div += "<div style='border:1px solid green; background-color:green;'>";
-									  	 //一条说说被评论(主评论和回复)的条数
-									    var toCaoLength = a.talkingTocao.length;
-									  	
-									 	$.each(a.talkingTocao,function(i,t){
-									 		if(t.talkingToCaoParentId==null){
-										 			 div += "<div style='border:1px solid black;'><img src='"+t.student.studentPhoto+"' style='height:40px;width:40px;float:left;'/>";
-									 			 div += "<span style='font-size:15px;display:block;margin-top:5px;'><font style='color:red'>"+t.student.studentName+"</font>&nbsp;&nbsp;:&nbsp;&nbsp;"+t.talkingToCaoContext+"</span>";
-												 div += "<span style='color:#c0c0c0;font-size:10px;'>"+((new Date(t.talkingToCaoDateTime)).toLocaleString().replace(/年|月/g,'-')).replace(/日/g,'')+"</span>";
-												 div += "</div>"; 
-    										 		$.each(a.talkingTocao,function(y,parent){
-    										 			if(parent.talkingToCaoParentId==t.talkingToCaoId){
-    	 										 			 div += "<div style='border:1px solid black;margin-left:40px;'><img src='"+parent.student.studentPhoto+"' style='height:40px;width:40px;float:left;'/>";
-    											 			 div += "<span style='font-size:15px;display:block;margin-top:5px;'><font style='color:red'>"+parent.student.studentName+"</font>&nbsp;<font style='color:black'>回复&nbsp;</font><font style='color:red'>"+t.student.studentName+":</font>&nbsp;&nbsp;:&nbsp;&nbsp;"+parent.talkingToCaoContext+"</span>";
-    														 div += "<span style='color:#c0c0c0;font-size:10px;'>"+((new Date(parent.talkingToCaoDateTime)).toLocaleString().replace(/年|月/g,'-')).replace(/日/g,'')+"</span>";
-    														 div += "</div>";
-    														 $.each(a.talkingTocao,function(z,child){
-    															 if(child.talkingToCaoParentId==parent.talkingToCaoId){
-    	    	 										 			 div += "<div style='border:1px solid black;margin-left:40px;'><img src='"+child.student.studentPhoto+"' style='height:40px;width:40px;float:left;'/>";
-    	    											 			 div += "<span style='font-size:15px;display:block;margin-top:5px;'><font style='color:red'>"+child.student.studentName+"</font>&nbsp;回复<font style='color:red'>"+parent.student.studentName+"</font>&nbsp;&nbsp;&nbsp;&nbsp;"+child.talkingToCaoContext+"</span>";
-    	    														 div += "<span style='color:#c0c0c0;font-size:10px;'>"+((new Date(child.talkingToCaoDateTime)).toLocaleString().replace(/年|月/g,'-')).replace(/日/g,'')+"</span>";
-    	    														 div += "</div>";		
-    															 }
-    														 })
-    										 			}
-    										 		})
-									 		}
+    //追加回复  传递主评论ID 
+    function   appendHuifu(id){
+		  //判断回复框是否存在  如果不存在则追加评论框 只能对一个主评论的最后一条评论进行回复
+    	  if($("#append"+id).next(".huifu").length==0){
+    		    $(".huifu").remove();
+    		    //追加回复框
+    			$("#append"+id).after("<div class='huifu'><input id='huifuContent' style='width:400px;height:30px;margin-left:100px;' type='text'><button  id='hui' class='layui-btn layui-btn-primary'>  评论  </button></div>");			   
+    	   }else if($("#append"+id).next(".huifu").length==1){
+    			//如果存在回复框 则删除回复框
+    			$(".huifu").remove();
+    	   }
+    	   //点击回复时删除回复框
+    		$("#hui").click(function(){
+    			alert("input的长度1:"+$("#append"+id).find("input").length);
+    			//得到一个主评论的回复数量  用于查找最后一个评论的父ID
+    			var inputLength = $("#append"+id).find("input").length;
+    			//得到被回复的ID
+    			var talkingToCaoParentId = $("#append"+id).find("input")[inputLength-1].value;
+    			var talkingId = document.getElementById("talkingIdhidden"+id).value;
+    			var talkingToCaoContext = document.getElementById("huifuContent").value;
+    			alert("被回复的ID:"+talkingToCaoParentId+"评论的说说ID:"+talkingId+"回复内容:"+talkingToCaoContext);
+    				$.ajax({
+                    		type:'post',
+                    		url:'/Student/insertTalkingToCao.action',
+                    		contentType:'application/json;charset=utf-8',
+                    		//数据格式是json串，商品信息
+                    		data:'{"talkingId":'+talkingId+',"talkingToCaoParentId":'+talkingToCaoParentId+',"talkingToCaoContext":"'+talkingToCaoContext+'"}',
+                    		success:function(data){//返回json结果
+                    			//回复成功后 刷新页面
+                    			window.location.reload();
+                    		}
+                    	});
+    			//删除回复框
+    			$('.huifu').remove();
+    		})
+    	   
+    }		
 
-									 	})
-									 	div +="</div>";
-								 }
-								 
-								 
-								 div += "<div style='border:1px solid green;'><i class='iconfont icon-iconfontpraise'></i></div>"                                                
-                                 //说说评论
-								 div += "</div></div></div>";
-				       })
-				       $("#talking").html(div);
-				})
-    	}		
-    )
+	    
 
 	
 </script>

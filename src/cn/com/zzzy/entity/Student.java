@@ -18,8 +18,10 @@ public class Student {
     private Integer studentClassId;// 学生的班级
     private Integer studentCommunityId;// 学生参加的社团
     private String studentPhoto;// 学生的个人照片
+    private String studentSignature;//学生个性签名
     private StudentClasses studentClasses;
     private Set<Student> studentFriend;
+    
 
     public Integer getStudentId() {
         return studentId;
@@ -109,4 +111,12 @@ public class Student {
         this.studentSex = studentSex;
     }
 
+    public String getStudentSignature() {
+        return studentSignature;
+    }
+
+    public void setStudentSignature(String studentSignature) {
+        this.studentSignature = studentSignature;
+    }
+    
 }

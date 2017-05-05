@@ -46,7 +46,7 @@ public class TalkingController {
     public List<Talking> queryTalkingByFriendId(PageParam param) {
         Integer stuId = 1;
         // 根据学生ID查询朋友信息 得到朋友信 息
-        List<StudentFriend> friendInfo = studentFriendService.queryFriendInfo(param, stuId);
+        List<Student> friendInfo = studentFriendService.queryFriendInfo(param, stuId);
         System.out.println("朋友数量:"+friendInfo.size());
         
         List<Talking> talkingList = null;
@@ -78,7 +78,7 @@ public class TalkingController {
     @RequestMapping("queryTalkingByStuId")
     @ResponseBody
     public List<Talking> queryTalkingByStuId(PageParam param) {
-        Integer stuId = 1;
+        Integer stuId = 3;
         List<Talking> TalkingStuIdList = talkingService.queryTalkingByStuId(param, stuId);
         return TalkingStuIdList;
     }
@@ -89,7 +89,7 @@ public class TalkingController {
      */
     @RequestMapping("queryTalkCountByStuId")
     public void queryTalkCountByStuId() {
-        int stuId = 1;
+        int stuId = 3;
         int count = talkingService.queryTalkCountByStuId(stuId);
         System.out.println("学生编号1发表的说说数量:" + count);
     }
