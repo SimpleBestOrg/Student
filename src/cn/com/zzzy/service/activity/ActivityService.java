@@ -49,16 +49,16 @@ public class ActivityService {
      * @param friendId
      * @return
      */
-    public List<Activity>  queryAllFriendActivity(PageParam param,List<Integer> friendId){
-            return activityMapper.queryActivityByFriendIds(param, friendId);
+    public List<Activity>  queryAllFriendActivity(PageParam param,Integer stuId){
+            return activityMapper.queryActivityByFriendIds(param, stuId);
     }
     /**
      * 根据朋友ID查询朋友圈活动的数量
      * @param friendId
      * @return
      */
-    public int   queryActivityCountByFriendIds(List<Integer> friendId){
-        return activityMapper.queryActivityCountByFriendIds(friendId);
+    public int   queryActivityCountByFriendIds(Integer stuId){
+        return activityMapper.queryActivityCountByFriendIds(stuId);
     }
     
     /**

@@ -5,16 +5,23 @@
 	<resultMap type="cn.com.zzzy.entity.StudentMessage" id="studentMessageResult">
 			<id column="stu_messageId" property="stuMessageId"></id>
 			<result column="stu_Id" property="studentId"></result>
-			<result column="stu_message" property="messageContext"></result>
+			<result column="stu_message_context" property="messageContext"></result>
 			<result column="stu_messageTime" property="messageTime"></result>
 	</resultMap>
 	
+	<!-- 根据好友添加消息 -->
 	<select id='queryAllMessage'  resultMap="studentMessageResult">
-			select  stu_messageId,stu_Id,stu_message from  stu_message where stu_Id  = #{stuId}
+			select  stu_messageId,stu_Id,stu_message_context,stu_messageTime from  stu_message where stu_Id  = #{stuId}
 	</select>
 	
+	<!-- 添加消息 -->
 	<insert id="insertMessage" parameterType="cn.com.zzzy.entity.StudentMessage">
-			insert into stu_message(stu_Id,stu_message,stu_messageTime) values(#{studentId},#{messageContext},now())
+			insert into stu_message(stu_Id,stu_message_context,stu_messageTime) values(#{studentId},#{messageContext},now())
 	</insert>
+	
+	<!--更新消息内容(如果对方同意你加为好友  或者  加入社团  或者  加入活动时的消息)-->
+	<update id="updateMessageContext" parameterType="cn.com.zzzy.entity.StudentMessage">
+	    update stu_message set stu_message_context = #{messageContext}   where  stu_messageId = #{stuMessageId}
+	</update>
 	
 </mapper>

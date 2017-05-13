@@ -2,6 +2,8 @@ package cn.com.zzzy.controller.student;
 
 import java.util.List;
 
+import javax.servlet.http.HttpSession;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -16,11 +18,16 @@ public class StudentMessageController {
       @Autowired
       private  StudentMessageService  studentMessageService;
       
+      /**
+       * 查找学生的消息
+       * @param session
+       * @return
+       */
       @RequestMapping("queryAllMessage")
       @ResponseBody
-      public List<StudentMessage>  queryAllMessage(){
-           Integer stuId = 1;
-           return   studentMessageService.queryAllMessage(stuId);
+      public List<StudentMessage>  queryAllMessage(HttpSession session){
+          Integer stuId = (Integer)session.getAttribute("stuId");
+          return   studentMessageService.queryAllMessage(stuId);
       }
       
 }

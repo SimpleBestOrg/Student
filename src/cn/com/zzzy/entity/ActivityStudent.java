@@ -15,6 +15,8 @@ public class ActivityStudent {
     private Integer stuActivityFlag;// 学生申请加入活动的状态
     private Activity  activity;
     private Student  students;
+    
+    private String activityName;  //辅助需要
 
     
     
@@ -72,6 +74,14 @@ public class ActivityStudent {
 
     public void setStudents(Student students) {
         this.students = students;
+    }
+
+    public String getActivityName() {
+        return activityName;
+    }
+
+    public void setActivityName(String activityName) {
+        this.activityName = activityName;
     }
 
 

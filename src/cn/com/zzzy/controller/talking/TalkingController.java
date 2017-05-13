@@ -1,24 +1,26 @@
 package cn.com.zzzy.controller.talking;
 
-import java.util.ArrayList;
+import java.io.IOException;
 import java.util.List;
+
+import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.multipart.commons.CommonsMultipartFile;
 
-import cn.com.zzzy.entity.Student;
-import cn.com.zzzy.entity.StudentFriend;
+import cn.com.zzzy.entity.AuthorityAccount;
 import cn.com.zzzy.entity.Talking;
+import cn.com.zzzy.entity.TalkingPhoto;
 import cn.com.zzzy.entity.TalkingStudentThum;
 import cn.com.zzzy.entity.TalkingToCao;
 import cn.com.zzzy.service.TalkingService;
 import cn.com.zzzy.service.TalkingStudentThumService;
 import cn.com.zzzy.service.TalkingToCaoService;
-import cn.com.zzzy.service.student.StudentFriendService;
-import cn.com.zzzy.service.student.StudentService;
 import cn.com.zzzy.util.PageParam;
 
 @Controller
@@ -33,8 +35,6 @@ public class TalkingController {
     @Autowired
     private TalkingToCaoService talkingToCaoService;
 
-    @Autowired
-    private StudentFriendService studentFriendService;
 
     /**
      * 根据学生ID查询朋友的说说
@@ -43,17 +43,11 @@ public class TalkingController {
      */
     @RequestMapping("queryTalkingByFriendId")
     @ResponseBody
-    public List<Talking> queryTalkingByFriendId(PageParam param) {
-        Integer stuId = 1;
-        // 根据学生ID查询朋友信息 得到朋友信 息
-        List<Student> friendInfo = studentFriendService.queryFriendInfo(param, stuId);
-        System.out.println("朋友数量:"+friendInfo.size());
-        
-        List<Talking> talkingList = null;
-        if(friendInfo.size()!=0){
-            // 通过朋友信息的ID得到对所有人可见的说说
-             talkingList = talkingService.queryTalkingByFriendId(param, friendInfo);
-        }
+    public List<Talking> queryTalkingByFriendId(PageParam param,HttpServletRequest request) {
+        // 得到登录学生的ID
+        AuthorityAccount account =(AuthorityAccount)request.getSession().getAttribute("Account");
+        System.out.println("学生号:"+account.getStudentId());
+        List<Talking> talkingList = talkingService.queryTalkingByFriendId(param, account.getStudentId());
         return talkingList;
     }
 
@@ -62,11 +56,9 @@ public class TalkingController {
      * @return
      */
     @RequestMapping("queryTalkCountByFriId")
-    public void queryTalkCountByFriId() {
-        List<Integer> stuId = new ArrayList<Integer>();
-        stuId.add(1);
-        stuId.add(2);
-        int count = talkingService.queryTalkCountByFriId(stuId);
+    public void queryTalkCountByFriId(HttpServletRequest request) {
+        AuthorityAccount account =(AuthorityAccount)request.getSession().getAttribute("Account");
+        int count = talkingService.queryTalkCountByFriId(account.getStudentId());
         System.out.println("好友説説數量:" + count);
     }
 
@@ -107,17 +99,6 @@ public class TalkingController {
         return list;
     }
 
-    /**
-     * 发表说说
-     * @param talking
-     */
-    @RequestMapping("insertTalking")
-    public void insertTalking(Talking talking) {
-        talking.setTalkingStudentId(3);
-        talking.setTalkingContent("乐观  积极 向上  正确的价值观");
-        talking.setTalkingAuthorityId(2);
-        talkingService.insertTalking(talking);
-    }
 
     /**
      * 更新说说的赞
@@ -136,5 +117,60 @@ public class TalkingController {
         } else {
             System.out.println("已经赞过该说说");
         }
+    }
+    
+    @RequestMapping("uploadImage")
+    @ResponseBody
+    public   void  uploadImage(@RequestParam("fileName") MultipartFile file) throws IllegalStateException, IOException{
+//        System.out.println("原始："+pinfo.getInputStream());
+//        System.out.println("getName"+pinfo.getName());
+//        System.out.println("原始名称:"+pinfo.getOriginalFilename());
+        //得到图片的原始名称
+        String originalFilename  =   file.getOriginalFilename();
+        System.out.println("图片"+originalFilename);
+ //       String  newFileName = null;
+//         Integer count =  1;
+ //       if(pinfo!=null && originalFilename!=null && originalFilename.length()>0){
+               //存储图片的物理路径
+//             String  pic_path = "E:\\develop\\";
+            //新的图片名称
+//               newFileName = UUID.randomUUID() + originalFilename.substring(originalFilename.lastIndexOf("."));
+//            //新图片
+//            File  file = new File(pic_path+newFileName);
+//            //将内存的数据写入磁盘
+//            pinfo.transferTo(file);
+//            newDetail.setPhoto(newFileName);
+//            count = 1;
+//        }
+        
+     //   return new jsonInfo(count,originalFilename);
+    }
+    
+    /**
+     * 发表说说
+     * @param talking
+     * @param imgName
+     * @return
+     */
+    @RequestMapping("insertTalking")
+    public  String  insertTalking(Talking talking,String [] imgName,HttpServletRequest request){
+        System.out.println("说说内容:"+talking.getTalkingContent());
+        talking.setTalkingStudentId((Integer)request.getSession().getAttribute("stuId"));
+        //保存说说
+        talkingService.insertTalking(talking);
+        
+        System.out.println("说说ID:"+talking.getTalkingId());
+        //实例化说说图片对象
+        TalkingPhoto talkingPhoto = new TalkingPhoto();
+        if(imgName.length>0){
+            for(int i=0;i<imgName.length;i++){
+                 System.out.println("下表:"+i+imgName[i]);
+                 talkingPhoto.setTalkingPhoto(imgName[i]);
+                 //设置说说的ID   添加说说成功后 返回说说的主键ID                                        
+                 talkingPhoto.setTalkingId(talking.getTalkingId());
+                 talkingService.insertTalkingPhoto(talkingPhoto);
+            }
+        }
+        return "/front/talking/talkingindex.jsp";
     }
 }

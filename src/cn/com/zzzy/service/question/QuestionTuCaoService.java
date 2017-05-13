@@ -4,17 +4,15 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
 
 import cn.com.zzzy.basemapper.questionmapper.QuestionTuCaoMapper;
-
+import cn.com.zzzy.entity.QuestionTuCao;
 @Service
 public class QuestionTuCaoService {
 	@Autowired
 	private QuestionTuCaoMapper questionTuCaoMapper;
-	public List select(Integer qid){
-		List list=questionTuCaoMapper.select(qid);
+	public List<QuestionTuCao> select(Integer qid){
+		List<QuestionTuCao> list=questionTuCaoMapper.select(qid);
 		return list;
 	}
 	public void delete(Integer qid){
@@ -24,4 +22,22 @@ public class QuestionTuCaoService {
 			System.out.println("你的问题还没有人吐槽");
 		}
 	}
+	/**
+	 * 添加吐槽表信息
+	 * @param questiontiontu
+	 */
+	public void insertTucao(QuestionTuCao questiontiontu){
+		questionTuCaoMapper.insertTucao(questiontiontu);
+	}
+	/**
+	 * 查询点赞学生是否存在
+	 * @param questionTuCao
+	 * @return
+	 */
+	public Integer  queryTuCaoStudent(QuestionTuCao questionTuCao){
+		
+		return questionTuCaoMapper.queryTuCaoStudent(questionTuCao);
+	}
+	
+	
 }

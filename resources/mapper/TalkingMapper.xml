@@ -60,18 +60,26 @@
 			Left JOIN stu ss on  ss.stu_Id = tt.talking_tocao_studentId 
 			WHERE
 				t.talking_authorityId = 1 and  t.talking_StudentId in
-				<foreach collection="friendId" item="friendId" open="(" separator="," close=")">
-						#{friendId.friend}
-				</foreach>
+						(		SELECT
+										sf.frientId
+									FROM
+										stu_friend sf
+									WHERE
+										sf.stuId = #{stuId}
+									AND sf.stu_friend_Flag = 1)
 		</select>
 		<!--根学生朋友的ID查询朋友发表说说的数量-->
 		<select id="queryTalkCountByFriId"   resultType="Integer">
 				select count(*) from  talking t left join stu s
 				on s.stu_Id = t.talking_StudentId
 				where   t.talking_authorityId =1  and  t.talking_StudentId in
-				<foreach collection="friendId" item="friendId" open="(" separator="," close=")">
-						#{friendId}
-				</foreach>		
+						(		SELECT
+										sf.frientId
+									FROM
+										stu_friend sf
+									WHERE
+										sf.stuId = #{stuId}
+									AND sf.stu_friend_Flag = 1)	
 		</select>
 		
 		
@@ -105,12 +113,18 @@
 		</select>		
 		
 		<!-- 发表说说 -->
-		<insert id="save"  parameterType="cn.com.zzzy.entity.Talking">
+		<insert id="insertTalking"  parameterType="cn.com.zzzy.entity.Talking" keyProperty="talkingId" useGeneratedKeys="true">
 				insert into talking(talking_Content,talking_StudentId,talking_Time,talking_thumCount,talking_authorityId) values(#{talkingContent},#{talkingStudentId},NOW(),0,#{talkingAuthorityId});
 		</insert>
 		
+		<!-- 添加说说图片 -->
+		<insert id="insertTalkingPhoto">
+				insert into  talking_photos(talkingId,talkingPhoto) values(#{talkingId},#{talkingPhoto})
+		</insert>
 		<!-- 更新说说被赞的次数 -->
 		<update id="updateTalkThum" parameterType="Integer">
 				update   talking  set talking.talking_thumCount = talking.talking_thumCount+1  where talking_Id = #{talkingId}
 		</update>
+		
+		
 </mapper>

@@ -15,18 +15,6 @@ import cn.com.zzzy.service.question.QuestionTypeService;
 public class QuestionTypeController {
 	@Autowired
 	private QuestionTypeService questionTypeService;
-	/*查询所有类型
-	 * */
-	@RequestMapping("questiontype")		
-	@ResponseBody
-	public ModelAndView questiontype(){
-		ModelAndView mv = new ModelAndView();
-		List<QuestionType> list=  questionTypeService.selecall();
-		mv.addObject("list",list);
-		mv.setViewName("front/MyQuestion.jsp");
-		System.out.println(list);
-		return mv;
-	}
 	/*
 	 * 根据类型查询问题
 	 */
@@ -41,7 +29,7 @@ public class QuestionTypeController {
 		System.out.println("根据ID查询问题出来没");
         System.out.println("查詢问题"+listt);
         System.out.println("查询类型"+list);
-		mv.setViewName("front/MyQuestion.jsp");
+		mv.setViewName("fronttt/MyQuestion.jsp");
         return mv;
     }
 }

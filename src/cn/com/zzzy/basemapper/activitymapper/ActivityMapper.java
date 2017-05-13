@@ -60,13 +60,13 @@ public interface ActivityMapper extends BaseMapper<Activity> {
      * @param friendId
      * @return
      */
-    List<Activity> queryActivityByFriendIds(@Param("param") PageParam param,@Param("aqv") List<Integer> friendId);
+    List<Activity> queryActivityByFriendIds(@Param("param") PageParam param,@Param("stuId") Integer stuId);
    /**
     * 查看朋友说说的数量 
     * @param friendId
     * @return
     */
-    int queryActivityCountByFriendIds(@Param("aqv") List<Integer> friendId);
+    int queryActivityCountByFriendIds(Integer stuId);
     
     /**
      * 更新活动状态

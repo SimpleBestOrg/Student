@@ -17,4 +17,23 @@ public interface StudentFriendMapper {
      * @return
      */
     List<Student>  queryFriendInfo(PageParam param,@Param("stuId") Integer stuId);
+    
+    /**
+     * 根据学生ID查询出来加他为好友的学生ID(用于home.jsp判断是否显示  加号好友  待对方审核 )
+     * @param stuId
+     * @return
+     */
+    List<StudentFriend>  queryFriendFlag(@Param("stuId")Integer stuId);
+    
+    /**
+     * 添加好友
+     * @param studentFriend
+     */
+    void   addFriend(StudentFriend studentFriend);
+    
+    /**
+     * 更新好友状态
+     * @param studentFriend
+     */
+    void updateStudentFriendFlag(StudentFriend studentFriend);
 }

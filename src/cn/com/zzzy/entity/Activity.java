@@ -16,15 +16,17 @@ public class Activity {
     private String activityAppliReason;// 申请活动原因
     private ActivityType activityType;// 活动--》活动类型 一对一关系
     private Student student;// 一个活动由一个学生申请 一个学生可以申请多个活动 学生--》活动 一对多
-    private ActivityRecord activityRecord;// 活动记录 活动--》活动记录 一对一
     private ActivityLaunch activityLaunch;
     private Set<ActivityStudent>  activityStudents;
+    private Set<ActivityRecord>  activityRecords;
     private Integer activityFlag;// 活动状态(0:正在申请中的状态 1:已经审批的活动并且同意了2:已经审批未同意的活动)
     private Integer activityApplyStuId;
+    private String activityPhoto;
     
     public Activity() {
         // TODO Auto-generated constructor stub
     }
+    
 
     public Set<ActivityStudent> getActivityStudents() {
         return activityStudents;
@@ -119,12 +121,13 @@ public class Activity {
         this.activityLaunch = activityLaunch;
     }
 
-    public ActivityRecord getActivityRecord() {
-        return activityRecord;
+
+    public Set<ActivityRecord> getActivityRecords() {
+        return activityRecords;
     }
 
-    public void setActivityRecord(ActivityRecord activityRecord) {
-        this.activityRecord = activityRecord;
+    public void setActivityRecords(Set<ActivityRecord> activityRecords) {
+        this.activityRecords = activityRecords;
     }
 
     public Integer getActivityApplyStuId() {
@@ -134,5 +137,14 @@ public class Activity {
     public void setActivityApplyStuId(Integer activityApplyStuId) {
         this.activityApplyStuId = activityApplyStuId;
     }
+
+    public String getActivityPhoto() {
+        return activityPhoto;
+    }
+
+    public void setActivityPhoto(String activityPhoto) {
+        this.activityPhoto = activityPhoto;
+    }
+    
     
 }

@@ -14,6 +14,10 @@
 				<result column="stu_signature" property="studentSignature"></result>
 				<association property="studentClasses" javaType="cn.com.zzzy.entity.StudentClasses" resultMap="classesResult">
 				</association>
+				<collection property="studentFriends" ofType="cn.com.zzzy.entity.StudentFriend">
+						<result column="frientId" property="friend"></result>
+						<result column="stu_friend_Flag" property="stuFriendFlag"></result>
+				</collection>	
 			</resultMap>
 			
 		 <resultMap type="cn.com.zzzy.entity.Student" id="friendResult">
@@ -64,12 +68,15 @@
 						stu_Birthday,
 						stu_Photo,
 						stu_signature,
-						sc.cla_Name
+						sc.cla_Name,
+						sf.frientId,
+						sf.stu_friend_Flag
 					FROM
 						stu
 					LEFT JOIN stu_classes sc ON sc.cla_Id = stu.stu_ClassId
+				  LEFT JOIN  stu_friend  sf on sf.stuId  = stu.stu_Id
 					WHERE
-						stu_Id = 1
+						stu_Id =  #{stuId}
 			</select>
 			<!-- 查询所有学生 -->
 			<select id="queryAllStudent" resultType="map">

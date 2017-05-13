@@ -14,8 +14,39 @@ public class QuestionAnswer {
     private Student quesetionAnswerStudentId;// 回答问题的学生ID
     private Date quesetionAnswerDateTime;// 回答答案的时间
     private Integer quesetionAnswerParentId;// 问题答案父ID(是回答问题的两个人聊天)
+    private Student student;
+    private Integer answerQuestionId;//临时列 回复时用到 学生
+    private Integer answerStudentId;//临时列回复时用到 问题
+    
+    
+    
+    
+    
+    public Integer getAnswerQuestionId() {
+		return answerQuestionId;
+	}
 
-    public Integer getQuesetionAnswerId() {
+	public void setAnswerQuestionId(Integer answerQuestionId) {
+		this.answerQuestionId = answerQuestionId;
+	}
+
+	public Integer getAnswerStudentId() {
+		return answerStudentId;
+	}
+
+	public void setAnswerStudentId(Integer answerStudentId) {
+		this.answerStudentId = answerStudentId;
+	}
+
+	public Student getStudent() {
+		return student;
+	}
+
+	public void setStudent(Student student) {
+		this.student = student;
+	}
+
+	public Integer getQuesetionAnswerId() {
         return quesetionAnswerId;
     }
 

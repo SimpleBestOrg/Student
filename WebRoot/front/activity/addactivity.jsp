@@ -13,40 +13,43 @@
   <meta name="keywords" content="fly,layui,前端社区">
   <meta name="description" content="Fly社区是模块化前端UI框架Layui的官网社区，致力于为web开发提供强劲动力">
   <link rel="stylesheet" href="/Student/front/res/layui/css/layui.css">
+   <link rel="stylesheet" type="text/css" href="/Student/front/imageUpload/css/preview.css" />
+  <link rel="stylesheet" type="text/css" href="/Student/front/imageUpload/css/style.css">
   <link rel="stylesheet" href="/Student/front/res/css/global.css">
+  <link rel="stylesheet" href="/Student/front/imageUpload/css/ssi-uploader.css"/>
 </head>
 <body>
 
 <div class="header">
   <div class="main">
-    <a class="logo" href="/" title="Fly">Fly社区</a>
-     <div class="nav">
-      <a  href="${path}/front/question/questionindex.jsp">
+     <div class="nav" style="margin-left:-50px;">
+      <a  href="${path}/squestion.action">
         <i class="iconfont icon-wenda"></i>问答
       </a>
-      <a href="${path}/front/community/communityindex.jsp">
-        <i class="layui-icon">&#xe617;</i>社团
+      <a href="${path}/getAllCommunity.action">
+        <i  class="layui-icon">&#xe600;</i>社团
       </a>
-      <a  class="nav-this" href="${path}/front/activity/activityindex.jsp">
-        <i class="layui-icon">&#xe633;</i>活动 
+      <a href="${path}/front/activity/activityindex.jsp">
+        <i  class="layui-icon">&#xe62e;</i>活动 
       </a>
       <a  href="${path}/front/talking/talkingindex.jsp">
-        <i class="layui-icon">&#xe611;</i>说说
-      </a>
+        <i  class="layui-icon">&#xe606;</i>说说
+      </a >
+      <a href="${path}/queryFriendsInfo.action">
+        <i  class="layui-icon">&#xe613;</i>朋友
+      </a>  
     </div>
     <div class="nav-user">      
-      <!-- 登入后的状态 -->
-      
-      <a class="avatar" href="../user/index.jsp">
-        <img src="">
-        <cite>贤心</cite>
-        <i>VIP2</i>
+      <a class="avatar" >
+        <img src="/pic/${loginStudent.studentPhoto}">
+        <cite>${loginStudent.studentName}</cite>
+        <i>${loginStudent.studentClasses.className}</i>
+         
       </a>
       <div class="nav">
-        <a href="../user/set.html"><i class="iconfont icon-shezhi"></i>设置</a>
+        <a href="/Student/front/user/set.jsp"><i class="iconfont icon-shezhi"></i>设置</a>
         <a href=""><i class="iconfont icon-tuichu" style="top: 0; font-size: 22px;"></i>退了</a>
       </div>
-      
     </div>
   </div>
 </div>
@@ -88,13 +91,21 @@
                   </div>
                 </div> 
                  <div class="layui-form-item layui-form-text" >
-                    <label class="layui-form-label" style="width:200px">申请理由</label>
+                    <label class="layui-form-label" style="width:200px">申请原因:</label>
                     <div class="layui-input-block" style="width:100px;" >
                       <textarea placeholder="请输入内容" name="activityInfo.activityAppliReason" class="layui-textarea" style="width:500px" lay-verify="applyreason"></textarea>
                     </div>
                  </div>
+                <div class="layui-form-pane " style="margin-top: 15px; margin-left:100px;">
+                  <div class="layui-form-item">
+                        <input type="file" name="file" class="layui-upload-file" />
+                  </div>
+                <div id="previewAppend">
+                        <!-- 图片预览 -->
+                </div> 
+                </div> 
                 <center>
-                 <button class="layui-btn"  lay-submit="demo" onclick="applyActivity()">立即提交</button>
+                    <button class="layui-btn"  lay-submit="demo" onclick="applyActivity()">立即提交</button>
                 </center> 
         </form>
     </div>
@@ -110,9 +121,10 @@
   </p>
 </div>
 <script src="/Student/front/res/layui/layui.js"></script>
+<script src="/Student/js/jquery-1.8.3.js"></script>
 <script>
 		   //layui模块
-            layui.use(['form','laydate'],function(){
+            layui.use(['form','laydate','upload'],function(){
                  var form = layui.form()
                  ,laydate = layui.laydate();
                   var start = {
@@ -125,6 +137,17 @@
                       end.start = datas //将结束日的初始值设定为开始日
                     }
                   };
+                  layui.upload({
+                	  url: '/News/uploadImage.action'
+                	  ,success: function(res){
+                		  var imgLength = $("#previewAppend").children('table').length;
+                		  alert(imgLength);
+                		  if(imgLength>0){
+                				$("#tableImg").remove();  
+                		  }
+                		  $("#previewAppend").append('<table id="tableImg" class="ssi-imgToUploadTable ssi-pending"><tbody><tr><td class="ssi-imgToUpload"> <img class="ssi-imgToUpload" id="previewImg1" src="/pic/'+res.url+'" style="width:140px;height:128px;"/></td></tr><tr><td><button type="button" class="ssi-button error ssi-removeBtn" onclick="removePreviewImg()" id="removeImg"><span  class="trash10 trash" ></span></button></td></tr><tr><td id="iii" id="previewName">'+res.url+'<input type="hidden" name="activityInfo.activityPhoto" value="'+res.url+'"></td></tr></tbody></table>');
+                	  }
+                	});
                   
                   var end = {
                     min: laydate.now()
@@ -154,13 +177,16 @@
                 		  if(value.length<5){
                 			  return "申请理由至少填写三十个字节";
                 		  }
-                	  },
+                	  }
                   });
                   form.on('submit(demo)', function(data){
-                	  		
                 	  });  
                })
-            
+          	
+	//删除图片
+	function removePreviewImg(){
+			 $("#tableImg").remove();
+	}  
                
 </script>
           

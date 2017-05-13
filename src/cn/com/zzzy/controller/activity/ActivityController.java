@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Required;
@@ -13,12 +14,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import cn.com.zzzy.entity.Activity;
+import cn.com.zzzy.entity.ActivityInfo;
 import cn.com.zzzy.entity.ActivityQueryVo;
-import cn.com.zzzy.entity.AuthorityAccount;
-import cn.com.zzzy.entity.Student;
-import cn.com.zzzy.entity.StudentFriend;
 import cn.com.zzzy.entity.StudentMessage;
-import cn.com.zzzy.service.activity.ActivityPhotoService;
+import cn.com.zzzy.service.activity.ActivityRecordPhotoService;
 import cn.com.zzzy.service.activity.ActivityService;
 import cn.com.zzzy.service.student.StudentFriendService;
 import cn.com.zzzy.service.student.StudentMessageService;
@@ -32,7 +31,7 @@ public class ActivityController {
     private ActivityService activityService;
 
     @Autowired
-    private ActivityPhotoService activityPhotoService;
+    private ActivityRecordPhotoService activityRecordPhotoService;
 
     @Autowired
     private StudentFriendService studentFriendService;
@@ -47,7 +46,12 @@ public class ActivityController {
      */
     @RequestMapping("queryActivityByCondition")
     @ResponseBody
-    public List<Activity> queryActivityByCondition(PageParam param, ActivityQueryVo activityQueryVo) {
+    public List<Activity> queryActivityByCondition(PageParam param,HttpSession session) {
+        ActivityQueryVo activityQueryVo = new ActivityQueryVo();
+        ActivityInfo activityInfo = new ActivityInfo();
+        System.out.println("查询的活动状态:"+param.getFlag());
+        activityInfo.setActivityApplyStuId((Integer)session.getAttribute("stuId"));
+        activityQueryVo.setActivityInfo(activityInfo);
         List<Activity> list = activityService.queryActivityByCondition(param, activityQueryVo);
         System.out.println("長度:" + list);
         return list;
@@ -78,23 +82,10 @@ public class ActivityController {
      */
     @RequestMapping("queryAllFriendActivity")
     @ResponseBody
-    public List<Activity> queryAllFriendActivity(PageParam param, HttpServletRequest request) {
-        // 得到登录学生的ID
-        AuthorityAccount account = (AuthorityAccount)request.getSession().getAttribute("Account");
-        
-        Integer  stuId  = account.getAccountId();
-        // 根据学生ID查找所有朋友的信息
-        List<Student> studentFriend = studentFriendService.queryFriendInfo(null, stuId);
-        List<Activity> friendActivityList = null;
-        if (studentFriend.size() != 0) {
-            List<Integer> friendIds = new ArrayList<Integer>();
-            for (int i = 0; i < studentFriend.size(); i++) {
-                //将朋友的Id添加到朋友ID的集合中
-//                friendIds.add(studentFriend.get(i).getFriend());
-                  System.out.println();
-            }
-            friendActivityList = activityService.queryAllFriendActivity(param, friendIds);
-        }
+    public List<Activity> queryAllFriendActivity(PageParam param, HttpSession session) {
+        Integer stuId  = (Integer)session.getAttribute("stuId");
+        System.out.println("学生号:"+stuId);
+        List<Activity> friendActivityList = activityService.queryAllFriendActivity(param, stuId);
         return friendActivityList;
     }
 
@@ -125,9 +116,8 @@ public class ActivityController {
      */
     @RequestMapping("queryMyJoinActivity")
     @ResponseBody
-    public List<Activity> queryMyJoinActivity(PageParam param,HttpServletRequest request) {
-        AuthorityAccount account = (AuthorityAccount)request.getSession().getAttribute("Account");
-        Integer  stuId  = account.getAccountId();
+    public List<Activity> queryMyJoinActivity(PageParam param,HttpSession session) {
+        Integer stuId = (Integer)session.getAttribute("stuId");
         List<Activity> list = activityService.queryMyJoinActivity(param, stuId);
         System.out.println("我参加的活动的数量" + list.size());
         return list;
@@ -139,7 +129,7 @@ public class ActivityController {
      * @return
      */
     @RequestMapping(value = "/insertApplyActivity")
-    public String insertApplyActivity(ActivityQueryVo activityQueryVo) {
+    public String insertApplyActivity(ActivityQueryVo activityQueryVo,String imgName) {
         System.out.println(activityQueryVo.getActivityInfo().getActivityName());
         System.out.println(activityQueryVo.getActivityInfo().getActivityBeginTime());
         System.out.println(activityQueryVo.getActivityInfo().getActivityEndTime());
@@ -177,5 +167,6 @@ public class ActivityController {
          studentMessage.setMessageContext(messageContext);
          studentMessageService.insertMessage(studentMessage);
     }
+    
 
 }

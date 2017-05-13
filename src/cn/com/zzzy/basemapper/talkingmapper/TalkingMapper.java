@@ -8,6 +8,7 @@ import cn.com.zzzy.basemapper.BaseMapper;
 import cn.com.zzzy.entity.Student;
 import cn.com.zzzy.entity.StudentFriend;
 import cn.com.zzzy.entity.Talking;
+import cn.com.zzzy.entity.TalkingPhoto;
 import cn.com.zzzy.util.PageParam;
 
 public interface TalkingMapper extends BaseMapper<Talking>{
@@ -18,14 +19,14 @@ public interface TalkingMapper extends BaseMapper<Talking>{
      * @param stuId
      * @return
      */
-    List<Talking>  queryTalkingByFriendId(@Param("page")PageParam param,@Param("friendId") List<Student> friendInfo);
+    List<Talking>  queryTalkingByFriendId(@Param("page")PageParam param,@Param("stuId") Integer stuId);
     /**
      * 根据学生ID查询出朋友说说的数量
      * @param param
      * @param stuId
      * @return
      */
-     int  queryTalkCountByFriId(@Param("friendId") List<Integer> stuId);
+     int  queryTalkCountByFriId(@Param("stuId") Integer stuId);
     
     
     /**
@@ -51,5 +52,16 @@ public interface TalkingMapper extends BaseMapper<Talking>{
      */
     void  updateTalkThum(Integer talkingId);
     
+    /**
+     * 发表说说
+     * @param talking
+     */
+    Integer  insertTalking(Talking talking);
+    
+    /**
+     * 添加说说图片
+     * @param talkingPhoto
+     */
+    void  insertTalkingPhoto(TalkingPhoto talkingPhoto);
     
 }

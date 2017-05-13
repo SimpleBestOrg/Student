@@ -13,19 +13,28 @@
 		<association column="question_typeId" property="quesetionTypeId" resultMap="questionTypeResult" javaType="cn.com.zzzy.entity.QuestionType"></association>
 		<association column="question_StudentId" property="quesetionStudentId" resultMap="questionStudentResult" javaType="cn.com.zzzy.entity.Student"></association>
 		<collection property="questionAnswer" ofType="cn.com.zzzy.entity.QuestionAnswer">
+						<id column="ques_answer_Id" property="quesetionAnswerId"></id>
+						<result column="ques_answer_content"  property="quesetionAnswerContent"></result>
+						<result column="ques_answer_DataTime"  property="quesetionAnswerDateTime"></result>
+						<result column="ques_answer_parent_Id"  property="quesetionAnswerParentId"></result>
+						<association column="ques_answer_studentId"  property="student" javaType="cn.com.zzzy.entity.Student">
+							<id column="answerStuId" property="studentId"></id>
+							<result column="answerStuName" property="studentName"></result>
+							<result column="answerStuPhoto" property="studentPhoto"></result>
+						</association>
 		</collection>
 	</resultMap>
 	<resultMap type="cn.com.zzzy.entity.QuestionType" id="questionTypeResult">
 		<id column="que_typeId" property="quesetionTypeId"></id>
-		<result column="quesetionTypeName" property="que_typeName"></result>
+		<result column="que_typeName" property="quesetionTypeName"></result>
 	</resultMap>
 	<resultMap type="cn.com.zzzy.entity.Student" id="questionStudentResult">
-		<id column="stu_Id" property="studentId"></id>
-		<result column="stu_Name" property="studentName"></result>
+		<id column="questionStuId" property="studentId"></id>
+		<result column="questionStuName" property="studentName"></result>
 		<result column="stu_Sex" property="studentSex"></result>
 		<result column="stu_Address" property="studentAddress"></result>
 		<result column="stu_BirthPlace" property="studentName"></result>
-		<result column="stu_Photo" property="studentPhoto"></result>
+		<result column="questionStuPhoto" property="studentPhoto"></result>
 	</resultMap>
 	<!-- 根据学生id查询问题 -->
 	<select id="stuquerylist" resultType="Map" >
@@ -34,27 +43,105 @@
 		on Question.question_typeId=QuestionType.que_typeId where Student.stu_Id=#{sid}
 	</select>
 	<!-- 根据问题id查询问题详细信息  -->
-	<select id="selectname"    resultMap="questionResult">
-		select q.question_Title,q.question_Content,sq.stu_Name,sq.stu_Photo,q.question_DataTime, 
-		qt.que_typeName,q.question_step,q.question_praise,sa.stu_Name,sa.stu_Photo,qa.ques_answer_DataTime 
-		from  ques q left join stu sq 
-		on sq.stu_Id  = q.question_StudentId left join ques_answer qa 
-		on  q.question_Id = qa.ques_answer_questionId  left join stu sa 
-		on qa.ques_answer_studentId  = sa.stu_Id left join ques_type qt 
-		on q.question_typeId=qt.que_typeId where q.question_id=#{qid}
+	<select id="selectname" resultMap="questionResult">
+			SELECT
+				q.question_Id,
+				q.question_DataTime,
+				q.question_Title,
+				q.question_praise,
+				q.question_step,
+				q.question_Content,
+				sq.stu_Id questionStuId,
+				sq.stu_Name questionStuName,
+				sq.stu_Photo questionStuPhoto,
+				qt.que_typeName,
+				sa.stu_Id answerStuId,
+				sa.stu_Name  answerStuName,
+				sa.stu_Photo answerStuPhoto,
+				qa.ques_answer_DataTime,
+				qa.ques_answer_content,
+				qa.ques_answer_studentId,
+			    qa.ques_answer_Id,
+			    qa.ques_answer_parent_Id
+			FROM
+				ques q
+			LEFT JOIN stu sq ON sq.stu_Id = q.question_StudentId
+			LEFT JOIN ques_answer qa ON q.question_Id = qa.ques_answer_questionId
+			LEFT JOIN stu sa ON qa.ques_answer_studentId = sa.stu_Id
+			LEFT JOIN ques_type qt ON q.question_typeId = qt.que_typeId
+			WHERE
+				q.question_id = #{qid}	
 	</select>   
 	<!-- 查询问题的 -->
 	<select id="squestion" resultType="Map">
 		select * from stu Student RIGHT JOIN ques Question 
 		on Student.stu_Id=Question.question_StudentId LEFT JOIN ques_type QuestionType 
 		on Question.question_typeId=QuestionType.que_typeId
-	</select>  
-	
+	</select>
+	<!-- 热帖查询 -->  
+	<select id="groupquestion" resultType="Map">
+		SELECT question_Id,question_Title,question_step FROM ques group by question_step DESC
+	</select>
+	<!-- 热议查询 -->
+	<select id="commentselect" resultType="Map">
+		SELECT
+			q.question_Id,q.question_Title, COUNT(*) AS count
+		FROM
+			ques_answer qa
+		RIGHT JOIN ques q ON q.question_Id = qa.ques_answer_questionId
+		GROUP BY
+			ques_answer_questionId ASC
+	</select>
+	<!-- 根据问题类型ID查询问题 -->
+	<select id="typeQuestion" resultType="Map">
+		SELECT
+			*
+		FROM
+			ques_type
+		RIGHT JOIN ques ON ques.question_typeId = ques_type.que_typeId
+		LEFT JOIN stu ON ques.question_StudentId = stu.stu_Id
+		WHERE
+			ques_type.que_typeId =#{typeid}
+	</select>
+	<!-- 模糊查询(根据内容,标题) -->
+	<select id="questiondim" resultType="Map">
+		SELECT
+			*
+		FROM
+			ques
+		<where>
+			<if test="1==1">
+				ques.question_Title like concat(concat('%',#{contenTitle}),'%')
+			</if>
+			<if test="1==1">
+				or question_Content LIKE concat(concat('%',#{contenTitle}),'%')
+			</if>
+		</where>
+	</select>
+	<!-- 更新(赞+1) -->
+	<update id="updateStep" parameterType="cn.com.zzzy.entity.Question">
+		update ques 
+		<set>
+			question_step =question_step+1
+		</set>
+		<where>
+			question_Id=#{questionId}
+		</where>
+	</update>
 	<!-- 添加问题 -->
-	<insert id="insertadd" parameterType="cn.com.zzzy.entity.Question">
-		insert into ques(question_Content,question_Title,question_typeId,question_StudentId) Question values (#{quesetionContent},#{quesetionTitle},#{quesetionTypeId.quesetionTypeId},#{quesetionStudentId.studentId})
-	</insert>
-	<!-- 删除问题 -->
-	<delete id="delete">
-	</delete>
+	<insert id="insertQuestion" parameterType="cn.com.zzzy.entity.Question">
+		insert into ques (
+			question_Content,
+			question_Title,
+			question_typeId,
+			question_StudentId,
+			question_DataTime
+			)
+		VALUES
+			(
+			#{quesetionContent},
+			#{quesetionTitle},
+			#{quesetionTypeId.quesetionTypeId},
+			#{StudentId},now())
+	</insert>	
 </mapper>

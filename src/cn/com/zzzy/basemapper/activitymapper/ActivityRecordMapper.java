@@ -1,5 +1,12 @@
 package cn.com.zzzy.basemapper.activitymapper;
 
-public interface ActivityRecordMapper {
+import cn.com.zzzy.entity.ActivityRecord;
 
+public interface ActivityRecordMapper {
+        
+    /**
+     * 添加活动记录
+     * @param activityRecord
+     */
+    void  insertActivityRecord(ActivityRecord activityRecord);
 }

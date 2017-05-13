@@ -41,17 +41,61 @@ public class StudentController {
      * @return
      */
     @RequestMapping("queryStudentInfoById")
-    public ModelAndView queryStudentInfoById(HttpServletRequest request) {
+    public ModelAndView queryStudentInfoById(HttpServletRequest request,Integer stuId) {
         AuthorityAccount account = (AuthorityAccount) request.getSession().getAttribute("Account");
-        System.out.println("登录学生ID:" + account.getStudentId());
-        request.getSession().setAttribute("StuId", account.getStudentId());
-        Student student = studentService.queryStudentInfoById(account.getStudentId());
+        Student loginStudent = studentService.queryStudentInfoById(account.getStudentId()); 
+        Student student = null;
+        Integer count = 5;
+        System.out.println("学生编号:"+stuId);
+        if(stuId!=null){
+            student = studentService.queryStudentInfoById(stuId);
+            if(stuId!=account.getStudentId()){
+             //根据学生ID查询出加他好友的学生ID和状态(审核 同意  未同意)
+             List<StudentFriend> studentFriendFlag = studentFriendService.queryFriendFlag(stuId);
+                 for(int i=0;i<studentFriendFlag.size();i++){
+                         StudentFriend studentFriend = studentFriendFlag.get(i);
+                         System.out.println(i+"nihao"+studentFriend.getStudentId()+"好友:"+studentFriend.getFriend());
+                         if(studentFriend.getStudentId()==account.getStudentId()  && studentFriend.getStuFriendFlag()==0){
+                                 //已经加对方为好友 但是对方未审核
+                                 count = 0;
+                         }else if(studentFriend.getStudentId()==account.getStudentId() && studentFriend.getStuFriendFlag()== 1){
+                                 //已经加对方为好友 对方已同意  已经是好友
+                                 count = 1;
+                         }else if(studentFriend.getStudentId()==account.getStudentId() && studentFriend.getStuFriendFlag()==2){
+                                //加对方为好友  但是被对方拒绝
+                                count = 2;
+                         }
+                 }
+            }else{
+                        count  = 1;
+            }  
+             //如果学生ID为空说明是用户登录
+        } else if(stuId == null){
+            System.out.println("登录学生ID:" + account.getStudentId());
+            count =  1;
+            request.getSession().setAttribute("stuId", account.getStudentId());
+            student = studentService.queryStudentInfoById(account.getStudentId());
+        }
+        
+        
+        HttpSession session = request.getSession();
+        session.setAttribute("loginStudent", loginStudent);
+        System.out.println("count:"+count);
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.addObject("student", student);
+        modelAndView.addObject("count", count);
+        modelAndView.addObject("loginStudent", loginStudent);
         modelAndView.setViewName("/front/user/home.jsp");
         return modelAndView;
     }
-
+   @RequestMapping("queryStudent")
+   @ResponseBody
+    public Student queryStudent(){
+        Integer stuId = 1;
+        Student student = studentService.queryStudentInfoById(stuId);
+        return student;
+    }
+    
     /**
      * 得到所有的学生信息
      * @return

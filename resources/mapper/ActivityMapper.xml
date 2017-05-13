@@ -10,16 +10,16 @@
 			<result column="activity_Flag"   property="activityFlag"></result>
 			<result column="activity_appliReason" property="activityAppliReason"></result>
 			<result column="activity_appliTime" property="activityAppliTime"></result>
+			<result column="activityPhoto" property="activityPhoto"></result>
 			<association column="activity_typeId" property="activityType"  javaType="cn.com.zzzy.entity.ActivityType" resultMap="activityTypeResult"></association>
 			<association column="activity_appliStuId" property="student" javaType="cn.com.zzzy.entity.Student" resultMap="studentResult"></association>
-			<association column="activity_recordId" property="activityRecord"  javaType="cn.com.zzzy.entity.ActivityRecord"  resultMap="activityRecordResult"></association>
 			<association column="activity_launchId"  property="activityLaunch" javaType="cn.com.zzzy.entity.ActivityLaunch" resultMap="activityLaunchResult"></association>
 			<collection property="activityStudents" ofType="cn.com.zzzy.entity.ActivityStudent">
 						<id column="activity_studentId"  property="activityStudentsId"></id>
-						<result column="activity_Id" property="activityId"></result>
 						<result column="stu_activityFlag" property="stuActivityFlag"></result>
 						<association column="stus_Id"  property="students" resultMap="studentsResult" javaType="cn.com.zzzy.entity.Student"/>
 			</collection>
+			<collection property="activityRecords" ofType="cn.com.zzzy.entity.ActivityRecord"  resultMap="activityRecordResult" />
 		</resultMap>
 		
 		<resultMap id="activityTypeResult" type="cn.com.zzzy.entity.ActivityType">
@@ -44,11 +44,12 @@
 		</resultMap>
 		
 		<resultMap id="activityRecordResult" type="cn.com.zzzy.entity.ActivityRecord">
-				<id column="activity_recordId"  property="activityRecordId"></id>
+				<id column="activityRecordId"  property="activityRecordId"></id>
 				<result column="activity_recordContent"  property="activityRecordContent"></result>
-				<collection property="activityPhotos" ofType="cn.com.zzzy.entity.ActivityPhoto">
-						<id column="activity_PhotoId" property="activityPhotoId"></id>
-						<result column="activity_photo" property="activityPhoto" />
+				<result column="activity_recordTime" property="activityRecordTime"></result>
+				<collection property="activityRecordPhotos" ofType="cn.com.zzzy.entity.ActivityRecordPhoto">
+						<id column="activity_record_PhotoId" property="activityPhotoId"></id>
+						<result column="activity_record_photo" property="activityRecordPhoto" />
 				</collection>
 		</resultMap>
 		
@@ -57,6 +58,13 @@
 				<result  column="activity_lanDesc"  property="activityLaunchDesc"/>
 				<result  column="activity_perNum"  property="activityPersonNum"/>
 				<result  column="activity_regisCon"  property="activityRegisterCond"/>
+				<collection resultMap="activityLaunchPhoto" property="activityLaunchPhoto" ofType="cn.com.zzzy.entity.ActivityLaunchPhoto" ></collection>
+		</resultMap>
+		
+		<resultMap id="activityLaunchPhoto" type="cn.com.zzzy.entity.ActivityLaunchPhoto">
+				<id column="activity_launch_photoId" property="activityLaunchPhotoId"></id>
+				<result column="activity_launch_Id" property="activityLaunchId"></result>
+				<result column="activity_launch_photos" property="activityLaunchPhotos"></result>
 		</resultMap>
 		
 		<resultMap id="communityResult" type="cn.com.zzzy.entity.Community">
@@ -68,18 +76,17 @@
 		
 		<!--根据 学生ID,活动状态,活动类型,活动名称 查询活动-->
 		<select id="queryActivityByCondition"  resultMap="activityResult">
-					select a.*,t.*,s.*,l.*,r.* from activity a  left join activity_type t
+					select a.*,t.*,s.*,l.* from activity a  left join activity_type t
 						on t.activity_typeId = a.activity_typeId left join stu s
 						on s.stu_Id = a.activity_appliStuId  left  join activity_launch l
-						on l.activity_lanId = a.activity_launchId left join activity_record r
-						on r.activity_recordId = a.activity_recordId
+						on l.activity_lanId = a.activity_launchId
 						<where>
 						       1 = 1 
 								<if test="aqv!=null  and  aqv.activityInfo !=null and aqv.activityInfo.activityFlag!=null">
 									 and	 a.activity_Flag = #{aqv.activityInfo.activityFlag}
 								</if>
-								<if test=" aqv!=null  and  aqv.activityInfo !=null  and aqv.activityInfo.studentId!=null">
-										  and a.activity_appliStuId  = #{aqv.activityInfo.studentId}
+								<if test=" aqv!=null  and  aqv.activityInfo !=null  and aqv.activityInfo.activityApplyStuId!=null">
+										  and a.activity_appliStuId  = #{aqv.activityInfo.activityApplyStuId}
 								</if>
 								<if test="aqv!=null  and  aqv.activityInfo !=null and aqv.activityInfo.activityTypeId !=null">
 										  and a.activity_typeId = #{aqv.activityInfo.activityTypeId}
@@ -105,8 +112,7 @@
 					select count(*) from activity a  left join activity_type t
 				on t.activity_typeId = a.activity_typeId left join stu s
 				on s.stu_Id = a.activity_appliStuId  left  join activity_launch l
-				on l.activity_lanId = a.activity_launchId left join activity_record r
-				on r.activity_recordId = a.activity_recordId 
+				on l.activity_lanId = a.activity_launchId 
 				<where>
 				     1 = 1
 						<if test=" aqv!=null and aqv.activityInfo !=null and aqv.activityInfo.activityFlag!=null">
@@ -135,50 +141,72 @@
 		
 		<!--查询朋友圈的活动 -->
 		<select id="queryActivityByFriendIds" resultMap="activityResult">
-				select  a.*,t.*,s.*,l.*,r.* from activity a  left join activity_type t
+				select  a.*,t.*,s.* from activity a  left join activity_type t
 						on t.activity_typeId = a.activity_typeId left join stu s
 						on s.stu_Id = a.activity_appliStuId  left  join activity_launch l
-						on l.activity_lanId = a.activity_launchId left join activity_record r
-						on r.activity_recordId = a.activity_recordId  
+						on l.activity_lanId = a.activity_launchId 
 						where   a.activity_Flag = 3  and   a.activity_appliStuId in
-						<foreach collection="aqv" item="stuId"  open="(" separator="," close=")">
-									#{stuId}
-						</foreach>
+						(		SELECT
+										sf.frientId
+									FROM
+										stu_friend sf
+									WHERE
+										sf.stuId = #{stuId}
+									AND sf.stu_friend_Flag = 1)
 						order by a.activity_Id 
 						limit #{param.startIndex},#{param.rows}
 		</select>
 		<!--查看朋友圈活动的数量-->
 		<select id="queryActivityCountByFriendIds" resultType="Integer">
-				select  count(*) from activity a  left join activity_type t
-						on t.activity_typeId = a.activity_typeId left join stu s
-						on s.stu_Id = a.activity_appliStuId  left  join activity_launch l
-						on l.activity_lanId = a.activity_launchId left join activity_record r
-						on r.activity_recordId = a.activity_recordId  
-						where   a.activity_Flag = 0   and   a.activity_appliStuId in
-						<foreach collection="aqv" item="stuId"  open="(" separator="," close=")">
-									#{stuId}
-						</foreach>
-		</select>
-		
-		<!-- 查询学生参加的活动 -->
-		<select id="queryMyJoinActivity" resultMap="activityResult">
-			select * from  activity  a
-			left join activity_student  s
-			on a.activity_Id  = s.activity_Id where s.stus_Id   = #{stuId}
-		</select>
-		
-		<!-- 根据活动ID查询活动的详细信息 -->
-		<select id="queryActivityDetail" resultMap="activityResult">
-	     select     a.*,s.*,activity_type.*,community.*,activity_student.*,activity_launch.*,activity_record.*,activity_photo.*
+	     select     a.*,s.*,activity_type.*,community.*,activity_student.*,activity_launch.*,activity_record.*
 	     			,ss.stu_Id as stusId,ss.stu_Name as activityStuName,ss.stu_Photo as activityStudentPhoto from activity  a left join stu  s
 					on s.stu_Id = a.activity_appliStuId  left  join  activity_type
 					on activity_type.activity_typeId = a.activity_typeId  left join  community
 					on  activity_type.community_Id = community.community_Id left join activity_student
 					on activity_student.activity_Id = a.activity_Id   left join stu  ss 
 					on  ss.stu_Id = activity_student.stus_Id   left join activity_launch
-					on a.activity_launchId = activity_launch.activity_lanId left join activity_record
-					on a.activity_recordId = activity_record.activity_recordId  left join activity_photo
-					on a.activity_recordId = activity_photo.activity_recordId 
+					on a.activity_launchId = activity_launch.activity_lanId   left join  activity_record
+				    on  a.activity_Id = activity_record.activity_Id left join activity_record_photo 
+					on   activity_record.activity_recordId = activity_record_photo.activity_recordId
+						where   a.activity_Flag = 0   and   a.activity_appliStuId in
+						(		SELECT
+										sf.frientId
+									FROM
+										stu_friend sf
+									WHERE
+										sf.stuId = #{stuId}
+									AND sf.stu_friend_Flag = 1)
+		</select>
+		
+		<!-- 查询学生参加的活动 -->
+		<select id="queryMyJoinActivity" resultMap="activityResult">
+					select * from  activity  a
+					left join activity_student  s
+					on a.activity_Id  = s.activity_Id   where s.stus_Id   = #{stuId}   and s.stu_activityFlag = 1
+		</select>
+		
+		<!-- 根据活动ID查询活动的详细信息 -->
+		<select id="queryActivityDetail" resultMap="activityResult">
+				SELECT
+					a.*, s.*, activity_type.*, community.*, activity_student.*, activity_launch.*,activity_launch_photo.*,
+				  activity_record.activity_recordId activityRecordId,
+				  activity_record.activity_recordContent,
+				  activity_record.activity_recordTime,
+					activity_record_photo.*,
+					ss.stu_Id AS stusId,
+					ss.stu_Name AS activityStuName,
+					ss.stu_Photo AS activityStudentPhoto
+				FROM
+					activity a
+				LEFT JOIN stu s ON s.stu_Id = a.activity_appliStuId
+				LEFT JOIN activity_type ON activity_type.activity_typeId = a.activity_typeId
+				LEFT JOIN community ON activity_type.community_Id = community.community_Id
+				LEFT JOIN activity_student ON activity_student.activity_Id = a.activity_Id
+				LEFT JOIN stu ss ON ss.stu_Id = activity_student.stus_Id
+				LEFT JOIN activity_launch ON a.activity_launchId = activity_launch.activity_lanId
+				LEFT JOIN activity_launch_photo ON activity_launch_photo.activity_launch_Id = activity_launch.activity_lanId 
+				LEFT JOIN activity_record ON a.activity_Id = activity_record.activity_Id
+				LEFT JOIN activity_record_photo ON activity_record.activity_recordId = activity_record_photo.activity_recordId
 					<where>
 								a.activity_Id = #{activityId}
 					</where>
@@ -188,12 +216,13 @@
 		
 		<!--申请活动-->
 		<insert id="insertActivity"  parameterType="cn.com.zzzy.entity.ActivityQueryVo">
-			insert into activity(activity_Name,activity_beginTime,activity_endTime,activity_appliTime,activity_appliReason,activity_typeId,activity_appliStuId) values(#{obj.activityInfo.activityName},#{obj.activityInfo.activityBeginTime},#{obj.activityInfo.activityEndTime},NOW(),#{obj.activityInfo.activityAppliReason},#{obj.activityInfo.activityTypeId},#{obj.activityInfo.studentId})
+			insert into activity(activity_Name,activity_beginTime,activity_endTime,activity_appliTime,activity_appliReason,activity_typeId,activity_appliStuId,activityPhoto) values(#{obj.activityInfo.activityName},#{obj.activityInfo.activityBeginTime},#{obj.activityInfo.activityEndTime},NOW(),#{obj.activityInfo.activityAppliReason},#{obj.activityInfo.activityTypeId},#{obj.activityInfo.studentId},#{obj.activityInfo.activityPhoto})
 		</insert>
 		
 		<!-- 更新活动状态  -->
 		<update id="updateActivityFlag">
 		   update activity a set a.activity_Flag = #{aqv.activityFlag} WHERE a.activity_Id =#{aqv.activityId}
 		</update>
+		
 		
 </mapper>

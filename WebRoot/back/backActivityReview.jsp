@@ -222,7 +222,7 @@
       								$('#activityReviewGrid').datagrid({
     									url:"/Student/queryActivityForPage.action",
     									queryParams: {
-    										activityFlag : newValue,
+    										flag : newValue,
     										keyWord : keyWord
     									}
     								});								  

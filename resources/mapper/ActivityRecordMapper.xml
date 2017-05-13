@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.com.zzzy.basemapper.activitymapper.ActivityRecordMapper">
+		
+
+
+		<!-- 添加活动记录 -->		
+		<insert id="insertActivityRecord"  useGeneratedKeys="true" keyProperty="activityRecordId">
+				insert into  activity_record(activity_recordContent,activity_Id,activity_recordTime) values(#{activityRecordContent},#{activityId},now());
+		</insert>
+</mapper>

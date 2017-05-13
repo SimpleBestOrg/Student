@@ -34,7 +34,7 @@ body .iconfont{-webkit-text-stroke-width: 0;}
   -moz-osx-font-smoothing: grayscale;
 }
 
-.icon-zan:before { content: "\e608"; }
+.icon-zan:before { content: "\e612"; }
 .icon-jiazaizhong:before { content: "\e60e"; }
 .icon-sousuo:before { content: "\e621"; }
 .icon-quanpingpad:before { content: "\e61d"; }
@@ -46,7 +46,7 @@ body .iconfont{-webkit-text-stroke-width: 0;}
 .icon-shui:before { content: "\e602"; }
 .icon-qq:before { content: "\e618"; }
 .icon-weibo:before { content: "\e617"; }
-.icon-tupian:before { content: "\e608"; }
+.icon-tupian:before { content: "\e611"; }
 .icon-logo:before { content: "\e603"; }
 .icon-daima:before { content: "\e609"; }
 .icon-biaoqing:before { content: "\e60f"; }
@@ -77,6 +77,7 @@ body .iconfont{-webkit-text-stroke-width: 0;}
 .icon-ui:before { content: "\e625"; }
 .icon-ss:before{content:"\e611"}
 .icon-iconfontpraise:before { content: "\e608"; }
+.icon-users:before{content:"\e607;"}
 /* 辅助 */
 pre{padding: 10px 15px; margin: 10px 0; font-size: 12px; border-left: 6px solid #009688;  background-color: #F2F2F2; font-family: Courier New; overflow: auto;}
 .fly-main{position:relative; width:1000px; margin:0 auto;}

@@ -28,5 +28,13 @@ public class StudentMessageService {
         public void   insertMessage(StudentMessage studentMessage){
                studentMessageMapper.insertMessage(studentMessage);
         }
+        
+        /**
+         * 更新消息内容(点击同意或者拒绝按钮时  更新消息内容)
+         * @param studentMessage
+         */
+        public void updateMessageContext(StudentMessage studentMessage){
+               studentMessageMapper.updateMessageContext(studentMessage);
+        }
 }
 

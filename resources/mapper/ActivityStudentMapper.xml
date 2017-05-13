@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.com.zzzy.basemapper.activitymapper.ActivityStudentMapper">
+		
+		<!-- 申请加入活动 -->
+		<insert id="insertActivityStudent" parameterType="cn.com.zzzy.entity.ActivityStudent">
+			insert into activity_student(activity_Id,stus_Id,stu_activityFlag) values(#{activityId},#{studentsId},#{stuActivityFlag})	
+		</insert>
+		
+		<update id="updateStudentActivityFlag" >
+			update activity_student set stu_activityFlag = #{stuActivityFlag} where activity_Id = #{activityId} and stus_Id = #{studentsId}
+		</update>
+</mapper>

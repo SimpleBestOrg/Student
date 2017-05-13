@@ -2,13 +2,28 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="cn.com.zzzy.basemapper.questionmapper.QuestionTuCaoMapper">
+	<!-- 根据问题删除回答 -->
 	<delete id="delete">
 		delete ques_tocao as QuestionTuCao 
 		where QuestionTuCao.ques_tocaoId=#{qid}
 	</delete>
+	<!-- 根据问题查询信息-->
 	<select id="select" resultType="map"> 
-		select QuestionTuCao.*  
+		select QuestionTuCao.* 
 		from ques_tocao as QuestionTuCao where 
 		QuestionTuCao.questionId=#{qid}
 	</select>
+	<!-- 查询此学生是否点过赞(1点过,0未点过) -->
+	<select id="queryTuCaoStudent" resultType="Integer">
+		select count(*) from ques_tocao where questionId = #{questionId} and ques_tucao_stuId = #{questionToCaoStuId}
+	</select>
+	<!-- 插入桥梁表信息 -->
+	<insert id="insertTucao" parameterType="cn.com.zzzy.entity.QuestionTuCao">
+		insert into ques_tocao 
+		values
+		(
+			#{questionId},
+			#{questionToCaoStuId}
+		)
+	</insert>
 </mapper>

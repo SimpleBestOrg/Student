@@ -21,6 +21,7 @@ public class Student {
     private String studentSignature;//学生个性签名
     private StudentClasses studentClasses;
     private Set<Student> studentFriend;
+    private Set<StudentFriend>  studentFriends;
     
 
     public Integer getStudentId() {
@@ -117,6 +118,14 @@ public class Student {
 
     public void setStudentSignature(String studentSignature) {
         this.studentSignature = studentSignature;
+    }
+
+    public Set<StudentFriend> getStudentFriends() {
+        return studentFriends;
+    }
+
+    public void setStudentFriends(Set<StudentFriend> studentFriends) {
+        this.studentFriends = studentFriends;
     }
     
 }

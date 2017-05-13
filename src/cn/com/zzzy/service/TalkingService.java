@@ -9,6 +9,7 @@ import cn.com.zzzy.basemapper.talkingmapper.TalkingMapper;
 import cn.com.zzzy.entity.Student;
 import cn.com.zzzy.entity.StudentFriend;
 import cn.com.zzzy.entity.Talking;
+import cn.com.zzzy.entity.TalkingPhoto;
 import cn.com.zzzy.util.PageParam;
 
 @Service
@@ -24,8 +25,8 @@ public class TalkingService {
      * @param stuId
      * @return
      */
-    public List<Talking> queryTalkingByFriendId(PageParam param,List<Student> friendInfo){
-        List<Talking>  talkingList = talkingMapper.queryTalkingByFriendId(param, friendInfo);
+    public List<Talking> queryTalkingByFriendId(PageParam param,Integer stuId){
+        List<Talking>  talkingList = talkingMapper.queryTalkingByFriendId(param, stuId);
         return talkingList;
     }
     
@@ -34,7 +35,7 @@ public class TalkingService {
      * @param stuId
      * @return
      */
-    public  int  queryTalkCountByFriId(List<Integer> stuId){
+    public  int  queryTalkCountByFriId(Integer stuId){
          return   talkingMapper.queryTalkCountByFriId(stuId);
     }
     
@@ -63,12 +64,8 @@ public class TalkingService {
      * 发表说说
      * @param talking
      */
-    public void insertTalking(Talking talking){
-        if(talking!=null  &&  talking.getTalkingStudentId()!=null  && talking.getTalkingContent()!=null && talking.getTalkingAuthorityId()!=null){
-            talkingMapper.save(talking);
-        }else{
-            System.out.println("说说信息填写不完整");
-        }
+    public Integer insertTalking(Talking talking){
+           return  talkingMapper.insertTalking(talking);
     }
     
     /**
@@ -79,6 +76,11 @@ public class TalkingService {
         talkingMapper.updateTalkThum(talkingId);
     }
     
-    
-    
+    /**
+     * 添加说说图片
+     * @param talkingPhoto
+     */
+    public void  insertTalkingPhoto(TalkingPhoto talkingPhoto){
+         talkingMapper.insertTalkingPhoto(talkingPhoto);
+    }
 }

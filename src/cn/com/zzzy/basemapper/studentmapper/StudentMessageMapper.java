@@ -17,4 +17,11 @@ public interface StudentMessageMapper {
          * @param studentMessage
          */
         void insertMessage(StudentMessage studentMessage);
+        
+        
+        /**
+         * 更新好友消息内容(点击同意或者拒绝时需要更新 消息中的两个按钮)
+         * @param studentMessage
+         */
+        void  updateMessageContext(StudentMessage studentMessage); 
 }

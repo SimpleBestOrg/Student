@@ -10,11 +10,20 @@ import cn.com.zzzy.entity.QuestionType;
 public class QuestionTypeService{
 	@Autowired
 	private  QuestionTypeMapper questionTypeMapper; 
+	/**
+	 * 查询所以类型
+	 * @return
+	 */
 	public List<QuestionType> selecall() {
 		 List<QuestionType> list = questionTypeMapper.selecall();
 		 System.out.println("进来Service");
 		 return list;
 	}
+	/**
+	 * 根据问题类型查询问题
+	 * @param tid
+	 * @return
+	 */
 	public List<Question> selecttype(Integer tid){
 		List<Question> list=questionTypeMapper.selecttype(tid);
 		System.out.println("这是根据类型id查询 问题标题");

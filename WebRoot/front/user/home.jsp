@@ -3,13 +3,6 @@
 <%
   String path = request.getContextPath();
   request.setAttribute("path", path);
-  if(session.getAttribute("Account")==null){
-      %>
-      <script type="text/javascript">
-      		window.location="/Student/login.jsp?loginInfo="+1;
-      </script>
-      <%
-  }
 %>
 <%@taglib prefix="fmt"  uri="http://java.sun.com/jsp/jstl/fmt" %> 
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
@@ -28,29 +21,34 @@
 
 <div class="header">
   <div class="main">
-     <div class="nav">
+     <div class="nav" style="margin-left:-50px;">
       <a  href="${path}/squestion.action">
         <i class="iconfont icon-wenda"></i>问答
       </a>
       <a href="${path}/getAllCommunity.action">
-        <i class="layui-icon">&#xe617;</i>社团
+        <i  class="layui-icon">&#xe600;</i>社团
       </a>
       <a href="${path}/front/activity/activityindex.jsp">
-        <i class="layui-icon">&#xe633;</i>活动 
+        <i  class="layui-icon">&#xe62e;</i>活动 
       </a>
       <a  href="${path}/front/talking/talkingindex.jsp">
-        <i class="layui-icon">&#xe611;</i>说说
-      </a>
+        <i  class="layui-icon">&#xe606;</i>说说
+      </a >
+      <a href="${path}/queryFriendsInfo.action">
+        <i  class="layui-icon">&#xe613;</i>朋友
+            
+      </a>  
     </div>
     
     <div class="nav-user">      
-      <a class="avatar" href="../user/index.html">
-        <img src="/pic/${student.studentPhoto}">
-        <cite>${student.studentName}</cite>
-        <i>${student.studentClasses.className}</i>
+      <a class="avatar" >
+        <img src="/pic/${loginStudent.studentPhoto}">
+        <cite>${loginStudent.studentName}</cite>
+        <i>${loginStudent.studentClasses.className}</i>
+         
       </a>
       <div class="nav">
-        <a href="../user/set.html"><i class="iconfont icon-shezhi"></i>设置</a>
+        <a href="/Student/front/user/set.jsp"><i class="iconfont icon-shezhi"></i>设置</a>
         <a href=""><i class="iconfont icon-tuichu" style="top: 0; font-size: 22px;"></i>退了</a>
       </div>
     </div>
@@ -71,17 +69,29 @@
     </c:if>
      
       
-    
-     <span style="color:#c00;">（超级码农）</span>
-    <span style="color:#5FB878;">（活雷锋）</span>
-    <span>（该号已被封）</span>
   </h1>
   <p class="fly-home-info">
-    <i class="iconfont icon-zuichun" title="飞吻"></i><span style="color: #FF7200;">67206飞吻</span>
+    
     <i class="iconfont icon-shijian"></i><span><fmt:formatDate pattern="yyyy-MM-dd" value="${student.studentBirthday}"></fmt:formatDate></span>
     <i class="iconfont icon-chengshi"></i><span>来自${student.studentAddress}</span>
+    <c:if  test="${count==0}">
+                    <span><button  class="layui-btn layui-btn-primary layui-btn-small">待审核</button></span>                
+    </c:if>
+    <c:if  test="${count!=0 && count!=1 && count!=2}">
+                    <span><button onclick="addFriend(${student.studentId})" class="layui-btn layui-btn-primary layui-btn-small">加为好友</button></span>
+    </c:if>
+    <c:if test="${count==2}">
+                    <span><button  class="layui-btn layui-btn-primary layui-btn-small">被拒绝</button></span>
+    </c:if>
+    
   </p>
-  <p class="fly-home-sign">（人生仿若一场修行）</p>
+  <c:if test="${student.studentSignature!=null}">
+          <p class="fly-home-sign">(${student.studentSignature})</p>
+  </c:if>
+  <c:if test="${student.studentSignature==null}">
+          <p class="fly-home-sign">(暂无签名)</p>
+  </c:if>
+
 </div>
 
 
@@ -94,8 +104,21 @@
     <a href="http://fly.layui.com/jie/2461.html" target="_blank">微信公众号</a>
   </p>
 </div>
+<script src="/Student/front/res/layui/layui.js"></script>
 <script src="/Student/js/jquery.min.js"></script>
 <script  type="text/javascript">
+	
+		$(function(){
+        	var stuId = <%=session.getAttribute("stuId")%>;
+        	if(stuId==null){
+        		window.location="/Student/login.jsp?loginInfo="+1;
+        	}
+		})
+		//添加好友
+		function addFriend(stuId){
+				alert(stuId);
+		       $.post("/Student/addFriend.action",{"friend":stuId},function(data){},"json");	 
+		}
 </script>
 
 </body>

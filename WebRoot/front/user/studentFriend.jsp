@@ -1,5 +1,10 @@
- <%@ page language="java" contentType="text/html; charset=UTF-8"
+ <%@page import="cn.com.zzzy.entity.Student"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+<%
+  String path = request.getContextPath();
+  request.setAttribute("path", path);
+%>
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <!DOCTYPE html>
 <html>
@@ -16,37 +21,40 @@
 
 <div class="header">
   <div class="main">
-    <a class="logo" href="/" title="Fly">Fly社区</a>
-    <div class="nav">
-      <a class="nav-this" href="index.html">
+     <div class="nav" style="margin-left:-50px;">
+      <a  href="${path}/squestion.action">
         <i class="iconfont icon-wenda"></i>问答
       </a>
-      <a href="http://www.layui.com/" target="_blank">
-        <i class="iconfont icon-ui"></i>框架
+      <a href="${path}/getAllCommunity.action">
+        <i  class="layui-icon">&#xe600;</i>社团
       </a>
+      <a href="${path}/front/activity/activityindex.jsp">
+        <i  class="layui-icon">&#xe62e;</i>活动 
+      </a>
+      <a  href="${path}/front/talking/talkingindex.jsp">
+        <i  class="layui-icon">&#xe606;</i>说说
+      </a >
+      <a href="${path}/queryFriendsInfo.action">
+        <i  class="layui-icon">&#xe613;</i>朋友
+      </a>  
     </div>
     
     <div class="nav-user">
-      <!-- 未登入状态 -->
-      <a class="unlogin" href="user/login.html"><i class="iconfont icon-touxiang"></i></a>
-      <span><a href="user/login.html">登入</a><a href="user/reg.html">注册</a></span>
-      <p class="out-login">
-        <a href="" onclick="layer.msg('正在通过QQ登入', {icon:16, shade: 0.1, time:0})" class="iconfont icon-qq" title="QQ登入"></a>
-        <a href="" onclick="layer.msg('正在通过微博登入', {icon:16, shade: 0.1, time:0})" class="iconfont icon-weibo" title="微博登入"></a>
-      </p>   
-      
+     
       <!-- 登入后的状态 -->
-      <!-- 
-      <a class="avatar" href="user/index.html">
-        <img src="http://tp4.sinaimg.cn/1345566427/180/5730976522/0">
-        <cite>贤心</cite>
-        <i>VIP2</i>
-      </a>
-      <div class="nav">
-        <a href="/user/set/"><i class="iconfont icon-shezhi"></i>设置</a>
-        <a href="/user/logout/"><i class="iconfont icon-tuichu" style="top: 0; font-size: 22px;"></i>退了</a>
-      </div> -->
-      
+      <%if(session.getAttribute("loginStudent")!=null){ 
+            Student student  = (Student)session.getAttribute("loginStudent");
+      %>
+          <a class="avatar" href="user/index.html">
+            <img src="/pic/<%=student.getStudentPhoto()%>">
+            <cite><%=student.getStudentName()%></cite>
+            <i><%=student.getStudentClasses().getClassName()%></i>
+          </a>
+          <div class="nav">
+            <a href="/Student/front/user/set.jsp"><i class="iconfont icon-shezhi"></i>设置</a>
+            <a href="/user/logout/"><i class="iconfont icon-tuichu" style="top: 0; font-size: 22px;"></i>退了</a>
+          </div>
+      <% } %>
     </div>
   </div>
 </div>
@@ -54,7 +62,7 @@
 
 <div class="main layui-clear">
   <div class="wrap">
-    <c:forEach items="${listFriendInfo.studentFriend}" var="friendInfo" begin="1" end="20">
+    <c:forEach items="${listFriendInfo}" var="friendInfo" >
         <div style="width:680px;height:80px;margin-top:5px;">
             <a>
                     <img src="/pic/${friendInfo.studentPhoto}" style='width:100px;height:78px;'/>
@@ -62,7 +70,7 @@
                     <span style="display:block;font-size:20px;margin-top:-75px;margin-left:110px;">${friendInfo.studentName}</span>
                     <span style="margin-left:110px;margin-top:-20px;">班级:${friendInfo.studentClasses.className}</span>
                     <span style="display:block;font-size:15px;margin-left:110px;margin-top:0px;">${friendInfo.studentSignature}</span>
-                    <input type="button" style="margin-left:500px;margin-top:-92px;"  class="layui-btn layui-btn-normal" value="他的主页"></input>
+                    <input type="button" style="margin-left:500px;margin-top:-92px;" onclick="stuDetail(${friendInfo.studentId})"  class="layui-btn layui-btn-normal" value="他的主页"></input>
         </div>
      </c:forEach>  
   </div>
@@ -84,6 +92,13 @@
     <a href="http://fly.layui.com/jie/2461.html" target="_blank">微信公众号</a>
   </p>
 </div>
-
+<script src="/Student/js/jquery.min.js"></script>
+<script type="text/javascript">
+			
+			function  stuDetail(stuId){
+					window.location.href="/Student/queryStudentInfoById.action?stuId="+stuId;
+			}
+</script>
 </body>
+
 </html>

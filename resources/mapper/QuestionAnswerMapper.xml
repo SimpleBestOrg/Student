@@ -2,12 +2,31 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="cn.com.zzzy.basemapper.questionmapper.QuestionAnswerMapper">
+	<!-- 删除问题答案 未实现 -->
 	<delete id="delete" parameterType="Integer">　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　
 		delete ques_answer as QuestionAnswer 
 		where QuestionAnswer.ques_answer_questionId=#{qid}
 	</delete>
+	<!-- 根据问题编号查询答案 -->
 	<select id="select" resultType="map">
 		select * from ques_answer as QuestionAnswer 
 		where QuestionAnswer.ques_answer_questionId=#{qid}
 	</select>
+	<!-- 增加回复 -->
+	<insert id="insertanswer" parameterType="cn.com.zzzy.entity.QuestionAnswer">
+		INSERT INTO ques_answer (
+		ques_answer_content,
+		ques_answer_questionId,
+		ques_answer_StudentId,
+		ques_answer_DataTime,
+		ques_answer_parent_Id
+		)
+	VALUES
+		(
+		#{quesetionAnswerContent},
+		#{answerQuestionId},
+		#{answerStudentId},
+		now(),
+		#{quesetionAnswerParentId})
+	</insert>
 </mapper>

@@ -1,5 +1,6 @@
 package cn.com.zzzy.entity;
 
+import java.util.Date;
 import java.util.Set;
 
 /**
@@ -10,8 +11,9 @@ import java.util.Set;
 public class ActivityRecord {
     private Integer activityRecordId;// 活动记录ID
     private String  activityRecordContent;// 活动记录内容
-    private Set<ActivityPhoto> activityPhotos;//一个活动多个照片
-    
+    private Integer activityId;
+    private Set<ActivityRecordPhoto> activityRecordPhotos;//一个活动多个照片
+    private Date    activityRecordTime;
 
     public Integer getActivityRecordId() {
         return activityRecordId;
@@ -29,14 +31,32 @@ public class ActivityRecord {
         this.activityRecordContent = activityRecordContent;
     }
 
-    public Set<ActivityPhoto> getActivityPhotos() {
-        return activityPhotos;
+
+    public Set<ActivityRecordPhoto> getActivityRecordPhotos() {
+        return activityRecordPhotos;
     }
 
-    public void setActivityPhotos(Set<ActivityPhoto> activityPhotos) {
-        this.activityPhotos = activityPhotos;
+    public void setActivityRecordPhotos(Set<ActivityRecordPhoto> activityRecordPhotos) {
+        this.activityRecordPhotos = activityRecordPhotos;
     }
 
+    public Integer getActivityId() {
+        return activityId;
+    }
+
+    public void setActivityId(Integer activityId) {
+        this.activityId = activityId;
+    }
+
+    public Date getActivityRecordTime() {
+        return activityRecordTime;
+    }
+
+    public void setActivityRecordTime(Date activityRecordTime) {
+        this.activityRecordTime = activityRecordTime;
+    }
+
+    
     
     
 }

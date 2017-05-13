@@ -24,4 +24,7 @@ public class QuestionTuCaoController {
 	public void tucaodelete(Integer qid){
 		questionTuCaoService.delete(qid);
 	}
+	
+	
+	
 }

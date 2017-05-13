@@ -1,5 +1,7 @@
 package cn.com.zzzy.entity;
 
+import java.util.Set;
+
 /**
  * 活动发起表
  * @author Admin
@@ -10,6 +12,7 @@ public class ActivityLaunch {
     private String activityLaunchDesc;// 对发起的活动进行描述
     private Integer activityPersonNum;// 互动人数限制
     private String activityRegisterCond;// 活动申请条件
+    private Set<ActivityLaunchPhoto> activityLaunchPhoto;
 
     public Integer getActivityLaunchId() {
         return activityLaunchId;
@@ -43,4 +46,13 @@ public class ActivityLaunch {
         this.activityRegisterCond = activityRegisterCond;
     }
 
+    public Set<ActivityLaunchPhoto> getActivityLaunchPhoto() {
+        return activityLaunchPhoto;
+    }
+
+    public void setActivityLaunchPhoto(Set<ActivityLaunchPhoto> activityLaunchPhoto) {
+        this.activityLaunchPhoto = activityLaunchPhoto;
+    }
+
+    
 }

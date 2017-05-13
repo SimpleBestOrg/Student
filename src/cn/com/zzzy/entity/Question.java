@@ -18,6 +18,7 @@ public class Question {
     private Integer questionStep;  //当你踩或者赞的时候 先通过刚才的表 判断  这个是否 踩过或者赞过这个问题 如果踩过和赞过这个问题  则不赞或者踩  如果未赞或者未踩 则只用踩得数量加一或者赞的数量加一  然后 在questionToCao表里面 录入学生ID和对应的问题ID
     private Integer questionPraise; //赞
     private Set<QuestionAnswer>  questionAnswer;	//一个问题对应多个答案
+    private Integer  StudentId;  //为了发表问题  增加的列
     
     public Integer getQuestionStep() {
 		return questionStep;
@@ -89,6 +90,14 @@ public class Question {
 
 	public void setQuestionAnswer(Set<QuestionAnswer> questionAnswer) {
 		this.questionAnswer = questionAnswer;
+	}
+
+	public Integer getStudentId() {
+		return StudentId;
+	}
+
+	public void setStudentId(Integer studentId) {
+		StudentId = studentId;
 	}
 	
 }

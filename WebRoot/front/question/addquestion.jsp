@@ -1,5 +1,10 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%
+  String path = request.getContextPath();
+  request.setAttribute("path", path);
+%>
 <!DOCTYPE html>
 <html>
 <head>
@@ -11,34 +16,51 @@
   <link rel="stylesheet" href="/Student/front/res/layui/css/layui.css">
   <link rel="stylesheet" href="/Student/front/res/css/global.css">
 </head>
+<style type="text/css">
+		.option1{
+				    font-weight: normal;	
+				        font-family: inherit;
+ 		   font-size: inherit;
+   				 font-style: inherit;
+   				 font-weight: inherit;
+		}
+</style>
 <body>
 
 <div class="header">
   <div class="main">
-    <a class="logo" href="/" title="Fly">Fly社区</a>
-    <div class="nav">
-      <a class="nav-this" href="index.html">
+     <div class="nav" style="margin-left:-50px;">
+      <a  href="${path}/squestion.action">
         <i class="iconfont icon-wenda"></i>问答
       </a>
-      <a href="http://www.layui.com/" target="_blank">
-        <i class="iconfont icon-ui"></i>框架
+      <a href="${path}/getAllCommunity.action">
+        <i  class="layui-icon">&#xe600;</i>社团
       </a>
+      <a href="${path}/front/activity/activityindex.jsp">
+        <i  class="layui-icon">&#xe62e;</i>活动 
+      </a>
+      <a  href="${path}/front/talking/talkingindex.jsp">
+        <i  class="layui-icon">&#xe606;</i>说说
+      </a >
+      <a href="${path}/queryFriendsInfo.action">
+        <i  class="layui-icon">&#xe613;</i>朋友
+            
+      </a>  
     </div>
     
     <div class="nav-user">      
-      <!-- 登入后的状态 -->
-      
-      <a class="avatar" href="../user/index.html">
-        <img src="http://tp4.sinaimg.cn/1345566427/180/5730976522/0">
-        <cite>贤心</cite>
-        <i>VIP2</i>
+      <a class="avatar" >
+        <img src="/pic/${loginStudent.studentPhoto}">
+        <cite>${loginStudent.studentName}</cite>
+        <i>${loginStudent.studentClasses.className}</i>
+         
       </a>
       <div class="nav">
-        <a href="../user/set.html"><i class="iconfont icon-shezhi"></i>设置</a>
+        <a href="/Student/front/user/set.jsp"><i class="iconfont icon-shezhi"></i>设置</a>
         <a href=""><i class="iconfont icon-tuichu" style="top: 0; font-size: 22px;"></i>退了</a>
       </div>
-      
     </div>
+      
   </div>
 </div>
 
@@ -47,41 +69,28 @@
     <h2 class="page-title">发表问题</h2>
     
     <!-- <div class="fly-none">并无权限</div> -->
-
     <div class="layui-form layui-form-pane">
-      <form action=" method="post">
+      <form action="insertQuestion.action" method="post" class="layui-form">
         <div class="layui-form-item">
           <label for="L_title" class="layui-form-label">标题</label>
           <div class="layui-input-block">
-            <input type="text" id="L_title" name="title" required lay-verify="required" autocomplete="off" class="layui-input">
+            <input type="text" id="quesetionTitle" name="quesetionTitle" required lay-verify="required" autocomplete="off" class="layui-input">
           </div>
         </div>
         <div class="layui-form-item layui-form-text">
           <div class="layui-input-block">
-            <textarea id="L_content" name="content" required lay-verify="required" placeholder="请输入内容" class="layui-textarea fly-editor" style="height: 260px;"></textarea>
+            <textarea id="quesetionContent" name="quesetionContent" required lay-verify="required" placeholder="请输入内容" class="layui-textarea fly-editor" style="height: 260px;"></textarea>
           </div>
           <label for="L_content" class="layui-form-label" style="top: -2px;">描述</label>
         </div>
-        <div class="layui-form-item">
+        <div class="layui-form-item" >
           <div class="layui-inline">
             <label class="layui-form-label">所在类别</label>
             <div class="layui-input-block">
-              <select lay-verify="required" name="class">
-                <option></option>
-                <option value="1" >layui框架综合</option> 
-                <option value="2" >layui.mobile模块</option> 
-                <option value="3" >layer弹出层</option> 
-              </select>
-            </div>
-          </div>
-          <div class="layui-inline">
-            <label class="layui-form-label">悬赏飞吻</label>
-            <div class="layui-input-block">
-              <select name="experience">
-                <option value="5" selected>5</option>
-                <option value="20">20</option>
-                <option value="50">50</option>
-                <option value="100">100</option>
+              <select lay-verify="required" name="quesetionTypeId.quesetionTypeId" id="quesetionTypeId" style="display:inline-block;height:36px;border-radius: 5px;border-color: initial;color: initial;    border-color: rgb(169, 169, 169);    white-space: pre;" >
+                <c:forEach items="${questiontype}" var="questiontype">
+                	<option class="option1" value="${questiontype.quesetionTypeId}">${questiontype.quesetionTypeName}</option> 
+            	</c:forEach>
               </select>
             </div>
           </div>
@@ -112,22 +121,8 @@
     <a href="http://fly.layui.com/jie/2461.html" target="_blank">微信公众号</a>
   </p>
 </div>
-<script src="../../res/layui/layui.js"></script>
+<script src="/Student/front/res/layui/layui.js"></script>
 <script>
-layui.cache.page = 'jie';
-layui.cache.user = {
-  username: '游客'
-  ,uid: -1
-  ,avatar: '../../res/images/avatar/00.jpg'
-  ,experience: 83
-  ,sex: '男'
-};
-layui.config({
-  version: "2.0.0"
-  ,base: '../../res/mods/'
-}).extend({
-  fly: 'index'
-}).use('fly');
 </script>
 
 </body>

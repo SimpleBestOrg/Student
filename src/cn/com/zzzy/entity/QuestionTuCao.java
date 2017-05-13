@@ -8,7 +8,8 @@ package cn.com.zzzy.entity;
 public class QuestionTuCao {
     private Integer querstionTuCaoId;
     private Integer questionId;// 问题的ID
-    private Student questionTucaoStudentId;//踩过或赞过的学生ID  在踩或者赞的时候  读取 此表查询 这个学生是否赞过 或者踩过此问题   如果踩过或者赞过 则不孕赞 
+    private Student questionTucaoStudentId;//踩过或赞过的学生ID  在踩或者赞的时候  读取 此表查询 这个学生是否赞过 或者踩过此问题   如果踩过或者赞过 则不孕赞
+    private Integer questionToCaoStuId;
     public Integer getQuerstionTuCaoId() {
         return querstionTuCaoId;
     }
@@ -31,6 +32,14 @@ public class QuestionTuCao {
 
 	public void setQuestionTucaoStudentId(Student questionTucaoStudentId) {
 		this.questionTucaoStudentId = questionTucaoStudentId;
+	}
+
+	public Integer getQuestionToCaoStuId() {
+		return questionToCaoStuId;
+	}
+
+	public void setQuestionToCaoStuId(Integer questionToCaoStuId) {
+		this.questionToCaoStuId = questionToCaoStuId;
 	}
 
     /*public Integer getQuestionTucaoStudentId() {
