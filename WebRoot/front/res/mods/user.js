@@ -182,16 +182,7 @@ layui.define(['laypage', 'fly', 'element'], function(exports){
     });
   }
 
-  //提交成功后刷新
-  fly.form['set-mine'] = function(data, required){
-    layer.msg('修改成功', {
-      icon: 1
-      ,time: 1000
-      ,shade: 0.1
-    }, function(){
-      location.reload();
-    });
-  }
+
 
   //帐号绑定
   $('.acc-unbind').on('click', function(){

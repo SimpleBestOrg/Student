@@ -55,8 +55,32 @@
 				from teacher t,authority_account a 
 				where t.tea_id=a.teacher_id and tea_name like CONCAT('%',#{teaName},'%')
 		</select>
+		
 		<!-- 添加登录账户 -->
 		<insert id="insertAuthorityAccount"  parameterType="cn.com.zzzy.entity.AuthorityAccount">
 					insert into  authority_account(student_id,teacher_id,account_name,account_pwd)   values(#{obj.studentId},#{obj.teacherId},#{obj.accountName},#{obj.accountPwd});
 		</insert>
+		
+		
+		<!-- 查询学生密码 -->
+			<select id="selectStudentPwd" resultType="String" >
+				SELECT
+					account_pwd
+				FROM
+					authority_account
+				WHERE
+					student_id = ${stuId}
+			</select>
+			
+			
+		<!-- 修改学生密码 -->
+			<update id="updateStudentPwd">
+				update
+					 authority_account  
+				SET 
+					account_pwd = '${studentPwd}'
+				WHERE
+					student_id = ${stuId}
+			</update>	
+		
 </mapper>

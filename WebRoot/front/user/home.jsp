@@ -48,7 +48,7 @@
          
       </a>
       <div class="nav">
-        <a href="/Student/front/user/set.jsp"><i class="iconfont icon-shezhi"></i>设置</a>
+        <a href="selectStudentSign.action"><i class="iconfont icon-shezhi"></i>设置</a>
         <a href=""><i class="iconfont icon-tuichu" style="top: 0; font-size: 22px;"></i>退了</a>
       </div>
     </div>
@@ -88,12 +88,10 @@
   <c:if test="${student.studentSignature!=null}">
           <p class="fly-home-sign">(${student.studentSignature})</p>
   </c:if>
-  <c:if test="${student.studentSignature==null}">
+  <c:if test="${student.studentSignature==null && student.studentSignature==''}">
           <p class="fly-home-sign">(暂无签名)</p>
   </c:if>
-
 </div>
-
 
 
 <div class="footer">

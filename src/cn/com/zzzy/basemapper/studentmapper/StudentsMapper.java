@@ -42,4 +42,18 @@ public interface StudentsMapper extends BaseMapper<Student>{
      * @param student
      */
     void  addStudent(Student student);
+    
+    /**
+     * 查询学生个性签名
+     * @param stuId
+     * @return
+     */
+    String selectStudentSign(@Param("stuId") Integer stuId);
+    
+    /**
+     * 更新学生个性签名
+     * @param stuId
+     * @param studentSign
+     */
+    void updateStudentSign(@Param("stuId") Integer stuId,@Param("studentSign") String studentSign);
 }

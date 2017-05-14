@@ -74,7 +74,7 @@
       </a>
     </li>
     <li class="layui-nav-item layui-this">
-      <a href="/Student/front/user/set.jsp">
+      <a href="/Student/selectStudentSign.action">
         <i class="layui-icon">&#xe620;</i>
         基本设置
       </a>
@@ -102,15 +102,16 @@
       </ul>
       <div class="layui-tab-content" style="padding: 20px 0;">
         <div class="layui-form layui-form-pane layui-tab-item layui-show">
-          <form method="post">
+          <form action="updateStudentSign.action" method="post">
             <div class="layui-form-item layui-form-text">
               <label for="L_sign" class="layui-form-label">签名</label>
               <div class="layui-input-block">
-                <textarea placeholder="随便写些什么刷下存在感" id="L_sign"  name="sign" autocomplete="off" class="layui-textarea" style="height: 80px;"></textarea>
+                <input type="hidden" id="stuId" name="stuId" value="${stuId}">
+                <textarea placeholder="随便写些什么刷下存在感" id="studentSign"  name="studentSign" autocomplete="off" class="layui-textarea" style="height: 80px;">${StuSign}</textarea>
               </div>
             </div>
             <div class="layui-form-item">
-              <button class="layui-btn" key="set-mine" lay-filter="*" lay-submit>确认修改</button>
+              <button class="layui-btn" lay-submit>确认修改</button>
             </div>
           </form>  
           </div>
@@ -128,28 +129,29 @@
           </div>
           
           <div class="layui-form layui-form-pane layui-tab-item">
-            <form action="/user/repass" method="post">
+            <form action="updateStudentPwd.action" id="udpatePwdForm" method="post">
               <div class="layui-form-item">
-                <label for="L_nowpass" class="layui-form-label">当前密码</label>
+                <label for="L_nowpass" class="layui-form-label" >当前密码</label>
                 <div class="layui-input-inline">
-                  <input type="password" id="L_nowpass" name="nowpass" required lay-verify="required" autocomplete="off" class="layui-input">
+                  <input type="password" id="L_nowpass" name="nowpass" onblur="verifyNowPwd()" required lay-verify="required" autocomplete="off" class="layui-input">
+                  <input type="hidden" id="hiddenPwd" value="${StudentPwd}">
                 </div>
               </div>
               <div class="layui-form-item">
                 <label for="L_pass" class="layui-form-label">新密码</label>
                 <div class="layui-input-inline">
-                  <input type="password" id="L_pass" name="pass" required lay-verify="required" autocomplete="off" class="layui-input">
+                  <input type="password" id="studentPwd" name="studentPwd" onblur="verifyNewPwd()" required lay-verify="required" autocomplete="off" class="layui-input">
                 </div>
                 <div class="layui-form-mid layui-word-aux">6到16个字符</div>
               </div>
               <div class="layui-form-item">
                 <label for="L_repass" class="layui-form-label">确认密码</label>
                 <div class="layui-input-inline">
-                  <input type="password" id="L_repass" name="repass" required lay-verify="required" autocomplete="off" class="layui-input">
+                  <input type="password" id="repwd" name="repwd" onblur="verifyRePwd()" required lay-verify="required" autocomplete="off" class="layui-input">
                 </div>
               </div>
               <div class="layui-form-item">
-                <button class="layui-btn" key="set-mine" lay-filter="*" lay-submit>确认修改</button>
+                <input type="button" value="确认修改" id="updatePwd" onclick="updatePwdForm()" class="layui-btn"></input>
               </div>
             </form>
           </div>
@@ -190,6 +192,7 @@
   </p>
 </div>
 <script src="/Student/front/res/layui/layui.js"></script>
+<script src="/Student/js/jquery.min.js"></script>
 <script>
 layui.cache.page = 'user';
 layui.cache.user = {
@@ -205,6 +208,96 @@ layui.config({
 }).extend({
   fly: 'index'
 }).use('fly');
+
+
+layui.use('layer', function(){
+	  var layer = layui.layer;
+	});    
+
+
+//提交成功后刷新
+/*fly.form['set-mine'] = function(data, required){
+  layer.msg('修改成功', {
+    icon: 1
+    ,time: 1000
+    ,shade: 0.1
+  }, function(){
+    location.reload();
+  });
+}
+*/
+
+/**
+ *  验证当前密码
+ */
+function verifyNowPwd(){
+	   var L_nowpass = $("#L_nowpass").val().toString();
+	   var hiddenPwd = $("#hiddenPwd").val().toString();
+	   if(L_nowpass != hiddenPwd){
+		   layer.alert('原密码输入不正确 请重新输入', {
+			   skin: 'layui-layer-molv' //样式类名
+			   ,closeBtn: 0
+			 }, function(index){
+				 $("#L_nowpass").val(null);
+				 layer.close(index);
+			 });
+		   return false;
+	   }else{
+		   return true;
+	   }
+}
+/**
+ * 验证新密码格式是否正确
+ */
+function verifyNewPwd(){
+	var newPwd = $("#studentPwd").val().toString();
+	if(newPwd.length<6 || newPwd.length>16){
+		   layer.alert('新密码格式输入错误 请重新输入', {
+			   skin: 'layui-layer-molv' //样式类名
+			   ,closeBtn: 0
+			 }, function(index){
+				 $("#studentPwd").val(null);
+				 layer.close(index);
+			 });	
+		  return false;
+	}else{
+		return true;
+	}
+}
+
+/**
+ * 验证重复密码输入是否正确
+ */
+ function  verifyRePwd(){
+	var newPwd = $("#studentPwd").val().toString();
+	var reNewPwd = $("#repwd").val().toString();
+	if(reNewPwd.length<6 || reNewPwd.length>16  || newPwd!=reNewPwd){
+			   layer.alert('重复密码输入错误 请重新输入', {
+				   skin: 'layui-layer-molv' //样式类名
+				   ,closeBtn: 0
+				 }, function(index){
+					 $("#studentPwd").val(null);
+					 $("#repwd").val(null);
+					 layer.close(index);
+				 });	
+			   return false;
+	}else{
+		return true;
+	}
+}
+/*
+ * 点击修改密码验证
+ */
+function updatePwdForm(){
+	alert("你好");
+		if( verifyNowPwd && verifyNewPwd()  && verifyRePwd()){
+			$("#udpatePwdForm").submit();
+		}
+}
+
+
+
+
 </script>
 
 </body>

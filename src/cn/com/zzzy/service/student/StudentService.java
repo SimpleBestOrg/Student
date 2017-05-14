@@ -87,4 +87,21 @@ public class StudentService {
             return "添加失败";
         }
     }
+    /**
+     * 查询学生个性签名
+     * @param stuId
+     * @return
+     */
+    public String selectStudentSign(Integer stuId){
+        return studentMapper.selectStudentSign(stuId);
+    }
+    
+    /**
+     * 更新学生个性签名
+     * @param stuId
+     * @param studentSign
+     */
+    public void updateStudentSign(Integer stuId,String studentSign){
+        studentMapper.updateStudentSign(stuId, studentSign);    
+    }
 }

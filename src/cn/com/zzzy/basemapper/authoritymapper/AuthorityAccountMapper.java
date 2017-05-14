@@ -57,6 +57,19 @@ public interface AuthorityAccountMapper {
 	 * @param authorityAccount
 	 */
 	void insertAuthorityAccount(@Param("obj") AuthorityAccount authorityAccount);
+	
+	/**
+	 * 查询用户密码
+	 * @param stuId
+	 * @return
+	 */
+	String selectStudentPwd(@Param("stuId")Integer stuId);
+	/**
+	 * 修改用户密码
+	 * @param studentPwd
+	 * @param stuId
+	 */
+	void updateStudentPwd(@Param("studentPwd") String studentPwd,@Param("stuId")Integer stuId);
 }
 
 

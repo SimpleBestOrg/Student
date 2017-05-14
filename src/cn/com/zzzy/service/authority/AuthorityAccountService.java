@@ -70,5 +70,20 @@ public class AuthorityAccountService {
 	public void  insertAuthorityAccount(AuthorityAccount account){
 	             auAcMapper.insertAuthorityAccount(account);  
 	}
-
+	/**
+	 * 查看用户密码
+	 * @param stuId
+	 * @return
+	 */
+	public String selectStudentPwd(Integer stuId){
+	    return auAcMapper.selectStudentPwd(stuId);
+	}
+	/**
+	 * 修改用户密码
+	 * @param studentPwd
+	 * @param stuId
+	 */
+	public void updateStudentPwd(String studentPwd,Integer stuId){
+	    auAcMapper.updateStudentPwd(studentPwd, stuId);
+	}
 }

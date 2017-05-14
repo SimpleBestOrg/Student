@@ -74,7 +74,7 @@
       </a>
     </li>
     <li class="layui-nav-item ">
-      <a href="/Student/front/user/set.jsp">
+      <a href="/Student/selectStudentSign.action">
         <i class="layui-icon">&#xe620;</i>
                            基本设置
       </a>

@@ -2,8 +2,6 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="cn.com.zzzy.basemapper.studentmapper.StudentsMapper">
-			
-			
 		  <resultMap type="cn.com.zzzy.entity.Student" id="StudentResult">
 				<id column="stu_Id" property="studentId"></id>
 				<result column="stu_Name"  property="studentName"   />
@@ -36,10 +34,6 @@
 		 		<id column="cla_Id" property="classesId"></id>
 		 		<id column="cla_Name" property="className"></id>
 		 </resultMap>
-		
-			
-			
-
 
 			<!--根据学生ID查询学生朋友的信息 -->
 			 <select id="queryFriendInfo" resultMap="StudentResult">
@@ -107,5 +101,27 @@
 			<!-- 添加学生 -->
 			<insert id="addStudent" parameterType="cn.com.zzzy.entity.Student" useGeneratedKeys="true" keyProperty="studentId">
 						insert into  stu(stu_Name,stu_Sex,stu_Birthday,stu_Address,stu_ClassId,stu_Photo)  values(#{studentName},#{studentSex},#{studentBirthday},#{studentAddress},#{studentClasses.classesId},#{studentPhoto})
-			</insert>	
+			</insert>
+			
+			
+			<!-- 根据学生Id查询学生签名 -->
+			<select id="selectStudentSign" resultType="String" parameterType="int">
+				SELECT
+					stu_signature
+				FROM
+					stu
+				WHERE
+					stu_Id = #{stuId};
+			</select>
+			
+			
+			<!-- 修改学生个性签名 -->
+			<update id="updateStudentSign">
+				UPDATE stu
+					SET 
+						stu_signature = #{studentSign}
+					WHERE
+						stu_Id = #{stuId};	
+			</update>
+			
 </mapper>

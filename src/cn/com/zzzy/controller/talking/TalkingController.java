@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -14,6 +15,8 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.commons.CommonsMultipartFile;
 
 import cn.com.zzzy.entity.AuthorityAccount;
+import cn.com.zzzy.entity.Student;
+import cn.com.zzzy.entity.StudentMessage;
 import cn.com.zzzy.entity.Talking;
 import cn.com.zzzy.entity.TalkingPhoto;
 import cn.com.zzzy.entity.TalkingStudentThum;
@@ -21,6 +24,7 @@ import cn.com.zzzy.entity.TalkingToCao;
 import cn.com.zzzy.service.TalkingService;
 import cn.com.zzzy.service.TalkingStudentThumService;
 import cn.com.zzzy.service.TalkingToCaoService;
+import cn.com.zzzy.service.student.StudentMessageService;
 import cn.com.zzzy.util.PageParam;
 
 @Controller
@@ -35,6 +39,8 @@ public class TalkingController {
     @Autowired
     private TalkingToCaoService talkingToCaoService;
 
+    @Autowired
+    private StudentMessageService studentMessageService;
 
     /**
      * 根据学生ID查询朋友的说说
@@ -106,16 +112,26 @@ public class TalkingController {
      * @param talkingId
      */
     @RequestMapping("thumTalking")
-    public void thumTalking(Integer stuId, Integer talkingId) {
+    public void thumTalking(HttpSession session, Integer talkingId,Integer studentId) {
+        Student loginStudent = (Student)session.getAttribute("loginStudent");
         TalkingStudentThum talkingStudentThum = new TalkingStudentThum();
-        talkingStudentThum.setStudentId(stuId);
+        talkingStudentThum.setStudentId(loginStudent.getStudentId());
         talkingStudentThum.setStudentId(talkingId);
         // 判断学生是否 赞过该说说
-        if (talkingStudentThumService.queryCount(talkingStudentThum) == 0) {
+        if (studentId != loginStudent.getStudentId()  && talkingStudentThumService.queryCount(talkingStudentThum) == 0) {
             talkingService.updateTalkThum(talkingId);
             talkingStudentThumService.save(talkingStudentThum);
-        } else {
-            System.out.println("已经赞过该说说");
+            //通知对方  赞了该说说
+            StudentMessage studentMessage = new StudentMessage();
+            studentMessage.setStudentId(studentId);
+            String messageContext = "<a href='/Student/queryStudentInfoById.action?stuId="+loginStudent.getStudentId()+"'><cite>"+loginStudent.getStudentName()+"</cite>赞了您的说说</a>";
+            studentMessage.setMessageContext(messageContext);
+            studentMessage.setStudentId(studentId);
+            studentMessageService.insertMessage(studentMessage);
+        } else if(studentId == loginStudent.getStudentId()  && talkingStudentThumService.queryCount(talkingStudentThum) == 0){
+            System.out.println("不能赞自己的说说");
+        } else if(studentId != loginStudent.getStudentId()  && talkingStudentThumService.queryCount(talkingStudentThum) == 1){
+            System.out.println("已经攒过该说说");   
         }
     }
     

@@ -1,5 +1,7 @@
 package cn.com.zzzy.controller.student;
 
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.request;
+
 import java.io.File;
 import java.io.IOException;
 import java.util.List;
@@ -18,6 +20,8 @@ import org.springframework.web.servlet.ModelAndView;
 import cn.com.zzzy.entity.AuthorityAccount;
 import cn.com.zzzy.entity.Student;
 import cn.com.zzzy.entity.StudentFriend;
+import cn.com.zzzy.service.authority.AuthorityAccountService;
+import cn.com.zzzy.service.authority.AuthorityMenuService;
 import cn.com.zzzy.service.student.StudentFriendService;
 import cn.com.zzzy.service.student.StudentService;
 import cn.com.zzzy.util.PageData;
@@ -33,7 +37,8 @@ public class StudentController {
     @Autowired
     private StudentFriendService studentFriendService;
     
-
+    @Autowired
+    private AuthorityAccountService auAcService;
 
     /**
      * 根据学生ID查询学生的详细信息
@@ -134,4 +139,34 @@ public class StudentController {
         String msg = studentService.addStudent(student);
         Util.Writer(msg);
     }
+    /**
+     * 查询学生个性签名
+     * @param stuId
+     * @return
+     */
+    @RequestMapping("selectStudentSign")
+    public ModelAndView selectStudentSign(HttpSession session){
+        //查询个性签名
+        String StuSign=studentService.selectStudentSign((Integer)session.getAttribute("stuId"));
+        //查询(原)密码
+        String StudentPwd= auAcService.selectStudentPwd((Integer)session.getAttribute("stuId"));
+        ModelAndView mv = new ModelAndView();
+        mv.addObject("StudentPwd", StudentPwd);
+        mv.addObject("stuId", (Integer)session.getAttribute("stuId"));
+        mv.addObject("StuSign", StuSign);
+        mv.setViewName("/front/user/set.jsp");
+        return mv;
+    }
+   /**
+    * 更新学生个性签名
+    * @param stuId
+    * @param studentSign
+    */
+    @RequestMapping("updateStudentSign")
+    public String updateStudentSign(Integer stuId,String studentSign){
+        studentService.updateStudentSign(stuId, studentSign);
+        return "redirect:queryStudentInfoById.action?stuId="+stuId;
+    }
+    
+    
 }

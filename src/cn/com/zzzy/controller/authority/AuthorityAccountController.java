@@ -1,15 +1,16 @@
 package cn.com.zzzy.controller.authority;
 
-import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.servlet.ModelAndView;
 
 import cn.com.zzzy.entity.AuthorityAccount;
 import cn.com.zzzy.service.authority.AuthorityAccountService;
@@ -93,5 +94,31 @@ public class AuthorityAccountController {
 		}
 	}
 	
+    	/**
+    	 * 查询学生密码
+    	 * @param stuId
+    	 * @return
+    	 */
+		public ModelAndView selectStudentPwd(Integer stuId){
+	    ModelAndView mv = new ModelAndView();
+	    String StudentPwd= auAcService.selectStudentPwd(stuId);
+	    mv.addObject("StudentPwd", StudentPwd);
+	    mv.setViewName("/front/user/set.jsp");
+	    return mv;
+	}
 	
+    /**
+     * 
+     * @param session
+     * @param studentPwd
+     * @param stuId
+     * @return
+     */
+	@RequestMapping("updateStudentPwd")
+	public String updateStudentPwd(HttpSession session,String studentPwd,Integer stuId){
+	    stuId=(Integer)session.getAttribute("stuId");
+	    auAcService.updateStudentPwd(studentPwd, stuId);
+	    System.out.println("修改密码："+stuId);
+	    return "redirect:queryStudentInfoById.action?stuId="+stuId;
+	}
 }

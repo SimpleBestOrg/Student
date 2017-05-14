@@ -112,6 +112,18 @@
 				on s.stu_Id = t.talking_StudentId where t.talking_StudentId = #{stuId}
 		</select>		
 		
+		<!-- 查询学生是否攒过该说说  -->
+		<select id="queryCount">
+				SELECT
+					count(*)
+				FROM
+					talking_stu_thum
+				WHERE
+					talking_Id = #{talkingId}
+				AND stu_Id = #{studentId}
+		</select>
+		
+		
 		<!-- 发表说说 -->
 		<insert id="insertTalking"  parameterType="cn.com.zzzy.entity.Talking" keyProperty="talkingId" useGeneratedKeys="true">
 				insert into talking(talking_Content,talking_StudentId,talking_Time,talking_thumCount,talking_authorityId) values(#{talkingContent},#{talkingStudentId},NOW(),0,#{talkingAuthorityId});
@@ -125,6 +137,7 @@
 		<update id="updateTalkThum" parameterType="Integer">
 				update   talking  set talking.talking_thumCount = talking.talking_thumCount+1  where talking_Id = #{talkingId}
 		</update>
+		
 		
 		
 </mapper>

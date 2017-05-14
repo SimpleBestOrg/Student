@@ -321,6 +321,7 @@
 	
     var talkingPage = {
             friendTalking:function(action){
+            		alert(action)
                     $.post(action,function(data){
                            var div ="";
                           if(data.length!=0){ 
@@ -393,9 +394,7 @@
                                             })
                                             div +="</div>";
                                      }
-                                    
-                                     
-                                     div += "<div class='jieda-reply'><span class='jieda-zan' type='zan'><i class='iconfont icon-zan'></i><em>0</em></span></div>"                                                
+                                     div += "<div class='jieda-reply'  ><span  onclick='addZanCount("+a.talkingId+","+a.talkingStudentId+")' class='jieda-zan'  type='zan'><i   class='iconfont icon-zan'></i><em>"+a.talkingThumCount+"</em></span></div>"                                                
                                      //说说评论
                                      div += "</div></div></div>";
                            })
@@ -445,13 +444,17 @@
                 //删除回复框
                 $('.huifu').remove();
             })
-           
     }   
-    
+    //点赞
+    function addZanCount(talkingId,studentId){
+    		alert("说说ID:"+talkingId);
+    		alert("学生ID:"+studentId);
+    		$.post("/Student/thumTalking.action",{"talkingId":talkingId,"studentId":studentId,},function(data){
+    			  
+    		},'json')
+    }
 
 	    
-
-	
 </script>
 
 </body>
