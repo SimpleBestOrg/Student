@@ -12,7 +12,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.multipart.commons.CommonsMultipartFile;
 
 import cn.com.zzzy.entity.AuthorityAccount;
 import cn.com.zzzy.entity.Student;
@@ -26,6 +25,7 @@ import cn.com.zzzy.service.TalkingStudentThumService;
 import cn.com.zzzy.service.TalkingToCaoService;
 import cn.com.zzzy.service.student.StudentMessageService;
 import cn.com.zzzy.util.PageParam;
+import cn.com.zzzy.util.Util;
 
 @Controller
 public class TalkingController {
@@ -75,8 +75,8 @@ public class TalkingController {
      */
     @RequestMapping("queryTalkingByStuId")
     @ResponseBody
-    public List<Talking> queryTalkingByStuId(PageParam param) {
-        Integer stuId = 3;
+    public List<Talking> queryTalkingByStuId(PageParam param,HttpSession session) {
+        Integer stuId = (Integer)session.getAttribute("stuId");
         List<Talking> TalkingStuIdList = talkingService.queryTalkingByStuId(param, stuId);
         return TalkingStuIdList;
     }
@@ -86,8 +86,8 @@ public class TalkingController {
      * @return
      */
     @RequestMapping("queryTalkCountByStuId")
-    public void queryTalkCountByStuId() {
-        int stuId = 3;
+    public void queryTalkCountByStuId(HttpSession session) {
+        Integer stuId = (Integer)session.getAttribute("stuId");
         int count = talkingService.queryTalkCountByStuId(stuId);
         System.out.println("学生编号1发表的说说数量:" + count);
     }
@@ -112,11 +112,14 @@ public class TalkingController {
      * @param talkingId
      */
     @RequestMapping("thumTalking")
-    public void thumTalking(HttpSession session, Integer talkingId,Integer studentId) {
+    @ResponseBody
+    public String thumTalking(HttpSession session, Integer talkingId,Integer studentId) {
         Student loginStudent = (Student)session.getAttribute("loginStudent");
         TalkingStudentThum talkingStudentThum = new TalkingStudentThum();
         talkingStudentThum.setStudentId(loginStudent.getStudentId());
-        talkingStudentThum.setStudentId(talkingId);
+        talkingStudentThum.setTalkingId(talkingId);
+        System.out.println("是否赞过 该说说:"+talkingStudentThumService.queryCount(talkingStudentThum));
+        String msg = null;
         // 判断学生是否 赞过该说说
         if (studentId != loginStudent.getStudentId()  && talkingStudentThumService.queryCount(talkingStudentThum) == 0) {
             talkingService.updateTalkThum(talkingId);
@@ -124,43 +127,21 @@ public class TalkingController {
             //通知对方  赞了该说说
             StudentMessage studentMessage = new StudentMessage();
             studentMessage.setStudentId(studentId);
-            String messageContext = "<a href='/Student/queryStudentInfoById.action?stuId="+loginStudent.getStudentId()+"'><cite>"+loginStudent.getStudentName()+"</cite>赞了您的说说</a>";
+            String messageContext = "<a href='/Student/queryStudentInfoById.action?stuId="+loginStudent.getStudentId()+"'><cite></a>"+loginStudent.getStudentName()+"</cite>赞了您的说说";
             studentMessage.setMessageContext(messageContext);
             studentMessage.setStudentId(studentId);
             studentMessageService.insertMessage(studentMessage);
-        } else if(studentId == loginStudent.getStudentId()  && talkingStudentThumService.queryCount(talkingStudentThum) == 0){
+            msg = "成功点赞";
+        } else if(studentId == loginStudent.getStudentId()  ){
             System.out.println("不能赞自己的说说");
+            msg = "不能点赞自己的说说";
         } else if(studentId != loginStudent.getStudentId()  && talkingStudentThumService.queryCount(talkingStudentThum) == 1){
             System.out.println("已经攒过该说说");   
+            msg  = "已经点赞";
         }
+        return msg;
     }
     
-    @RequestMapping("uploadImage")
-    @ResponseBody
-    public   void  uploadImage(@RequestParam("fileName") MultipartFile file) throws IllegalStateException, IOException{
-//        System.out.println("原始："+pinfo.getInputStream());
-//        System.out.println("getName"+pinfo.getName());
-//        System.out.println("原始名称:"+pinfo.getOriginalFilename());
-        //得到图片的原始名称
-        String originalFilename  =   file.getOriginalFilename();
-        System.out.println("图片"+originalFilename);
- //       String  newFileName = null;
-//         Integer count =  1;
- //       if(pinfo!=null && originalFilename!=null && originalFilename.length()>0){
-               //存储图片的物理路径
-//             String  pic_path = "E:\\develop\\";
-            //新的图片名称
-//               newFileName = UUID.randomUUID() + originalFilename.substring(originalFilename.lastIndexOf("."));
-//            //新图片
-//            File  file = new File(pic_path+newFileName);
-//            //将内存的数据写入磁盘
-//            pinfo.transferTo(file);
-//            newDetail.setPhoto(newFileName);
-//            count = 1;
-//        }
-        
-     //   return new jsonInfo(count,originalFilename);
-    }
     
     /**
      * 发表说说

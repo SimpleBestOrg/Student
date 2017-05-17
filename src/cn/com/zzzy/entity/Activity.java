@@ -22,6 +22,7 @@ public class Activity {
     private Integer activityFlag;// 活动状态(0:正在申请中的状态 1:已经审批的活动并且同意了2:已经审批未同意的活动)
     private Integer activityApplyStuId;
     private String activityPhoto;
+    private Integer activityLaunchId;
     
     public Activity() {
         // TODO Auto-generated constructor stub
@@ -144,6 +145,16 @@ public class Activity {
 
     public void setActivityPhoto(String activityPhoto) {
         this.activityPhoto = activityPhoto;
+    }
+
+
+    public Integer getActivityLaunchId() {
+        return activityLaunchId;
+    }
+
+
+    public void setActivityLaunchId(Integer activityLaunchId) {
+        this.activityLaunchId = activityLaunchId;
     }
     
     

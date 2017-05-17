@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.com.zzzy.basemapper.activitymapper.ActivityLaunchPhotoMapper">
+	<!-- 发起活动时  添加活动宣传海报 -->
+	<insert  id="insertActivityLaunchPhoto" parameterType="cn.com.zzzy.entity.ActivityLaunchPhoto">
+		insert into  activity_launch_photo(activity_launch_Id,activity_launch_photos) values(#{activityLaunchId},#{activityLaunchPhotos})
+	</insert>
+</mapper>

@@ -2,10 +2,6 @@
     pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
-<%
-  String path = request.getContextPath();
-  request.setAttribute("path", path);
-%>
 <!DOCTYPE html>
 <html>
 <head>
@@ -20,38 +16,25 @@
 <body>
 <div class="header">
   <div class="main">
-     <div class="nav" style="margin-left:-50px;">
-      <a  href="${path}/squestion.action">
+    <a class="logo" href="/" title="Fly">Fly社区</a>
+    <div class="nav">
+      <a class="nav-this" href="squestion.action">
         <i class="iconfont icon-wenda"></i>问答
       </a>
-      <a href="${path}/getAllCommunity.action">
-        <i  class="layui-icon">&#xe600;</i>社团
+      <a href="http://www.layui.com/" target="_blank">
+        <i class="iconfont icon-ui"></i>框架
       </a>
-      <a href="${path}/front/activity/activityindex.jsp">
-        <i  class="layui-icon">&#xe62e;</i>活动 
-      </a>
-      <a  href="${path}/front/talking/talkingindex.jsp">
-        <i  class="layui-icon">&#xe606;</i>说说
-      </a >
-      <a href="${path}/queryFriendsInfo.action">
-        <i  class="layui-icon">&#xe613;</i>朋友
-            
-      </a>  
     </div>
     
-    <div class="nav-user">      
-      <a class="avatar" >
-        <img src="/pic/${loginStudent.studentPhoto}">
-        <cite>${loginStudent.studentName}</cite>
-        <i>${loginStudent.studentClasses.className}</i>
-         
-      </a>
-      <div class="nav">
-        <a href="/Student/front/user/set.jsp"><i class="iconfont icon-shezhi"></i>设置</a>
-        <a href=""><i class="iconfont icon-tuichu" style="top: 0; font-size: 22px;"></i>退了</a>
-      </div>
+    <div class="nav-user">
+      <!-- 未登入状态 -->
+      <a class="unlogin" href="user/login.html"><i class="iconfont icon-touxiang"></i></a>
+      <span><a href="user/login.html">登入</a><a href="user/reg.html">注册</a></span>
+      <p class="out-login">
+        <a href="" onclick="layer.msg('正在通过QQ登入', {icon:16, shade: 0.1, time:0})" class="iconfont icon-qq" title="QQ登入"></a>
+        <a href="" onclick="layer.msg('正在通过微博登入', {icon:16, shade: 0.1, time:0})" class="iconfont icon-weibo" title="微博登入"></a>
+      </p>   
     </div>
-      
   </div>
 </div>
 <div class="main layui-clear">
@@ -109,7 +92,7 @@
               <!-- <i class="iconfont icon-caina" title="最佳答案"></i> -->
             </div>
             <div class="detail-body jieda-body">
-              <p>${answer.quesetionAnswerContent}</p>
+              ${answer.quesetionAnswerContent}
             </div>
             <div class="jieda-reply">
             <!-- 点击获得答案的ID -->
@@ -143,12 +126,27 @@
   </div>
   
   <div class="edge">
+  	<div class="fly-panel leifeng-rank"> 
+      <h3 class="fly-panel-title">近一月回答榜 - TOP 12</h3>
+      <dl>
+      	<c:forEach items="${answerlist}" var="answerlist">
+        <dd>
+        <!-- 跳转到个人详细页面 -->
+          <a href="xxx.action?stuid=${answerlist.stu_Id}">
+            <img src="../../res/images/avatar/default.png" alt="${answerlist.stu_Photo}">
+            <cite>${answerlist.stu_Name}</cite>
+            <i>${answerlist.count}次回答</i>
+          </a>
+        </dd>
+        </c:forEach>
+      </dl>
+    </div>
     <dl class="fly-panel fly-list-one"> 
       <dt class="fly-panel-title">最近热帖</dt>
       <c:forEach items="${groupquestion}" var="groupquestion">
 	      <dd>
 	        <a href="questionselect.action?qid=${groupquestion.question_Id}">${groupquestion.question_Title}</a>
-	        <span><i class="iconfont">&#xe60b;</i>${groupquestion.question_step}</span>
+	        <span><i class="iconfont icon-zan"></i>${groupquestion.question_step}</span>
 	      </dd>
       </c:forEach>
     </dl>
@@ -174,6 +172,29 @@
   </p>
 </div>
 <script src="/Student/front/res/layui/layui.js"></script>
+<script>
+layui.cache.page = 'jie';
+layui.cache.user = {
+  username: '游客'
+  ,uid: -1
+  ,avatar: '../../res/images/avatar/00.jpg'
+  ,experience: 83
+  ,sex: '男'
+};
+layui.config({
+  version: "2.0.0"
+  ,base: '/Student/front/res/mods/'
+}).extend({
+  fly: 'index'
+}).use('fly', function(){
+  var fly = layui.fly;
+  //如果你是采用模版自带的编辑器，你需要开启以下语句来解析。
+  $('.detail-body').each(function(){
+    var othis = $(this), html = othis.html();
+    othis.html(fly.content(html));
+  });
+});
+</script>
 <script src="/Student/js/jquery.min.js"></script>
 <!-- 点回复获得滑倒底部 -->
 <script type="text/javascript">
@@ -182,7 +203,7 @@
 		/* 获得滑倒底部  */
 		document.getElementById("quesetionAnswerContent").scrollIntoView();
 		$("#quesetionAnswerParentId").val(null);
-		$("#quesetionAnswerContent").val(null);
+		$("questionStudnetName").val(null);
 		/* 获得焦点 */
 		$("#quesetionAnswerContent")[0].focus();
 	})
@@ -213,13 +234,10 @@
 		 	/* 得到问题的Id */
 		   var questionId =  $("#questionId").val();
 		   /* 跳转到updateStep.action方法中并把问题ID传进去 */
-		 	$.post("/Student/updateStep.action",{"questionId":questionId},function(data){
-		 		alert(data);
-		 	},'json');
+		 	$.post("/Student/updateStep.action",{"questionId":questionId});
 		   /* 从新刷新页面 */
 		   window.location.reload();
 	 })
-</script>
-
+	 </script>
 </body>
 </html>

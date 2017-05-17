@@ -1,5 +1,6 @@
 package cn.com.zzzy.service;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import cn.com.zzzy.basemapper.talkingmapper.TalkingStudentThumMapper;
@@ -7,6 +8,8 @@ import cn.com.zzzy.entity.TalkingStudentThum;
 
 @Service
 public class TalkingStudentThumService {
+      
+        @Autowired
         private  TalkingStudentThumMapper talkingStudentThumMapper;
         
         
@@ -15,7 +18,7 @@ public class TalkingStudentThumService {
          * @param talkingStudentThum
          */
         public void save(TalkingStudentThum  talkingStudentThum){
-            talkingStudentThumMapper.save(talkingStudentThum);
+            talkingStudentThumMapper.saveTalkingStudent(talkingStudentThum);
         }
         
         /**
@@ -24,7 +27,10 @@ public class TalkingStudentThumService {
          * @return
          */
         public int queryCount(TalkingStudentThum talkingStudentThum){
-            return talkingStudentThumMapper.queryCount(talkingStudentThumMapper);
+            System.out.println("赞说说的学生ID:"+talkingStudentThum.getStudentId());
+            System.out.println("赞学生说说的说说ID:"+talkingStudentThum.getTalkingId());
+            System.out.println(talkingStudentThum!=null);
+            return  talkingStudentThumMapper.queryStudentCount(talkingStudentThum); 
         }
         
 }

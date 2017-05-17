@@ -18,4 +18,9 @@ public interface QuestionAnswerMapper {
 	 * @param answer
 	 */
 	public void insertanswer(QuestionAnswer answer);
+	/**
+	 * 回答榜(统计)
+	 * @return
+	 */
+	public List<QuestionAnswer> answerselect();
 }

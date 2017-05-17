@@ -24,4 +24,15 @@
 	    update stu_message set stu_message_context = #{messageContext}   where  stu_messageId = #{stuMessageId}
 	</update>
 	
+	<!-- 根据消息ID删除消息 -->
+	<delete id="deleteMessageByMessId"  >
+		delete from stu_message  where  stu_messageId = #{stuMessageId}
+	</delete>
+	
+	<!-- 根据学生ID删除消息 -->
+	<delete id="deleteMessageByStuId">
+		delete from stu_message where stu_Id = #{studentId}
+	</delete>
+	
+	
 </mapper>

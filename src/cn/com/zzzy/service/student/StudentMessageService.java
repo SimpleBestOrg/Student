@@ -36,5 +36,21 @@ public class StudentMessageService {
         public void updateMessageContext(StudentMessage studentMessage){
                studentMessageMapper.updateMessageContext(studentMessage);
         }
+        
+        /**
+         * 根据消息ID进行删除
+         * @param stuMessageId
+         */
+        public void deleteMessageByMessId(Integer stuMessageId){
+               studentMessageMapper.deleteMessageByMessId(stuMessageId);
+        }
+        
+        /**
+         * 根据学生ID删除消息
+         * @param studentId
+         */
+        public void deleteMessageByStuId(Integer studentId){
+               studentMessageMapper.deleteMessageByStuId(studentId);
+        }
 }
 

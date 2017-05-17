@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.apache.ibatis.annotations.Param;
 
+import cn.com.zzzy.entity.TalkingStudentThum;
 import cn.com.zzzy.util.PageParam;
 
 /**
@@ -23,10 +24,10 @@ public interface BaseMapper<T> {
     
     /**
      * 根据条件查询得到的数据量
-     * @param t
+     * @param talkingStudentThum
      * @return
      */
-    int   queryCount(T t);
+    int   queryCount(Object obj);
     
     /**
      * 根据ID删除

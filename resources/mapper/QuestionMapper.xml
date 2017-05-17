@@ -38,9 +38,23 @@
 	</resultMap>
 	<!-- 根据学生id查询问题 -->
 	<select id="stuquerylist" resultType="Map" >
-		select * from stu Student RIGHT JOIN ques Question 
-		on Student.stu_Id=Question.question_StudentId LEFT JOIN ques_type QuestionType 
-		on Question.question_typeId=QuestionType.que_typeId where Student.stu_Id=#{sid}
+		SELECT
+			*, count(ques_answer_Id) AS answerCount
+		FROM
+			stu Student
+		RIGHT JOIN ques Question ON Student.stu_Id = Question.question_StudentId
+		LEFT JOIN ques_type QuestionType ON Question.question_typeId = QuestionType.que_typeId
+		LEFT JOIN ques_answer qa ON qa.ques_answer_questionId = Question.question_Id
+		 where Student.stu_Id=#{sid}
+		GROUP BY
+			student.stu_Id,
+			Student.stu_Name,
+			Question.question_Id,
+			Question.question_Content,
+			Question.question_Title,
+			Question.question_step,
+			QuestionType.que_typeName
+
 	</select>
 	<!-- 根据问题id查询问题详细信息  -->
 	<select id="selectname" resultMap="questionResult">
@@ -72,11 +86,23 @@
 			WHERE
 				q.question_id = #{qid}	
 	</select>   
-	<!-- 查询问题的 -->
+	<!-- 查询问题全部 -->
 	<select id="squestion" resultType="Map">
-		select * from stu Student RIGHT JOIN ques Question 
-		on Student.stu_Id=Question.question_StudentId LEFT JOIN ques_type QuestionType 
-		on Question.question_typeId=QuestionType.que_typeId
+		SELECT
+			*, count(ques_answer_Id) AS answerCount
+		FROM
+			stu Student
+		RIGHT JOIN ques Question ON Student.stu_Id = Question.question_StudentId
+		LEFT JOIN ques_type QuestionType ON Question.question_typeId = QuestionType.que_typeId
+		LEFT JOIN ques_answer qa ON qa.ques_answer_questionId = Question.question_Id
+		GROUP BY
+			student.stu_Id,
+			Student.stu_Name,
+			Question.question_Id,
+			Question.question_Content,
+			Question.question_Title,
+			Question.question_step,
+			QuestionType.que_typeName
 	</select>
 	<!-- 热帖查询 -->  
 	<select id="groupquestion" resultType="Map">
@@ -95,28 +121,48 @@
 	<!-- 根据问题类型ID查询问题 -->
 	<select id="typeQuestion" resultType="Map">
 		SELECT
-			*
+			*, count(ques_answer_Id) AS answerCount
 		FROM
-			ques_type
-		RIGHT JOIN ques ON ques.question_typeId = ques_type.que_typeId
-		LEFT JOIN stu ON ques.question_StudentId = stu.stu_Id
-		WHERE
-			ques_type.que_typeId =#{typeid}
+			stu Student
+		RIGHT JOIN ques Question ON Student.stu_Id = Question.question_StudentId
+		LEFT JOIN ques_type QuestionType ON Question.question_typeId = QuestionType.que_typeId
+		LEFT JOIN ques_answer qa ON qa.ques_answer_questionId = Question.question_Id
+		 where QuestionType.que_typeId =#{typeid}
+		GROUP BY
+			student.stu_Id,
+			Student.stu_Name,
+			Question.question_Id,
+			Question.question_Content,
+			Question.question_Title,
+			Question.question_step,
+			QuestionType.que_typeName
 	</select>
 	<!-- 模糊查询(根据内容,标题) -->
 	<select id="questiondim" resultType="Map">
 		SELECT
-			*
+			*, count(ques_answer_Id) AS answerCount
 		FROM
-			ques
+			stu Student
+		RIGHT JOIN ques Question ON Student.stu_Id = Question.question_StudentId
+		LEFT JOIN ques_type QuestionType ON Question.question_typeId = QuestionType.que_typeId
+		LEFT JOIN ques_answer qa ON qa.ques_answer_questionId = Question.question_Id
 		<where>
 			<if test="1==1">
-				ques.question_Title like concat(concat('%',#{contenTitle}),'%')
+				Question.question_Title like concat(concat('%',#{contenTitle}),'%')
 			</if>
 			<if test="1==1">
-				or question_Content LIKE concat(concat('%',#{contenTitle}),'%')
+				or Question.question_Content LIKE concat(concat('%',#{contenTitle}),'%')
 			</if>
 		</where>
+			GROUP BY
+				student.stu_Id,
+				Student.stu_Name,
+				Question.question_Id,
+				Question.question_Content,
+				Question.question_Title,
+				Question.question_step,
+				QuestionType.que_typeName
+		
 	</select>
 	<!-- 更新(赞+1) -->
 	<update id="updateStep" parameterType="cn.com.zzzy.entity.Question">

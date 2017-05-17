@@ -225,4 +225,9 @@
 		</update>
 		
 		
+		<update id="updateActivityLaunchId">
+			update activity  set activity.activity_launchId =#{activityLaunchId}  where  activity.activity_Id = #{activityId}
+		</update>
+		
+		
 </mapper>

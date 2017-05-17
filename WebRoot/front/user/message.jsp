@@ -62,15 +62,9 @@
 <div class="main fly-user-main layui-clear">
   <ul class="layui-nav layui-nav-tree layui-inline" lay-filter="user">
     <li class="layui-nav-item">
-      <a href="/Student/front/user/home.jsp">
+      <a href="/Student/queryStudentInfoById.action">
         <i class="layui-icon">&#xe609;</i>
                                 我的主页
-      </a>
-    </li>
-    <li class="layui-nav-item">
-      <a href="index.html">
-        <i class="layui-icon">&#xe612;</i>
-                                   用户中心
       </a>
     </li>
     <li class="layui-nav-item ">
@@ -92,12 +86,12 @@
   </div>
   <div class="site-mobile-shade"></div>
 
-  <div class="fly-panel fly-panel-user" pad20>
+  <div class="fly-panel fly-panel-user" >
       <div class="layui-tab layui-tab-brief" lay-filter="user" id="LAY_msg" style="margin-top: 15px;">
-        <button class="layui-btn layui-btn-danger" id="LAY_delallmsg">清空全部消息</button>
+       
         <div  id="LAY_minemsg"  style="margin-top: 10px;">
        
-      </div>
+        </div>
       </div>
     </div>
 
@@ -120,23 +114,22 @@
         	});  
         $('#LAY_delallmsg').on('click', function(){
             var othis = $(this);
-            layer.confirm('确定清空吗？', function(index){
-            		layer.close(index);
-            });
+
           });
         
         $(function(){
         	var div ="";
         	$.post("/Student/queryAllMessage.action",function(data){
         		if(data.length>0){
+        			$("#LAY_minemsg").before("<button onclick='deleteAllMessage()' style='margin-top:20px;margin-left:20px;' class='layui-btn layui-btn-danger' id='LAY_delallmsg'>清空全部消息</button>");
         			div += "<ul class='mine-msg'>";
         		  $.each(data,function(i,a){
-        			div += "<li data-id='123'>";
+        			div += "<li data-id='123'  style='margin-left:20px;'>";
         			div += "<blockquote class='layui-elem-quote'>";
         			div += a.messageContext;
         			div += "<input type='hidden' id='inty' value='"+a.stuMessageId+"'>"
         			div += "</blockquote>";
-        			div += "<p><span>"+new Date(a.messageTime)+"</span><a href='javascript:;' class='layui-btn layui-btn-small layui-btn-danger fly-delete'>删除</a></p>";
+        			div += "<p><span>"+new Date(a.messageTime)+"</span><button style='margin-right:10px;' onclick='deleteMessage("+a.stuMessageId+")'  class='layui-btn layui-btn-small layui-btn-danger fly-delete'>删除</button></p>";
         			div += "</li>";
         		  })
         		  div += "</ul>";
@@ -153,6 +146,7 @@
         	   $.post("/Student/updateStudentFriendFlag.action",{"studentId":stuId,"stuFriendFlag":flag,"messageId":messageId},function(data){
         		   
         	   },'json')
+        	   window.location.reload();
         }
         
         //申请加入社团时   同意或者拒绝
@@ -171,6 +165,25 @@
         			alert(data);
         	},'json')
         }
+        
+        //删除学生消息
+        function  deleteMessage(MessageId){
+        		alert("消息ID:"+MessageId);
+        		$.post("/Student/deleteMessageByMessId.action",{"stuMessageId":MessageId})
+        		window.location.reload();
+        }
+        
+        //清空全部消息
+        function  deleteAllMessage(){
+            layer.confirm('确定清空吗？', function(index){
+        		 $.post("/Student/deleteMessageByStuId.action");
+        		 window.location.reload();
+        		 layer.close(index);
+        	});
+        }
+        
+        
+        
 </script>
 
 </body>

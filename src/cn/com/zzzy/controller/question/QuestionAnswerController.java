@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import cn.com.zzzy.service.question.QuestionAnswerService;
 
+
 @Controller
 public class QuestionAnswerController {
 	@Autowired
@@ -16,7 +17,7 @@ public class QuestionAnswerController {
 	@RequestMapping("answselecte")
 	@ResponseBody
 	public List answselecte(Integer qid){
-		List list=questionAnswerService.select(1);
+		List list=questionAnswerService.select(qid);
 		return list;
 	}
 	@RequestMapping("answdelete")

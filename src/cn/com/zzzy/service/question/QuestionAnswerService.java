@@ -28,7 +28,14 @@ public class QuestionAnswerService {
 		}
 		return list;
 	}
-	
+	/**
+	 * 回答榜（统计）
+	 * @return
+	 */
+	public List<QuestionAnswer> answerselect(){
+		List<QuestionAnswer> list=questionAnswerMapper.answerselect();
+		return list;
+	}
 	public void delete(Integer qid){
 		questionAnswerMapper.delete(qid);
 	}

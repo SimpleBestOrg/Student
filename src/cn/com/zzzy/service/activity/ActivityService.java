@@ -108,6 +108,13 @@ public class ActivityService {
         activityMapper.updateActivityFlag(activity);
     }
     
+    /**
+     * 更新活动的发起ID
+     * @param activity
+     */
+    public void updateActivityLaunchId(Activity activity){
+        activityMapper.updateActivityLaunchId(activity);
+    }
     
     
 }

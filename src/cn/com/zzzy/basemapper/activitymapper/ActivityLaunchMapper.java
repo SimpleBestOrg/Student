@@ -1,11 +1,16 @@
 package cn.com.zzzy.basemapper.activitymapper;
-import cn.com.zzzy.basemapper.BaseMapper;
-import cn.com.zzzy.entity.Activity;
+import cn.com.zzzy.entity.ActivityLaunch;
 /**
  * 发起活动mapper  
  * @author Admin
  *
  */
-public interface ActivityLaunchMapper<Activity> extends  BaseMapper<Activity>{
+public interface ActivityLaunchMapper{
 		    
+    /**
+     * 发起活动
+     * @param activityLaunch
+     */
+     void  insertlaunchActivity(ActivityLaunch activityLaunch);
+     
 }

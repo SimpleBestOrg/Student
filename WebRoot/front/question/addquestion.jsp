@@ -1,10 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
-<%
-  String path = request.getContextPath();
-  request.setAttribute("path", path);
-%>
 <!DOCTYPE html>
 <html>
 <head>
@@ -29,38 +25,29 @@
 
 <div class="header">
   <div class="main">
-     <div class="nav" style="margin-left:-50px;">
-      <a  href="${path}/squestion.action">
+    <a class="logo" href="/" title="Fly">Fly社区</a>
+    <div class="nav">
+      <a class="nav-this" href="index.html">
         <i class="iconfont icon-wenda"></i>问答
       </a>
-      <a href="${path}/getAllCommunity.action">
-        <i  class="layui-icon">&#xe600;</i>社团
+      <a href="http://www.layui.com/" target="_blank">
+        <i class="iconfont icon-ui"></i>框架
       </a>
-      <a href="${path}/front/activity/activityindex.jsp">
-        <i  class="layui-icon">&#xe62e;</i>活动 
-      </a>
-      <a  href="${path}/front/talking/talkingindex.jsp">
-        <i  class="layui-icon">&#xe606;</i>说说
-      </a >
-      <a href="${path}/queryFriendsInfo.action">
-        <i  class="layui-icon">&#xe613;</i>朋友
-            
-      </a>  
     </div>
     
     <div class="nav-user">      
-      <a class="avatar" >
-        <img src="/pic/${loginStudent.studentPhoto}">
-        <cite>${loginStudent.studentName}</cite>
-        <i>${loginStudent.studentClasses.className}</i>
-         
+      <!-- 登入后的状态 -->
+      
+      <a class="avatar" href="../user/index.html">
+        <img src="http://tp4.sinaimg.cn/1345566427/180/5730976522/0">
+        <cite>贤心</cite>
+        <i>VIP2</i>
       </a>
       <div class="nav">
-        <a href="/Student/front/user/set.jsp"><i class="iconfont icon-shezhi"></i>设置</a>
+        <a href="../user/set.html"><i class="iconfont icon-shezhi"></i>设置</a>
         <a href=""><i class="iconfont icon-tuichu" style="top: 0; font-size: 22px;"></i>退了</a>
       </div>
     </div>
-      
   </div>
 </div>
 
@@ -123,7 +110,29 @@
 </div>
 <script src="/Student/front/res/layui/layui.js"></script>
 <script>
-</script>
+layui.cache.page = 'jie';
+layui.cache.user = {
+  username: '游客'
+  ,uid: -1
+  ,avatar: '../../res/images/avatar/00.jpg'
+  ,experience: 83
+  ,sex: '男'
+};
+layui.config({
+  version: "2.0.0"
+  ,base: '../../res/mods/'
+}).extend({
+  fly: 'index'
+}).use('fly', function(){
+  var fly = layui.fly;
+  //如果你是采用模版自带的编辑器，你需要开启以下语句来解析。
+  $('.detail-body').each(function(){
+    var othis = $(this), html = othis.html();
+    othis.html(fly.content(html));
+  });
+});
+  
 
+</script>
 </body>
 </html>

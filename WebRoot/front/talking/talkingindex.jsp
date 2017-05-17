@@ -58,7 +58,7 @@
 </div>
 
 
-<div class="main layui-clear">
+<div class="main layui-clear" >
   <div class="wrap">
     <div class="content">
       <div class="fly-tab fly-tab-index">
@@ -75,8 +75,8 @@
              <!-- 发表说说 -->
        <div id="editTalking"  style="width:100%;height:180px;margin-bottom: 20px;">
             <form class="layui-form" action="/Student/insertTalking.action"  method="post"  enctype="multipart/form-data">
-                <div style="width:690px;">
-                <textarea id="L_content" name="talkingContent" required lay-verify="required" placeholder="我要回答"  class="layui-textarea fly-editor" style="height: 50px;"></textarea>
+                <div style="width:600px;">
+                <textarea id="L_content" name="talkingContent" required lay-verify="required" placeholder="发说说"  class="layui-textarea fly-editor" style="height: 50px;"></textarea>
                 </div> 
                 <div id="previewAppend">
                         <!-- 图片预览 -->
@@ -106,34 +106,6 @@
   </div>
   
   <div class="edge">
-    <div class="fly-panel leifeng-rank"> 
-      <h3 class="fly-panel-title">近一月回答榜 - TOP 12</h3>
-      <dl>
-      </dl>
-    </div>
-    
-    <dl class="fly-panel fly-list-one"> 
-      <dt class="fly-panel-title">最近热帖</dt>
-    </dl>
-    
-    <dl class="fly-panel fly-list-one"> 
-      <dt class="fly-panel-title">近期热议</dt>
-    </dl>
-    
-    <div class="fly-panel fly-link"> 
-      <h3 class="fly-panel-title">友情链接</h3>
-      <dl>
-        <dd>
-          <a href="http://www.layui.com/" target="_blank">layui</a>
-        </dd>
-        <dd>
-          <a href="http://layim.layui.com/" target="_blank">LayIM</a>
-        </dd>
-        <dd>
-          <a href="http://layer.layui.com/" target="_blank">layer</a>
-        </dd>
-      </dl>
-    </div>
 
 
   </div>
@@ -205,7 +177,7 @@
 		                          ,success: function(layero, index){
 		                            var image =  layero.find('input[name="image"]');
 		                            layui.upload({
-		                              url: '/News/uploadImage.action'
+		                              url: '/Student/uploadImage.action'
 		                              ,elem: '#fly-jie-upload .layui-upload-file'
 		                              ,success: function(res){
 		                                if(res.flag == 1){
@@ -353,7 +325,7 @@
                                         //      alert("评论数量:"+toCaoLength);
                                             $.each(a.talkingTocao,function(i,t){
                                                 //找出主评论  
-                                                if(t.talkingToCaoParentId==null){
+                                                if(t.talkingToCaoParentId==0){
                                                 //  toCaoLength = toCaoLength-1; 
                                                      div += "<div  id='append"+t.talkingToCaoId+"'  onclick='appendHuifu("+t.talkingToCaoId+")' style='border:2px solid black;'><div style='border:1px solid black;'><img src='"+t.student.studentPhoto+"' style='height:40px;width:40px;float:left;'/>";
                                                      div += "<input type='hidden' id='talkingIdhidden"+t.talkingToCaoId+"' value='"+a.talkingId+"'></input>";
@@ -394,7 +366,8 @@
                                             })
                                             div +="</div>";
                                      }
-                                     div += "<div class='jieda-reply'  ><span  onclick='addZanCount("+a.talkingId+","+a.talkingStudentId+")' class='jieda-zan'  type='zan'><i   class='iconfont icon-zan'></i><em>"+a.talkingThumCount+"</em></span></div>"                                                
+                                     div += "<div class='jieda-reply'  ><span  onclick='addZanCount("+a.talkingId+","+a.talkingStudentId+")' class='jieda-zan'  type='zan'><i   class='iconfont icon-zan'></i><em>"+a.talkingThumCount+"</em></span></div>"
+                                     div += "<div style='width:600px;height:40px;border:1px solid red'><textarea id='mainToCaoContext"+a.talkingId+"' style='width:530px;height:40px;' placeholder='评论'></textarea><button onclick='pushTalkingToCao("+a.talkingId+","+a.stuId.studentId+")' style='margin-top:-30px;' class='layui-btn'>评论</button></div>";
                                      //说说评论
                                      div += "</div></div></div>";
                            })
@@ -434,11 +407,11 @@
                             type:'post',
                             url:'/Student/insertTalkingToCao.action',
                             contentType:'application/json;charset=utf-8',
-                            //数据格式是json串，商品信息
+                            //数据格式是json串
                             data:'{"talkingId":'+talkingId+',"talkingToCaoParentId":'+talkingToCaoParentId+',"talkingToCaoContext":"'+talkingToCaoContext+'"}',
                             success:function(data){//返回json结果
                                 //回复成功后 刷新页面
-                                window.location.reload();
+                            	window.location.reload();
                             }
                         });
                 //删除回复框
@@ -447,12 +420,34 @@
     }   
     //点赞
     function addZanCount(talkingId,studentId){
-    		alert("说说ID:"+talkingId);
-    		alert("学生ID:"+studentId);
     		$.post("/Student/thumTalking.action",{"talkingId":talkingId,"studentId":studentId,},function(data){
-    			  
-    		},'json')
+    		},'json');
+    		window.location.reload();
     }
+    
+    //发表主评论
+    function pushTalkingToCao(talkingId,studentId){
+    	alert("说说ID:"+talkingId);
+    	alert("评论的说说发表人:"+studentId);
+    	var context = document.getElementById("mainToCaoContext"+talkingId).value;
+		if(context.length!=0){
+            $.ajax({
+                type:'post',
+                url:'/Student/insertTalkingToCao.action',
+                contentType:'application/json;charset=utf-8',
+                //数据格式是json串，商品信息
+				data:'{"talkingId":'+talkingId+',"talkingToCaoParentId":'+0+',"talkingToCaoContext":"'+context+'","studentId":'+studentId+'}',
+                success:function(data){//返回json结果
+                    //回复成功后 刷新页面
+                    window.location.reload();
+                }
+            });			
+		}else if(context.length==0){
+			 alert("请填写评论内容");
+		}
+    }
+    
+    
 
 	    
 </script>

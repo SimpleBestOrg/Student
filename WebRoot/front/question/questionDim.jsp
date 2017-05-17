@@ -1,10 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" 
 pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
-<%
-  String path = request.getContextPath();
-  request.setAttribute("path", path);
-%>
 <!DOCTYPE html>
 <html>
 <head>
@@ -20,38 +16,30 @@ pageEncoding="UTF-8"%>
 
 <div class="header">
   <div class="main">
-     <div class="nav" style="margin-left:-50px;">
-      <a  href="${path}/squestion.action">
+    <a class="logo" href="/" title="Fly">Fly社区</a>
+    <div class="nav">
+      <a class="nav-this" href="jie/index.html">
         <i class="iconfont icon-wenda"></i>问答
       </a>
-      <a href="${path}/getAllCommunity.action">
-        <i  class="layui-icon">&#xe600;</i>社团
+      <a href="#" target="_blank">
+        <i class="layui-icon">&#xe617;</i>社团
       </a>
-      <a href="${path}/front/activity/activityindex.jsp">
-        <i  class="layui-icon">&#xe62e;</i>活动 
+      <a href="" target="_blank">
+        <i class="layui-icon">&#xe633;</i>活动 
       </a>
-      <a  href="${path}/front/talking/talkingindex.jsp">
-        <i  class="layui-icon">&#xe606;</i>说说
-      </a >
-      <a href="${path}/queryFriendsInfo.action">
-        <i  class="layui-icon">&#xe613;</i>朋友
-            
-      </a>  
+            <a href="" target="_blank">
+        <i class="layui-icon">&#xe611;</i>说说
+      </a>
     </div>
-    
-    <div class="nav-user">      
-      <a class="avatar" >
-        <img src="/pic/${loginStudent.studentPhoto}">
-        <cite>${loginStudent.studentName}</cite>
-        <i>${loginStudent.studentClasses.className}</i>
-         
-      </a>
-      <div class="nav">
-        <a href="/Student/front/user/set.jsp"><i class="iconfont icon-shezhi"></i>设置</a>
-        <a href=""><i class="iconfont icon-tuichu" style="top: 0; font-size: 22px;"></i>退了</a>
-      </div>
+    <div class="nav-user">
+      <!-- 未登入状态 -->
+      <a class="unlogin" href="user/login.html"><i class="iconfont icon-touxiang"></i></a>
+      <span><a href="user/login.html">登入</a><a href="user/reg.html">注册</a></span>
+      <p class="out-login">
+        <a href="" onclick="layer.msg('正在通过QQ登入', {icon:16, shade: 0.1, time:0})" class="iconfont icon-qq" title="QQ登入"></a>
+        <a href="" onclick="layer.msg('正在通过微博登入', {icon:16, shade: 0.1, time:0})" class="iconfont icon-weibo" title="微博登入"></a>
+      </p>   
     </div>
-      
   </div>
 </div>
 
@@ -91,8 +79,8 @@ pageEncoding="UTF-8"%>
             <span>${likedim.question_DataTime}</span>
             <span>${likedim.que_typeName}</span>
             <span class="fly-list-hint">
-              <i class="iconfont" title="赞">&#xe60c;</i>赞 ${likedim.question_step}
-              <i class="iconfont" title="踩">&#xe60b;</i>踩 ${likedim.question_praise}
+              <i class="iconfont" title="踩">&#xe60b;</i>赞 ${likedim.question_step}
+              <i class="iconfont" title="赞">&#xe60c;</i>评${likedim.answerCount}
             </span>
           </p>
         </li>

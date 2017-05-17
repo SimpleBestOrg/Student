@@ -138,7 +138,7 @@
                     }
                   };
                   layui.upload({
-                	  url: '/News/uploadImage.action'
+                	  url: '/Student/uploadImage.action'
                 	  ,success: function(res){
                 		  var imgLength = $("#previewAppend").children('table').length;
                 		  alert(imgLength);

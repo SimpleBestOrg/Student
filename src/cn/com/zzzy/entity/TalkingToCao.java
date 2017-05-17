@@ -18,7 +18,8 @@ public class TalkingToCao {
     private Integer talkingToCaoStudentID;// 评论的学生ID、
     private Date talkingToCaoDateTime;// 评论的时间
     
-    
+    //辅助
+    private  Integer  studentId;
     
     public Talking getTalking() {
         return talking;
@@ -90,6 +91,14 @@ public class TalkingToCao {
 
     public void setStudent(Student student) {
         this.student = student;
+    }
+
+    public Integer getStudentId() {
+        return studentId;
+    }
+
+    public void setStudentId(Integer studentId) {
+        this.studentId = studentId;
     }
     
     

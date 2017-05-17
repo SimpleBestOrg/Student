@@ -74,4 +74,10 @@ public interface ActivityMapper extends BaseMapper<Activity> {
      */
     void  updateActivityFlag(@Param("aqv")Activity activity);
     
+    /**
+     * 更新活动发起ID
+     * @param activity
+     */
+    void  updateActivityLaunchId(Activity activity);
+    
 }

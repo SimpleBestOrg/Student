@@ -24,4 +24,17 @@ public interface StudentMessageMapper {
          * @param studentMessage
          */
         void  updateMessageContext(StudentMessage studentMessage); 
+        
+        /**
+         * 根据消息ID删除消息
+         * @param stuMessageId
+         */
+        void  deleteMessageByMessId(Integer stuMessageId);
+        
+        /**
+         * 根据学生ID删除学生消息
+         * @param studentId
+         */
+        void  deleteMessageByStuId(Integer studentId);
+        
 }

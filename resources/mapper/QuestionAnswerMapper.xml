@@ -2,6 +2,20 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="cn.com.zzzy.basemapper.questionmapper.QuestionAnswerMapper">
+	<!-- 一对多映射 -->
+	<resultMap type="cn.com.zzzy.entity.QuestionAnswer" id="answerResult">
+		<id column="" property="quesetionAnswerId"></id>
+		<result column="ques_answer_Id" property="quesetionAnswerId"/>
+		<result column="ques_answer_content" property="quesetionAnswerContent"/>
+		<result column="ques_answer_DataTime" property="quesetionAnswerDateTime"/>
+		<result column="ques_answer_parent_Id" property="quesetionAnswerParentId"/>
+		<association column="ques_answer_questionId" property="quesetionAnswerQuestionId" resultMap="quesetionResult" javaType="cn.com.zzzy.entity.Question"></association>
+	</resultMap>
+	<resultMap type="cn.com.zzzy.entity.Student" id="studentResult">
+		<id column="stu_Id" property="studentId"/>
+		<result column="stu_Name" property="studentName"/>
+		<result column="stu_Photo" property="studentPhoto"/>
+	</resultMap>
 	<!-- 删除问题答案 未实现 -->
 	<delete id="delete" parameterType="Integer">　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　
 		delete ques_answer as QuestionAnswer 
@@ -11,6 +25,20 @@
 	<select id="select" resultType="map">
 		select * from ques_answer as QuestionAnswer 
 		where QuestionAnswer.ques_answer_questionId=#{qid}
+	</select>
+	<!-- 回答榜(统计) -->
+	<select	id="answerselect" resultType="map">
+		SELECT
+			s.stu_Id,
+			s.stu_Name,
+			s.stu_Photo,
+			qr.ques_answer_studentId,
+		count(qr.ques_answer_studentId) count 
+		FROM
+			ques_answer qr
+		LEFT JOIN stu s ON qr.ques_answer_studentId = s.stu_Id
+		GROUP BY
+			qr.ques_answer_studentId
 	</select>
 	<!-- 增加回复 -->
 	<insert id="insertanswer" parameterType="cn.com.zzzy.entity.QuestionAnswer">

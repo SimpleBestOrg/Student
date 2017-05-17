@@ -10,8 +10,7 @@ import java.util.Set;
 public class ActivityLaunch {
     private Integer activityLaunchId;// 活动发起ID
     private String activityLaunchDesc;// 对发起的活动进行描述
-    private Integer activityPersonNum;// 互动人数限制
-    private String activityRegisterCond;// 活动申请条件
+    private Integer activityPersonNum;// 活动人数限制
     private Set<ActivityLaunchPhoto> activityLaunchPhoto;
 
     public Integer getActivityLaunchId() {
@@ -38,13 +37,6 @@ public class ActivityLaunch {
         this.activityPersonNum = activityPersonNum;
     }
 
-    public String getActivityRegisterCond() {
-        return activityRegisterCond;
-    }
-
-    public void setActivityRegisterCond(String activityRegisterCond) {
-        this.activityRegisterCond = activityRegisterCond;
-    }
 
     public Set<ActivityLaunchPhoto> getActivityLaunchPhoto() {
         return activityLaunchPhoto;

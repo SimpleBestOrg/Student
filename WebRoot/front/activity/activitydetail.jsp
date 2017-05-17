@@ -60,6 +60,34 @@
 <div id="activityDetailInfo" style="width:100%;height:auto;">
         
 </div>
+<div  id="launchActivityDiv" style='border:1px solid red;display:none;'>
+       <form    action="/Student/insertActivityLaunch.action"   class="layui-form" id="activityLaunchForm"   style="margin-left:-50px;display:inline-block;"   method="post"  >
+            
+            <div class="layui-form-item " >
+                    <label class="layui-form-label" style="width:200px">限制人数:</label>
+                    <div class="layui-input-block">
+                     <input type="hidden" id="activityIdForLaunch" name="activityId">   
+                      <input style='margin-top:10px;' name="activityPersonNum"  type="number" min="5" value="5" ></input>
+                    </div>
+              </div>
+              <div class="layui-form-item" style='margin-top:-30px;' >
+                    <label class="layui-form-label" style="width:200px">活动描述:</label>
+                    <div class="layui-input-block">
+                       <textarea rows="5" cols="61" name="activityLaunchDesc" class="layui-textarea"  placeholder='请填写活动描述'></textarea>
+                    </div>
+              </div>   
+              <div class="layui-form-item" style='margin-top:-15px;'>
+                    <label class="layui-form-label" style="width:200px">宣传海报:</label>
+                    <div class="layui-input-block">
+                       <input type="file" name="file" class="layui-upload-file">
+                    </div>
+              </div>  
+              <div id="previewAppend" style=" margin-right: auto; margin-left: auto; ">
+              
+              </div>              
+        </form>
+            
+</div>
 
 <div class="footer">
   <p><a href="http://fly.layui.com/">Fly社区</a> 2017 &copy; <a href="http://www.layui.com/">layui.com</a></p>
@@ -74,7 +102,7 @@
 <script src="/Student/js/jquery.min.js"></script>
       <script type="text/javascript">
                 $(function(){
-              	  layui.use(['layer', 'laytpl', 'form', 'upload', 'util'], function(){
+              	  layui.use(['layer', 'laytpl', 'form', 'upload', 'util','upload'], function(){
             		  var $ = layui.jquery
             		  ,layer = layui.layer
             		  ,laytpl = layui.laytpl
@@ -92,7 +120,20 @@
             			      obj.value = result.join('');
             			    }
             			  };
-            		  
+            	 
+            	  //上传海报
+                  layui.upload({
+                	  url: '/Student/uploadImage.action'
+                	  ,success: function(res){
+                          var imgIndex =  $("#previewDiv").children('table').length;
+                          if(document.getElementById('previewDiv')){
+                        	  $("#previewDiv").append('<table id="table'+imgIndex+'" class="ssi-imgToUploadTable ssi-pending"><tbody><tr><td class="ssi-imgToUpload"> <img class="ssi-imgToUpload" id="previewImg1" src="/pic/'+res.url+'" style="width:140px;height:128px;"/></td></tr><tr><td><button type="button" class="ssi-button error ssi-removeBtn" onclick="removePreviewImg('+imgIndex+')" id="removeImg"><span  class="trash10 trash" ></span></button></td></tr><tr><td id="iii" id="previewName">'+res.url+'<input type="hidden" name="imgName" value="'+res.url+'"></td></tr></tbody></table>');
+                          }else{
+                        	  $("#previewAppend").append('<div id="previewDiv" style="margin-left:50px;" class="ssi-uploadBox ssi-previewBox ssi-uploadNoDropZone"><table id="table0" class="ssi-imgToUploadTable ssi-pending"><tbody><tr><td class="ssi-imgToUpload"> <img class="ssi-imgToUpload" id="previewImg1" src="/pic/'+res.url+'" style="width:140px;height:128px;"/></td></tr><tr><td><button onclick="removePreviewImg('+0+')" class="ssi-button error ssi-removeBtn" type="button" id="removeImg"><span  class="trash10 trash" ></span></button></td></tr><tr><td id="iii" id="previewName">'+res.url+'<input type="hidden" name="imgName" value="'+res.url+'"></td></tr></tbody></table></div>');
+                          }
+                	  }
+                	}); 
+            	   
             		 var gather={
             	            layEditor: function(options){
             	                var html = '<div class="fly-edit">'
@@ -123,7 +164,7 @@
             	                          ,success: function(layero, index){
             	                            var image =  layero.find('input[name="image"]');
             	                            layui.upload({
-            	                              url: '/News/uploadImage.action'
+            	                              url: '/Student/uploadImage.action'
             	                              ,elem: '#fly-jie-upload .layui-upload-file'
             	                              ,success: function(res){
             	                                if(res.flag == 1){
@@ -156,8 +197,9 @@
             		    	elem: '.fly-editor'
             		  	  });
             		 
-            		  })
-                	
+          })
+      	
+          
                 	
                 	var stuId = <%=session.getAttribute("stuId")%>;
                     var activityId = <%=request.getParameter("activityId")%>;
@@ -310,7 +352,8 @@
                     div += "</ul>";  
                             div += "<span>";
                             	 if(data.activityFlag==1 && new Date(data.activityBeginTime) > today){
-                            		 div+="<button style='margin-top:45px;margin-left:30px' class='layui-btn layui-btn-big layui-btn-normal'>发起活动</button>";                            		 
+                            		 $("#activityIdForLaunch").val(data.activityId);
+                            		 div+="<button  onclick='launchActivity()' style='margin-top:45px;margin-left:30px' class='layui-btn layui-btn-big layui-btn-normal'>发起活动</button>";                            		 
                             	 }else if(data.activityFlag==1 && new Date(data.activityBeginTime) < today){
                             		 div+="<button style='margin-top:45px;margin-left:30px' class='layui-btn layui-btn-big layui-btn-normal layui-btn-disabled'>活动已过期</button>";
                             	 }else if(data.activityFlag == 2){
@@ -463,7 +506,7 @@
                   		                          ,success: function(layero, index){
                   		                            var image =  layero.find('input[name="image"]');
                   		                            layui.upload({
-                  		                              url: '/News/uploadImage.action'
+                  		                              url: '/Student/uploadImage.action'
                   		                              ,elem: '#fly-jie-upload .layui-upload-file'
                   		                              ,success: function(res){
                   		                                if(res.flag == 1){
@@ -474,7 +517,6 @@
                   		                                  }else{
                   		                                	  $("#previewAppend").append('<div id="previewDiv" class="ssi-uploadBox ssi-previewBox ssi-uploadNoDropZone"><table id="table0" class="ssi-imgToUploadTable ssi-pending"><tbody><tr><td class="ssi-imgToUpload"> <img class="ssi-imgToUpload" id="previewImg1" src="/pic/'+res.url+'" style="width:140px;height:128px;"/></td></tr><tr><td><button onclick="removePreviewImg('+0+')" class="ssi-button error ssi-removeBtn" type="button" id="removeImg"><span  class="trash10 trash" ></span></button></td></tr><tr><td id="iii" id="previewName">'+res.url+'<input type="hidden" name="imgName" value="'+res.url+'"></td></tr></tbody></table></div>');
                   		                                  }
-                  		                                  
                   		                                } else {
                   		                                  layer.msg(res.msg, {icon: 5});
                   		                                }
@@ -580,6 +622,7 @@
                     		}
                     		alert("删除的图片下标:"+imgIndex);
                     	}
+                		
                 	   //点击申请按钮
                 	   function applyReview(flag){
                 		   if(flag == 0){
@@ -613,7 +656,20 @@
 										
 								},'json')
                 	  }
-                	   
+                	  
+                  	//发起活动
+              	      function   launchActivity(){
+              	    	layer.open({
+              	    		  type: 1,
+              	    		  skin: 'layui-layer-rim', //加上边框
+              	    		  area: ['600px', '500px'], //宽高
+              	    		  content: $('#launchActivityDiv'),
+              	    		  btn:['确定发起','取消'],
+              	    		  yes: function(index,layero){
+              	    			 document.getElementById("activityLaunchForm").submit();
+              	    		  }
+              	    		})
+              	    }	
         </script>
 </body>
 </html>

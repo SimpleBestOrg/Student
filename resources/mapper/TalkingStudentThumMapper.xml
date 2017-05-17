@@ -3,11 +3,11 @@
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="cn.com.zzzy.basemapper.talkingmapper.TalkingStudentThumMapper">
 		
-		<select id="queryCount" resultType="Integer">
-			select count(*) from talking_stu_thum  where talking_Id =#{talkingId}  and stu_Id =#{studentId} 
+		<select id="queryStudentCount"   resultType="Integer">
+			select count(*) from talking_stu_thum  where talking_Id = #{obj.talkingId}  and stu_Id = #{obj.studentId}
 		</select>
 		
-		<insert id="save">
+		<insert id="saveTalkingStudent">
 			insert into talking_stu_thum(talking_Id,stu_Id) values(#{obj.talkingId},#{obj.studentId})
 		</insert>
 		

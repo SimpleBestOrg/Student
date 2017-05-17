@@ -15,8 +15,9 @@ public class QuestionTypeService{
 	 * @return
 	 */
 	public List<QuestionType> selecall() {
+	    System.out.println("进来Service");
 		 List<QuestionType> list = questionTypeMapper.selecall();
-		 System.out.println("进来Service");
+		 
 		 return list;
 	}
 	/**
