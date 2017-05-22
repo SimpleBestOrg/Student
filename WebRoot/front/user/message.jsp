@@ -122,6 +122,7 @@
         	if(stuId==null){
         		window.location="/Student/login.jsp?loginInfo="+1;
         	}
+        	var today =new Date();
         	var div ="";
         	$.post("/Student/queryAllMessage.action",function(data){
         		if(data.length>0){
@@ -133,7 +134,7 @@
         			div += a.messageContext;
         			div += "<input type='hidden' id='inty' value='"+a.stuMessageId+"'>"
         			div += "</blockquote>";
-        			div += "<p><span>"+new Date(a.messageTime)+"</span><button style='margin-right:10px;' onclick='deleteMessage("+a.stuMessageId+")'  class='layui-btn layui-btn-small layui-btn-danger fly-delete'>删除</button></p>";
+        			div += "<p><span>"+((new Date(a.messageTime)).toLocaleString().replace(/年|月/g,'-')).replace(/日/g,'')+"</span><button style='margin-right:10px;' onclick='deleteMessage("+a.stuMessageId+")'  class='layui-btn layui-btn-small layui-btn-danger fly-delete'>删除</button></p>";
         			div += "</li>";
         		  })
         		  div += "</ul>";
@@ -146,7 +147,6 @@
         //申请加为好友 同意或者 拒绝   stuId(请求加为好友的学生ID) flag(同意或者拒绝的状态 用来判断)
         function  agreeOrrefuseFriend(stuId,flag,obj){
         	   var messageId =  $(obj).parent().next().val();
-        	   alert(messageId);
         	   $.post("/Student/updateStudentFriendFlag.action",{"studentId":stuId,"stuFriendFlag":flag,"messageId":messageId},function(data){
         		   
         	   },'json')
@@ -168,8 +168,6 @@
         	var messageId =  $(obj).parent().next().val();
         	//得到活动名称
         	var activityName = $(obj).parent().prev().text();
-        	alert("消息ID"+messageId);
-        	alert("活动名称:"+activityName);
         	$.post("/Student/updateStudentActivityFlag.action",{"studentsId":stuId,"activityId":activityId,"activityName":activityName,"stuMessageId":messageId,"stuActivityFlag":flag},function(data){
         			alert(data);
         	},'json')
@@ -178,7 +176,6 @@
         
         //删除学生消息
         function  deleteMessage(MessageId){
-        		alert("消息ID:"+MessageId);
         		$.post("/Student/deleteMessageByMessId.action",{"stuMessageId":MessageId})
         		window.location.reload();
         }

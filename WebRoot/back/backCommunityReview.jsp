@@ -193,7 +193,6 @@
     						 searcher:function(value,name){ 
     							 alert(value + "," + name);
     							 var communityFlag = $('#cc').val();
-    							 alert("状态:"+communityFlag);
             							 $('#communityGrid').datagrid({
             								    url:'/Student/queryCommunityForPage.action',  
             									queryParams: {

@@ -152,7 +152,6 @@
 		                    	    buttons:[{
 		                    	    	text:'同意',
 		                    	    	handler:function(){
-		                    	    		alert($('#reviewActivityReason').val().length);
 		                    	    		if($('#reviewActivityReason').val().length!=0){
 		                    	    			//点击同意按钮时  说明活动审核通过  给活动状态隐藏栏赋值1 用于更新活动的状态 
 		                    	    			$('#activityFlag').val(1);

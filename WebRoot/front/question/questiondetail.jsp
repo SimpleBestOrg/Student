@@ -5,7 +5,7 @@
   request.setAttribute("path", path);
 %>    
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
-<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%> 
 <!DOCTYPE html>
 <html>
 <head>
@@ -70,7 +70,7 @@
           </div>
         </div>
         <div class="detail-about">
-          <a class="jie-user" href="">
+          <a class="jie-user" href="/Student/queryStudentInfoById.action?stuId=${question.quesetionStudentId.studentId}">
             <img src="http://tp4.sinaimg.cn/1345566427/180/5730976522/0" alt=" ${question.quesetionStudentId.studentPhoto}">
             <cite>
              	  ${question.quesetionStudentId.studentName}
@@ -86,7 +86,7 @@
         </div>
          	<div class="jieda-reply" style="margin-left: 540px;">
          	  <!-- 点赞 调用JavaScript -->
-              <a id="step"><span class="jieda-zan"><i class="iconfont icon-zan"></i><em> ${question.questionStep}</em></span></a>
+              <a id="step"><span class="jieda-zan"><i class="iconfont icon-zan"></i><em id="stepCount"> ${question.questionStep} </em></span></a>
               <span type="reply" id="span"><i class="iconfont icon-svgmoban53"></i>回复</span>
             </div>
       </div>
@@ -97,7 +97,7 @@
           <li data-id="12" class="jieda-daan">
             <a name="item-121212121212"></a>
             <div class="detail-about detail-about-reply">
-              <a class="jie-user" href="">
+              <a class="jie-user" href="/Student/queryStudentInfoById.action?stuId=${answer.student.studentId}">
                 <img src="../../res/images/avatar/default.png" alt="${answer.student.studentPhoto}">
                 <cite>
                   <i>${answer.student.studentName}</i>
@@ -131,8 +131,8 @@
               	<input type="hidden" id="answerQuestionId" name="answerQuestionId" value="${qid}"/>
               	<input type="hidden" id="quesetionAnswerParentId" name="quesetionAnswerParentId" value=""/>
               	<input type="hidden" id="questionName" name="questionName" value=""/>
-                <input type="hidden" id="huiFuStudent" name="huiFuStudent" value="" />
-                <input type="hidden" id="huiFuType"    name="huiFuType" value=""/>
+                <input type="text" id="huiFuStudent" name="huiFuStudent" value="${question.quesetionStudentId.studentId}" />
+                <input type="text" id="huiFuType"    name="huiFuType" value="0"/>
               </div>
             </div>
             <div class="layui-form-item">
@@ -146,6 +146,7 @@
   </div>
   
   <div class="edge">
+   <c:if test="${fn:length(answerlist) >0 } ">
   	<div class="fly-panel leifeng-rank"> 
       <h3 class="fly-panel-title">近一月回答榜 - TOP 12</h3>
       <dl>
@@ -161,6 +162,7 @@
         </c:forEach>
       </dl>
     </div>
+  </c:if>
     <dl class="fly-panel fly-list-one"> 
       <dt class="fly-panel-title">最近热帖</dt>
       <c:forEach items="${groupquestion}" var="groupquestion">
@@ -255,7 +257,7 @@ layui.config({
 		/* 给隐藏框赋值 */
 		$("#quesetionAnswerParentId").val(panid);
 		/* 给隐藏框赋值  */
-		$("#quesetionAnswerContent").val('@'+paname);
+		$("#quesetionAnswerContent").val('@'+paname+' ');
 		/* 获得焦点 */
 		$("#quesetionAnswerContent")[0].focus();
 	})
@@ -270,9 +272,15 @@ layui.config({
 		    //得到发表问题的学生ID
 		   var studentId  = $("#studentId").val();
 		   /* 跳转到updateStep.action方法中并把问题ID传进去 */
-		 	$.post("/Student/updateStep.action",{"questionId":questionId,"studentId":studentId});
-		   /* 从新刷新页面 */
-		   window.location.reload();
+		 	$.post("/Student/updateStep.action",{"questionId":questionId,"studentId":studentId},function(data){
+		 		  var stepCount  = $("#stepCount").html();
+		 		  if(data == 'havaStep'){
+		 			  layer.msg("不能重复点赞",{icon:5,time:1500});
+		 		  }else{
+		 			 $("#stepCount").html(++stepCount);
+		 		  }
+		 		 
+		 	});
 	 })
 	 </script>
 </body>

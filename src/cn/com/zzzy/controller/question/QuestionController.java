@@ -125,18 +125,18 @@ public class QuestionController {
 	 * @return
 	 */
 	@RequestMapping("updateStep")
-	public void  updateStep(Integer questionId,Integer studentId,HttpSession session){
+	@ResponseBody
+	public String  updateStep(Integer questionId,Integer studentId,HttpSession session){
 		//实例化对象
 		QuestionTuCao questionTuCao = new QuestionTuCao();
 		//录入得到的问题Id
 		questionTuCao.setQuestionId(questionId);
 		//录入是谁吐槽的(只能是登陆的学生)
 		questionTuCao.setQuestionToCaoStuId((Integer)session.getAttribute("stuId"));
-		System.out.println("打印了吗"+questionTuCaoService.queryTuCaoStudent(questionTuCao));
-		//判断吐槽表有无点赞记录  0是无记录
+		//判断吐槽表有无点赞记录  0是无记录(可以点赞 )
 		if(questionTuCaoService.queryTuCaoStudent(questionTuCao)!=0){
-			//向外打印   已经点过赞 不能再点赞
-		}else if(questionTuCaoService.queryTuCaoStudent(questionTuCao)==0){
+			return "havaStep";
+		}else {
 			System.out.println("看看打印的实际"+questionTuCaoService.queryTuCaoStudent(questionTuCao));
 			//更新赞的次数
 			questionService.updateStep(questionId);
@@ -153,6 +153,7 @@ public class QuestionController {
     			studentMessage.setMessageContext(messageContext);
     			studentMessageService.insertMessage(studentMessage);
 			}
+			return "noStep";
 		}
 	}
 	
@@ -187,12 +188,16 @@ public class QuestionController {
 	    //主回复(评论的学生如果是该问题的发表学生)
 	    if(huiFuType==0  &&  huiFuStudent != loginStudent.getStudentId()){
 	        messageContext = "<a href='/Student/queryStudentInfoById.action?stuId="+loginStudent.getStudentId()+"'><cite>"+loginStudent.getStudentName()+"</cite></a>评论了您的问题&nbsp;&nbsp";
+	        studentMessage.setMessageContext(messageContext);
+	        studentMessage.setStudentId(huiFuStudent);
+	        studentMessageService.insertMessage(studentMessage);
 	    }else if(huiFuType==  1  &&  huiFuStudent != loginStudent.getStudentId()){
 	        messageContext = "<a href='/Student/queryStudentInfoById.action?stuId="+loginStudent.getStudentId()+"'><cite>"+loginStudent.getStudentName()+"</cite></a>回复了您的评论&nbsp;&nbsp";
+	        studentMessage.setMessageContext(messageContext);
+	        studentMessage.setStudentId(huiFuStudent);
+	        studentMessageService.insertMessage(studentMessage);
 	    }
-	    studentMessage.setMessageContext(messageContext);
-	    studentMessage.setStudentId(huiFuStudent);
-	    studentMessageService.insertMessage(studentMessage);
+
 		//得到添加问题回复的Id
 		answer.setAnswerStudentId((Integer)session.getAttribute("stuId"));
 		//添加回复数据

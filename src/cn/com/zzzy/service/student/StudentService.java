@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import cn.com.zzzy.basemapper.authoritymapper.AuthorityAccountMapper;
 import cn.com.zzzy.basemapper.studentmapper.StudentsMapper;
@@ -15,6 +16,7 @@ import cn.com.zzzy.util.PageParam;
 import cn.com.zzzy.util.PinyingUtil;
 
 @Service
+@Transactional
 public class StudentService {
 
     @Autowired

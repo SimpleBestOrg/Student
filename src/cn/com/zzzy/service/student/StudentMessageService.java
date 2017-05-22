@@ -4,11 +4,13 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import cn.com.zzzy.basemapper.studentmapper.StudentMessageMapper;
 import cn.com.zzzy.entity.StudentMessage;
 
 @Service
+@Transactional
 public class StudentMessageService {
         @Autowired
         private StudentMessageMapper    studentMessageMapper;

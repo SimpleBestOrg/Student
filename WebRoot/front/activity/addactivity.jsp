@@ -149,7 +149,6 @@
                 	  url: '/Student/uploadImage.action'
                 	  ,success: function(res){
                 		  var imgLength = $("#previewAppend").children('table').length;
-                		  alert(imgLength);
                 		  if(imgLength>0){
                 				$("#tableImg").remove();  
                 		  }
@@ -178,11 +177,11 @@
                   form.verify({
                 	  activityName:function(value){
                 		  if(value.length<5 ||  value.length>20){
-                			  return "活动名称至少三个字符之多五个字符";
+                			  return "活动名称至少5个字符之多20个字符";
                 		  }
                 	  },
                 	  applyreason:function(value){
-                		  if(value.length<5){
+                		  if(value.length<30){
                 			  return "申请理由至少填写三十个字节";
                 		  }
                 	  }

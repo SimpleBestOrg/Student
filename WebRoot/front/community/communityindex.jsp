@@ -1,6 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
     <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+    <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%> 
 <%
   String path = request.getContextPath();
   request.setAttribute("path", path);
@@ -51,7 +52,7 @@
     
     <div class="nav-user">      
        <a class="avatar" href="/Student/queryStudentInfoById.action">
-        <img src="pic/${loginStudent.studentPhoto}"> 
+        <img src="/pic/${loginStudent.studentPhoto}"> 
         <cite>${loginStudent.studentName}</cite>
         <i>${loginStudent.studentClasses.className}</i>
       </a>
@@ -90,19 +91,21 @@
       </div>
       <!-- 显示所有的社团 -->
     <div class="front">
+    <c:if test="${fn:length(listCommunity) > 0 }">
     	<c:forEach items="${listCommunity}" var="list">
       <div class="front-community">
       		<div class="front-photo"><img src="/pic/${list.communityPhoto }" style="width: 229px;height: 200px;"></div>
       		<button class="layui-btn" style="width:230px;height:50px;" onclick="communityDetail(${list.communityId})">${list.communityName }</button>
       </div>
-      </c:forEach>
+       </c:forEach>
+    </c:if> 
+    <c:if test="${fn:length(listCommunity) == 0 }">
+            <div class="fly-none">暂时没有社团</div> 
+    </c:if>  
     </div>
     <div class="clear"></div>
     
-      <!-- <div class="fly-none">并无相关数据</div> -->
-      <div style="text-align: center">
-        <div class="laypage-main"><span class="laypage-curr">1</span><a href="/jie/page/2/">2</a><a href="/jie/page/3/">3</a><a href="/jie/page/4/">4</a><a href="/jie/page/5/">5</a><span>…</span><a href="/jie/page/148/" class="laypage-last" title="尾页">尾页</a><a href="/jie/page/2/" class="laypage-next">下一页</a></div>
-      </div>
+     
     </div>
   </div>
 </div>

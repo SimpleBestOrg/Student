@@ -41,7 +41,7 @@ public class StudentFriendController {
     @RequestMapping("queryFriendInfo")
     @ResponseBody
     public List<Student> queryFriendInfo(PageParam param) {
-        Integer stuId = 1;
+        Integer stuId = 1;//
         return studentFriendService.queryFriendInfo(param, stuId);
     }
     
@@ -69,7 +69,7 @@ public class StudentFriendController {
      * @param session  获取 登录的学生ID
      */
     @RequestMapping("addFriend")
-    public void  addFriend(StudentFriend studentFriend,HttpSession  session){
+    public String  addFriend(StudentFriend studentFriend,HttpSession  session){
         System.out.println("好友Id:"+studentFriend.getFriend());
         //获取登录学生ID
         Integer stuId = (Integer)session.getAttribute("stuId");
@@ -82,13 +82,14 @@ public class StudentFriendController {
         
         //查询被加好友的信息
        Student addFriendInfo = studentService.queryStudentInfoById(studentFriend.getFriend());
-        
+         
        StudentMessage studentMessage = new StudentMessage();
        String messageContext = "<a href='/Student/queryStudentInfoById.action?stuId="+stuId+"'><cite>"+stu.getStudentName()+"</cite></a>请求加为好友<span style='margin-left:530px;'><button onclick='agreeOrrefuseFriend("+stuId+",1,this)' class='layui-btn layui-btn-danger layui-btn-small'>同意</button><button onclick='agreeOrrefuseFriend("+stuId+",2,this)' class='layui-btn layui-btn-danger layui-btn-small '>拒绝</button></span> ";
        System.out.println("消息内容:"+messageContext);
        studentMessage.setMessageContext(messageContext);
        studentMessage.setStudentId(studentFriend.getFriend());
        studentMessageServie.insertMessage(studentMessage);
+        return null;
     }
     
     /**

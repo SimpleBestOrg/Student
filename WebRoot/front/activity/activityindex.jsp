@@ -59,17 +59,12 @@
     <div class="content" style="margin-right:0">
       <div class="fly-tab">
         <span>
-          <a id = "friendActivity" onclick="activityPage.friendActivity()" class="tab-this">朋友活动</a>
+          <a id = "friendActivity" onclick="activityPage.friendActivity()" class="tab-this">全部活动</a>
           <a id = "myJoinActivity" onclick="joinActivity()">我参加的活动</a>
           <a id = "myApplyActivity" onclick="applyActivity('/Student/queryActivityByCondition.action','1')">我申请的活动</a>
-          <a >活动消息</a>
           
           
         </span>
-        <form action="http://cn.bing.com/search" class="fly-search">
-          <i class="iconfont icon-sousuo"></i>
-          <input class="layui-input" autocomplete="off" placeholder="搜索内容，回车跳转" type="text" name="q">
-        </form>
         <a href="/Student/queryAllActivityType.action" class="layui-btn jie-add">申请活动</a>
       </div>
       
@@ -126,7 +121,7 @@
             		        		 div +="</div>";
             		    		 })
             					}else{
-            						div += "暂无活动";
+            						div += "<span style='margin-left:400px;font-size:20px;'>暂未申请活动</span>";
             					}	 
             		    		 $('#activity').html(div);
             		    	},"json");
@@ -138,6 +133,7 @@
             	    		$.post("/Student/queryActivityByCondition.action",function(data){
             		      	 var div = "";
             		   		 var today =new Date()
+            		   	 if(data.length!=0){
             		   		 $.each(data,function(i,a){
             		   			 div += " <div  style='border:1px solid #5DADE2; height:170px; margin-top:10px;'><div style='width:50%;height:auto;margin-top:10px;margin-left:50px;'><a href='#'>";
             		       		 div += "<img  class='media-object img-circle ' style='width:150px;height:150px;float:left;'src='/pic/"+a.activityPhoto+"' alt='通用的占位符图像'/></a> ";
@@ -164,7 +160,10 @@
             		        			div +="<button class='layui-btn layui-btn-normal' style='margin-left:550px;margin-top:-160px;' onclick='detailActivity("+a.activityId+")'>查看详情</button>";
             		        		}
             		       		 div +="</div>";
-            		   		 })
+            		   		 	})
+            		   		 }else{
+            		   			div += "<span style='margin-left:400px;font-size:20px;'>暂未申请活动</span>";
+            		   		 }
             		   		 $('#activity').html(div);		
             		       	},"json");						
             			},
@@ -175,6 +174,7 @@
             			   	$.post("/Student/queryMyJoinActivity.action",function(data){
             		    		 var div = "";
             		    		 var today =new Date();
+            		    		if(data.length!=0){ 
             		    		 $.each(data,function(i,a){
             		    			 div += " <div  style='border:1px solid #5DADE2; height:170px; margin-top:10px;'><div  style='width:50%;height:auto;margin-top:10px;margin-left:50px;'><a href='#'>";
             		        		 div += "<img class='media-object img-circle ' style='width:150px;height:150px;float:left;' src='/pic/"+a.activityPhoto+"' alt='通用的占位符图像'/></a> ";
@@ -190,12 +190,14 @@
             		            		 }
             		        		 div +="</div>";
             		    		 })
+            		    		}else{
+            		    			div += "<span style='margin-left:400px;font-size:20px;'>暂未参加活动活动</span>";
+            		    		} 
             		    		 $('#activity').html(div);
             		    	},"json");
             			},
             			//活动详情
             			detailActivity:function(activityId){
-            					alert(activityId);
             				    window.location.href="/Student/front/activity/activitydetail.jsp?activityId="+activityId;
             			}
             			
@@ -210,7 +212,6 @@
             }
             //活动详细
             function  detailActivity(activityId){
-            	alert(activityId);
             	activityPage.detailActivity(activityId);
             }
             

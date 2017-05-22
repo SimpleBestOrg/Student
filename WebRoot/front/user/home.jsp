@@ -114,8 +114,9 @@
 		})
 		//添加好友
 		function addFriend(stuId){
-		       $.post("/Student/addFriend.action",{"friend":stuId},function(data){},"json");
-		       window.location.reload();
+		       $.post("/Student/addFriend.action",{"friend":stuId},function(data){
+		    	   
+		       },"json");
 		}
 </script>
 

@@ -11,11 +11,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.jmx.export.annotation.ManagedAttribute;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -24,7 +21,6 @@ import org.springframework.web.servlet.ModelAndView;
 
 import cn.com.zzzy.entity.Community;
 import cn.com.zzzy.entity.CommunityPeople;
-import cn.com.zzzy.entity.CommunityPeopleVo;
 import cn.com.zzzy.entity.CommunityVo;
 import cn.com.zzzy.entity.Student;
 import cn.com.zzzy.entity.StudentMessage;
@@ -33,6 +29,7 @@ import cn.com.zzzy.service.student.StudentMessageService;
 import cn.com.zzzy.service.student.StudentService;
 import cn.com.zzzy.util.PageData;
 import cn.com.zzzy.util.PageParam;
+
 
 @Controller
 public class CommunityController {

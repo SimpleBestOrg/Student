@@ -2,11 +2,13 @@ package cn.com.zzzy.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import cn.com.zzzy.basemapper.talkingmapper.TalkingStudentThumMapper;
 import cn.com.zzzy.entity.TalkingStudentThum;
 
 @Service
+@Transactional
 public class TalkingStudentThumService {
       
         @Autowired

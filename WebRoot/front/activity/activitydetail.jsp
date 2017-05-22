@@ -206,7 +206,6 @@
                 	
                 	var stuId = <%=session.getAttribute("stuId")%>;
                     var activityId = <%=request.getParameter("activityId")%>;
-                    //alert(activityId);
                     var today = new Date();
                     $.post("/Student/queryActivityDetail.action",{"activityId":activityId},function(data){
                         
@@ -214,10 +213,10 @@
            				var count = 0;
             			var joinActivityFlag = 5;
            				$.each(data.activityStudents,function(i,a){
-           					count++;
+           					
            					//判断登录学生加入了这个活动
            					if(a.students.studentId==stuId   && a.stuActivityFlag == 1){
-           						alert("学生");
+           						count++;
 							   //登录学生已经加入这个活动 显示  我要加入 的禁用按钮
            						joinActivityFlag = 1;
            					}else if(a.students.studentId == stuId  && a.stuActivityFlag == 0){
@@ -237,7 +236,7 @@
                                	  	div +="</div>";
                                	  	div += "<ul style='list-style:none; line-height:30px;margin-left:200px;margin-top:50px;'>";
                                	  			div+="<li><span id='applyStudent' style='font-size:18px;margin-left:30px;'>发起人:"+data.student.studentName+"</span>";
-                               	  			div+="<li><span id='applyStudent' style='font-size:18px;margin-left:30px;'>时间:2015/02/01 17:25:05 ~ 2015/02/01 17:25:05</span>";
+                               	  			div+="<li><span id='applyStudent' style='font-size:18px;margin-left:30px;'>时间:"+((new Date(data.activityBeginTime)).toLocaleString().replace(/年|月/g,'-')).replace(/日/g,'')+"~"+((new Date(data.activityEndTime)).toLocaleString().replace(/年|月/g,'-')).replace(/日/g,'')+"</span>";
                                	  			div+="<li><span id='applyStudent' style='font-size:18px;margin-left:30px;'>类型:"+data.activityType.activityTypeName+"</span>";
                                	  			if(new Date(data.activityBeginTime)>today){
                                	  				if(count==data.activityLaunch.activityPersonNum){
@@ -308,7 +307,7 @@
 														$.each(data.activityStudents,function(i,p){
 															if(p.stuActivityFlag==1){
 															div += "<a href='/Student/queryStudentInfoById.action?stuId="+p.students.studentId+"'><div style='float:left'><div class='layui-inline'>";
-															div += "<img src='/pic/"+p.students.studentPhoto+"' class='layui-circle'></div>";
+															div += "<img  style='width:200px;height:200px;' src='/pic/"+p.students.studentPhoto+"' class='layui-circle'></div>";
 															div += "<p style='margin-top:5px;margin-left:70px;'>"+p.students.studentName+"</p>";
 															div += "</div></a>";
 														  }	
@@ -413,7 +412,6 @@
                                 	//已经加入这个活动的人数
                                 	var activityStu = 0;
                                 	$.each(data.activityStudents,function(i,as){
-                                		alert("状态:"+as.stuActivityFlag);
                                 		if(as.stuActivityFlag == 1){
                                         	 activityStu++;                                			
                                 		}
@@ -421,8 +419,6 @@
                                 			activityStuReview++;	
                                 		}
                                 	})
-                                	alert("待审批:"+activityStuReview);
-                                	alert("已经加入:"+activityStu);
                                 	if(data.activityStudents.length!=0){
                                  	   if(activityStu>0){
                                      	div += "<fieldset class='layui-elem-field'>";
@@ -430,7 +426,7 @@
                                      	div += "<div class='layui-field-box'>";
                                      	  $.each(data.activityStudents,function(i,as){
                                      		if(as.stuActivityFlag == 1){  
-                                           	div += "<a href='/Student/queryStudentInfoById.action?stuId="+as.students.studentId+"'><div class='layui-inline' style='float:left'><img src='/pic/"+as.students.studentPhoto+"' class='ayui-circle'>";
+                                           	div += "<a href='/Student/queryStudentInfoById.action?stuId="+as.students.studentId+"'><div class='layui-inline' style='float:left'><img  style='width:200px;height:200px;' src='/pic/"+as.students.studentPhoto+"'>";
                                            	div += "<p style='margin-top:5px;margin-left:90px;'>"+as.students.studentName+"</p>";
                                          	div += "</div></a>";
                                      		}
@@ -439,14 +435,14 @@
                                  	   }
                                  	   if(activityStuReview>0){
                                             	div += "<fieldset class='layui-elem-field'>";
-                                         	div += "<legend>待审批人员</legend>";
+                                         	    div += "<legend>待审批人员</legend>";
                                          	  $.each(data.activityStudents,function(i,as){
                                          		if(as.stuActivityFlag == 0){  
-                                               	div += "<a href='/Student/queryStudentInfoById.action?stuId="+p.students.studentId+"'><div class='layui-field-box'><div class='layui-inline'><img src='/pic/"+as.students.studentPhoto+"' class='ayui-circle'>";
+                                               	div += "<div style='display:inline-block'><a href='/Student/queryStudentInfoById.action?stuId="+as.students.studentId+"'><div class='layui-field-box'><div class='layui-inline'><img style='width:200px;height:200px;' src='/pic/"+as.students.studentPhoto+"' class='ayui-circle'></a>";
                                                	div += "<p style='margin-top:5px;margin-left:90px;'>"+as.students.studentName+"</p>";
                                                	div += "<button style='margin-left:35px;' onclick='agreeOrrefuse("+as.students.studentId+","+data.activityId+",1,"+as.stuMessageId+")' class='layui-btn layui-btn-normal  layui-btn-small'>同意</button>";
                                                 div += "<button style='margin-left:30px;' onclick='agreeOrrefuse("+as.students.studentId+","+data.activityId+",2,"+as.stuMessageId+")' class='layui-btn layui-btn-normal  layui-btn-small'>拒绝</button>";
-                                             	div += "</div></div></a>";
+                                             	div += "</div></div></div>";
                                          		}
                                          	  })   
                                          	 div += "</fieldset>"; 
@@ -621,13 +617,11 @@
                     	function removePreviewImg(imgIndex){
                     		//删除图片时 判断图片的长度 如果为0则把显示图片的div删除掉    如果不为0则只删除对应的table  不让显示该图片
                     		var imgLength = $("#previewDiv").children('table').length;
-                    		alert("长度:"+imgLength);
                     		if(imgLength>1){
                     			 $("#table"+imgIndex).remove();
                     		}else{
                     			$("#previewDiv").remove();
                     		}
-                    		alert("删除的图片下标:"+imgIndex);
                     	}
                 		
                 	   //点击申请按钮
@@ -641,8 +635,6 @@
                 	   
                 	   //点击报名按钮
                 	   function  signUp(activityId,stuId){
-                		   alert("活动ID:"+activityId);
-                		   alert("活动管理人:"+stuId);
                 		   var activityName = $("#activityName").html();
                 		   $.post("/Student/insertStudentActivity.action",{"activityId":activityId,"activityApplyStuId":stuId,"activityName":activityName},function(data){
                 		   },'json');

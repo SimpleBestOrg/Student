@@ -4,18 +4,20 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import cn.com.zzzy.basemapper.communitymapper.CommunityMapper;
 import cn.com.zzzy.entity.Activity;
 import cn.com.zzzy.entity.Community;
 import cn.com.zzzy.entity.CommunityPeople;
-import cn.com.zzzy.entity.CommunityPeopleVo;
 import cn.com.zzzy.entity.CommunityVo;
 import cn.com.zzzy.entity.Student;
 import cn.com.zzzy.util.PageData;
 import cn.com.zzzy.util.PageParam;
 
+
 @Service
+@Transactional
 public class CommunityService {
     @Autowired
     private CommunityMapper communityMapper;

@@ -41,12 +41,17 @@ public class ActivityController {
     
 
     /**
-     * 查询所有活动
+     * 查询所有已经发起的活动活动
      * @return
      */
     @RequestMapping("queryAllActivity")
-    public List<Activity>  queryAllActivity(){
-        return  activityService.queryActivityByCondition(null , null);
+    @ResponseBody
+    public List<Activity>  queryAllActivity(PageParam param){
+        ActivityQueryVo activityQueryVo = new ActivityQueryVo();
+        ActivityInfo activityInfo = new ActivityInfo();   
+        activityInfo.setActivityFlag(3);
+        activityQueryVo.setActivityInfo(activityInfo);
+        return  activityService.queryActivityByCondition(param , activityQueryVo);
     }
     
     
