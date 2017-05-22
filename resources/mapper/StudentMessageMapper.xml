@@ -15,7 +15,7 @@
 	</select>
 	
 	<!-- 添加消息 -->
-	<insert id="insertMessage" parameterType="cn.com.zzzy.entity.StudentMessage">
+	<insert id="insertMessage" parameterType="cn.com.zzzy.entity.StudentMessage"  keyProperty="stuMessageId" useGeneratedKeys="true">
 			insert into stu_message(stu_Id,stu_message_context,stu_messageTime) values(#{studentId},#{messageContext},now())
 	</insert>
 	

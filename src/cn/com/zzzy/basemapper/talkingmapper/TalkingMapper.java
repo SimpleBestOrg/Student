@@ -64,4 +64,15 @@ public interface TalkingMapper extends BaseMapper<Talking>{
      */
     void  insertTalkingPhoto(TalkingPhoto talkingPhoto);
     
+    /**
+     * 根据说说ID  删除说说
+     * @param talkingId
+     */
+    void  deleteTalkingByTalkingId(@Param("talkingId")Integer talkingId);
+    
+    /**
+     * 根据说说ID 删除说说的照片
+     * @param talkingId
+     */
+    void  deleteTalkingPhotoByTalkingId(@Param("talkingId")Integer talkingId);
 }

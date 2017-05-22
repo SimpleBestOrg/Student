@@ -36,11 +36,6 @@ public class ActivityStudentController {
     @RequestMapping("insertStudentActivity")
     @ResponseBody
     public String insertStudentActivity(Activity activity,HttpSession session){
-        ActivityStudent activityStudent = new ActivityStudent();
-        activityStudent.setActivityId(activity.getActivityId());
-        activityStudent.setStudentsId((Integer)session.getAttribute("stuId"));
-        activityStudent.setStuActivityFlag(0);
-        activityStudentService.insertActivityStudent(activityStudent);
         
         Student  loginStudent = (Student)session.getAttribute("loginStudent");
         
@@ -49,6 +44,15 @@ public class ActivityStudentController {
         String messageContext = "<a href='/Student/queryStudentInfoById.action?stuId="+loginStudent.getStudentId()+"'><cite>"+loginStudent.getStudentName()+"</cite></a>申请加入&nbsp;&nbsp;<a href='/student/queryActivityDetail.action?activityId="+activity.getActivityId()+"'><cite>"+activity.getActivityName()+"</cite></a>&nbsp;&nbsp;活动<span style='margin-left:450px;'><button onclick='agreeOrRefuseActivity("+loginStudent.getStudentId()+","+activity.getActivityId()+",1,this)' class='layui-btn layui-btn-danger layui-btn-small'>同意</button><button onclick='agreeOrRefuseActivity("+activity.getActivityApplyStuId()+","+activity.getActivityId()+",1,this)' class='layui-btn layui-btn-danger layui-btn-small'>拒绝</button></span>";
         studentMessage.setMessageContext(messageContext);
         studentMessageService.insertMessage(studentMessage);
+        
+        
+        ActivityStudent activityStudent = new ActivityStudent();
+        activityStudent.setActivityId(activity.getActivityId());
+        activityStudent.setStudentsId((Integer)session.getAttribute("stuId"));
+        activityStudent.setStuActivityFlag(0);
+        activityStudent.setStuMessageId(studentMessage.getStuMessageId());
+        activityStudentService.insertActivityStudent(activityStudent);
+        
         return  "你好";
     }
     
@@ -59,11 +63,11 @@ public class ActivityStudentController {
      */
     @RequestMapping("updateStudentActivityFlag")
     @ResponseBody
-    public String  updateStudentActivityFlag(ActivityStudent activityStudent,Integer messageId,HttpSession session){
+    public String  updateStudentActivityFlag(ActivityStudent activityStudent,HttpSession session){
          System.out.println("活动ID:"+activityStudent.getActivityId());
          System.out.println("学生ID:"+activityStudent.getStudentId());
          System.out.println("状态:"+activityStudent.getStuActivityFlag());
-         System.out.println("消息ID:"+messageId);
+         System.out.println("消息ID:"+activityStudent.getStuMessageId());
          System.out.println("同意或者拒绝的活动名称:"+activityStudent.getActivityName());
          
          System.out.println("你好");
@@ -96,7 +100,7 @@ public class ActivityStudentController {
          studentMessage.setMessageContext(messageContext);
          studentMessage.setStudentId(applyActivitystudent.getStudentId());
          updateLoginStuMessage.setMessageContext(updateLogStuMessageContext);
-         updateLoginStuMessage.setStuMessageId(messageId);
+         updateLoginStuMessage.setStuMessageId(activityStudent.getStuMessageId());
          studentMessageService.insertMessage(studentMessage);
          studentMessageService.updateMessageContext(updateLoginStuMessage);
          return "你好";

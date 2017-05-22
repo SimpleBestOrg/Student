@@ -10,7 +10,7 @@
 	<script  src="/Student/js/jquery.min.js"></script>
 	<script  src="/Student/back/easyui/jquery.easyui.min.js"></script>
 	<script  src="/Student/js/easyui-lang-zh_CN.js"></script>
-<title>Insert title here</title>
+<title>用户管理</title>
 </head>
 <body class="easyui-layout">   
     <div data-options="region:'west',title:'人员',split:true,collapsible:false" style="width:200px;">
@@ -74,7 +74,7 @@
 			},
 			ComBoX:function(){
 				$('#AcComBox').combobox({
-					data:[{"id":1,"text":"老师"},{"id":2,"text":"学生"}],
+					data:[{"id":1,"text":"老师"}],
 				    width:55,
 				    valueField:'id',    
 				    textField:'text',

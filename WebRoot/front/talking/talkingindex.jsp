@@ -43,7 +43,7 @@
     </div>v>
     
     <div class="nav-user">      
-      <a class="avatar" >
+       <a class="avatar" href="/Student/queryStudentInfoById.action">
         <img src="/pic/${loginStudent.studentPhoto}">
         <cite>${loginStudent.studentName}</cite>
         <i>${loginStudent.studentClasses.className}</i>
@@ -51,7 +51,7 @@
       </a>
       <div class="nav">
         <a href="/Student/front/user/set.jsp"><i class="iconfont icon-shezhi"></i>设置</a>
-        <a href=""><i class="iconfont icon-tuichu" style="top: 0; font-size: 22px;"></i>退了</a>
+        <a href="/Student/logout.action"><i class="iconfont icon-tuichu" style="top: 0; font-size: 22px;"></i>退了</a>
       </div>
     </div>
   </div>
@@ -63,9 +63,8 @@
     <div class="content">
       <div class="fly-tab fly-tab-index">
         <span>
-          <a id="allTalking"  onclick="talkingPage.friendTalking('/Student/queryTalkingByFriendId.action')">全部说说</a>
-          <a id="mytalking"   onclick="talkingPage.friendTalking('/Student/queryTalkingByStuId.action')">我的说说</a>
-          <a>朋友说说</a>
+          <a id="friendTalking"  onclick="talkingPage.friendTalking('/Student/queryTalkingByFriendId.action')">朋友说说</a>
+          <a id="myTalking"   onclick="talkingPage.friendTalking('/Student/queryTalkingByStuId.action')">我的说说</a>
         </span>
         <form action="http://cn.bing.com/search" class="fly-search">
           <i class="iconfont icon-sousuo"></i>
@@ -73,10 +72,10 @@
         </form>
       </div>
              <!-- 发表说说 -->
-       <div id="editTalking"  style="width:100%;height:180px;margin-bottom: 20px;">
-            <form class="layui-form" action="/Student/insertTalking.action"  method="post"  enctype="multipart/form-data">
+       <div id="editTalking"  style="width:100%;margin-bottom: 20px;">
+            <form class="layui-form" action="/Student/insertTalking.action"  method="post" >
                 <div style="width:600px;">
-                <textarea id="L_content" name="talkingContent" required lay-verify="required" placeholder="发说说"  class="layui-textarea fly-editor" style="height: 50px;"></textarea>
+                <textarea id="L_content" name="talkingContent" required lay-verify="required" placeholder="发说说"  class="layui-textarea fly-editor" style="height: 50px;resize:none;"></textarea>
                 </div> 
                 <div id="previewAppend">
                         <!-- 图片预览 -->
@@ -97,19 +96,26 @@
                 </div>
                </div> 
             </form>  
-             <div class="talking"  id="talking" style="border:1px solid red;width:600px;">
-                   <!--说说显示 -->                    
-            </div>  
        </div>
+            <div class="talking"  id="talking" style="width:600px;">
+                   <!--说说显示 -->                    
+            </div> 
          
     </div>
+      <div style="text-align: center">
+        <div id="demo8" class="laypage-main"></div>
+      </div>    
   </div>
   
   <div class="edge">
-
+          <div>
+              <img  style="width:500px;height:300px;" src="/pic/20170522000525.jpg"/>
+              <img  style="margin-top:30px;;width:500px;height:300px;" src="/pic/psb.jpg"/>
+          </div>
 
   </div>
 </div>
+
 
 <div class="footer">
   <p><a href="http://fly.layui.com/">Fly社区</a> 2017 &copy; <a href="http://www.layui.com/">layui.com</a></p>
@@ -125,12 +131,25 @@
 <script>
 
 	$(function(){
-		talkingPage.friendTalking('/Student/queryTalkingByFriendId.action');
-		layui.use(['layer', 'laytpl', 'form', 'upload', 'util'], function(){
+        var stuId = <%=session.getAttribute("stuId")%>;
+        if(stuId==null){
+        	window.location="/Student/login.jsp?loginInfo="+1;
+        }
+		var action = '<%=request.getParameter("action")%>';
+		if(action=='null'){
+			talkingPage.friendTalking('/Student/queryTalkingByFriendId.action');	
+		}else {
+			talkingPage.friendTalking(action);
+		}
+		
+		layui.use(['layer', 'laytpl', 'form', 'upload', 'util','laypage'], function(){
 			  var $ = layui.jquery
 			  ,layer = layui.layer
 			  ,laytpl = layui.laytpl
+			  ,laypage = layui.laypage
 			  ,form = layui.form()
+			
+      
 			  
 			  layui.focusInsert = function(obj, str){
 				    var result, val = obj.value;
@@ -281,36 +300,44 @@
 	function removePreviewImg(imgIndex){
 		//删除图片时 判断图片的长度 如果为0则把显示图片的div删除掉    如果不为0则只删除对应的table  不让显示该图片
 		var imgLength = $("#previewDiv").children('table').length;
-		alert("长度:"+imgLength);
 		if(imgLength>1){
 			 $("#table"+imgIndex).remove();
 		}else{
 			$("#previewDiv").remove();
 		}
-		alert("删除的图片下标:"+imgIndex);
 	}
 	
 	
     var talkingPage = {
             friendTalking:function(action){
-            		alert(action)
+            		if(action=='/Student/queryTalkingByStuId.action'){
+            			$("#friendTalking").removeClass("tab-this");
+            			$("#myTalking").addClass("tab-this");
+            		}else if(action=='/Student/queryTalkingByFriendId.action'){
+            			$("#myTalking").removeClass("tab-this");
+            			$("#friendTalking").addClass("tab-this");
+            		}
                     $.post(action,function(data){
-                           var div ="";
+                          var div ="";
                           if(data.length!=0){ 
                            $.each(data,function(i,a){
-                                     div += " <div  style='width:600px;'>";
-                                     div += "<img class='media-object img-circle ' style='width:60px;height:60px;float:left;' src='"+a.stuId.studentPhoto+"' alt='通用的占位符图像'/>";
+                        	   		
+                                     div += " <div  style='width:600px;' id='remove"+a.talkingId+"'>";
+                                     div += "<a href='/Student/queryStudentInfoById.action?stuId="+a.stuId.studentId+"'><img class='media-object img-circle ' style='width:60px;height:60px;float:left;' src='/pic/"+a.stuId.studentPhoto+"' alt='通用的占位符图像'/></a>";
                                      div += "<span style='font-size:20px;display:block;margin-top:10px;'>"+a.stuId.studentName+"</span>";
-                                     div += "<span style='color:#c0c0c0;font-size:10px;'>"+((new Date(a.talkingDateTime)).toLocaleString().replace(/年|月/g,'-')).replace(/日/g,'')+"</span>";
-                                     div += "<div style='border:1px solid red;width:600px;margin-top:10px;'>";
-                                     div += "<div style='border:1px solid blue;'>"+a.talkingContent+"</div>";
+                                     div += "<span id='talkingDeleteBtn' style='color:#c0c0c0;font-size:10px;'>"+((new Date(a.talkingDateTime)).toLocaleString().replace(/年|月/g,'-')).replace(/日/g,'')+"</span>";
+                                     if(action=="/Student/queryTalkingByStuId.action"){
+                                    	 div += "<button  onclick='deleteTalking("+a.talkingId+")' class='layui-btn layui-btn-primary layui-btn-mini' style='margin-left:375px;'>删除</button>";
+                                     }
+                                     div += "<div style='width:600px;margin-top:10px;'>";
+                                     div += "<div style='margin-top:20px;margin-bottom:10px;font-size:18px;'>"+a.talkingContent+"</div>";
                                      
                                      //如果说说中有照片 则显示照片
                                      if(a.talkingPhotos.length!=0){
                                             $.each(a.talkingPhotos,function(i,p){
                                                 //照片数量为1时  照片宽度
                                                 if(a.talkingPhotos.length==1){
-                                                    div  +=  "<img src='/pic/"+p.talkingPhoto+"' style='width:500px;height:500px;'/>";                                                   
+                                                    div  +=  "<img src='/pic/"+p.talkingPhoto+"' style='width:600px;height:500px;'/>";                                                   
                                                 }else{
                                                     div  +=  "<img src='/pic/"+p.talkingPhoto+"' style='width:150px;height:150px;'/>";
                                                 }
@@ -318,7 +345,7 @@
                                      }
                                      //如果说说的评论不是空  则显示说说评论的内容
                                      if(a.talkingTocao.length!=0){
-                                          div += "<div style='border:1px solid green; background-color:green;'>";
+                                          div += "<div style='border:1px solid black; '>";
                                           
                                              //一条说说被评论(主评论和回复)的条数
                                         //    var toCaoLength = a.talkingTocao.length;
@@ -327,22 +354,23 @@
                                                 //找出主评论  
                                                 if(t.talkingToCaoParentId==0){
                                                 //  toCaoLength = toCaoLength-1; 
-                                                     div += "<div  id='append"+t.talkingToCaoId+"'  onclick='appendHuifu("+t.talkingToCaoId+")' style='border:2px solid black;'><div style='border:1px solid black;'><img src='"+t.student.studentPhoto+"' style='height:40px;width:40px;float:left;'/>";
+                                                     div += "<div  id='append"+t.talkingToCaoId+"'  onclick='appendHuifu("+t.talkingToCaoId+")' ><div ><img src='/pic/"+t.student.studentPhoto+"' style='height:40px;width:40px;float:left;'/>";
                                                      div += "<input type='hidden' id='talkingIdhidden"+t.talkingToCaoId+"' value='"+a.talkingId+"'></input>";
+                                                     div += "<input type='hidden' id='studentTuCaoId"+t.talkingToCaoId+"' value='"+t.student.studentId+"'>";
                                                      div += "<span style='font-size:15px;display:block;margin-top:5px;'><font style='color:red'>"+t.student.studentName+"</font>&nbsp;&nbsp;:&nbsp;&nbsp;"+t.talkingToCaoContext+"</span>";
                                                      div += "<span style='color:#c0c0c0;font-size:10px;'>"+((new Date(t.talkingToCaoDateTime)).toLocaleString().replace(/年|月/g,'-')).replace(/日/g,'')+"</span>";
                                                      div += "<input type='hidden' value='"+t.talkingToCaoId+"'/>";
                                                      div += "</div>"; 
                                                         $.each(a.talkingTocao,function(y,parent){
                                                             if(parent.talkingToCaoParentId==t.talkingToCaoId){
-                                                                 div += "<div style='border:1px solid black;margin-left:40px;'><img src='"+parent.student.studentPhoto+"' style='height:40px;width:40px;float:left;'/>";
+                                                                 div += "<div style='margin-left:40px;'><img src='/pic/"+parent.student.studentPhoto+"' style='height:40px;width:40px;float:left;'/>";
                                                                  div += "<span style='font-size:15px;display:block;margin-top:5px;'><font style='color:red'>"+parent.student.studentName+"</font>&nbsp;<font style='color:black'>回复&nbsp;</font><font style='color:red'>"+t.student.studentName+":</font>&nbsp;&nbsp;:&nbsp;&nbsp;"+parent.talkingToCaoContext+"</span>";
                                                                  div += "<span style='color:#c0c0c0;font-size:10px;'>"+((new Date(parent.talkingToCaoDateTime)).toLocaleString().replace(/年|月/g,'-')).replace(/日/g,'')+"</span>";
                                                                  div += "<input type='hidden' value='"+parent.talkingToCaoId+"'/>";
                                                                  div += "</div>";
                                                                  $.each(a.talkingTocao,function(z,child){
                                                                      if(child.talkingToCaoParentId==parent.talkingToCaoId){
-                                                                         div += "<div style='border:1px solid black;margin-left:40px;'><img src='"+child.student.studentPhoto+"' style='height:40px;width:40px;float:left;'/>";
+                                                                         div += "<div style='margin-left:40px;'><img src='/pic/"+child.student.studentPhoto+"' style='height:40px;width:40px;float:left;'/>";
                                                                          div += "<span style='font-size:15px;display:block;margin-top:5px;'><font style='color:red'>"+child.student.studentName+"</font>&nbsp;回复<font style='color:red'>"+parent.student.studentName+"</font>&nbsp;&nbsp;&nbsp;&nbsp;"+child.talkingToCaoContext+"</span>";
                                                                          div += "<span style='color:#c0c0c0;font-size:10px;'>"+((new Date(child.talkingToCaoDateTime)).toLocaleString().replace(/年|月/g,'-')).replace(/日/g,'')+"</span>";
                                                                          //回复人的ID
@@ -350,7 +378,7 @@
                                                                          div += "</div>";
                                                                          $.each(a.talkingTocao,function(h,grandson){
                                                                               if(grandson.talkingToCaoParentId==child.talkingToCaoId){
-                                                                                     div += "<div style='border:1px solid black;margin-left:40px;'><img src='"+grandson.student.studentPhoto+"' style='height:40px;width:40px;float:left;'/>";
+                                                                                     div += "<div style='margin-left:40px;'><img src='/pic/"+grandson.student.studentPhoto+"' style='height:40px;width:40px;float:left;'/>";
                                                                                      div += "<span style='font-size:15px;display:block;margin-top:5px;'><font style='color:red'>"+grandson.student.studentName+"</font>&nbsp;回复<font style='color:red'>"+child.student.studentName+"</font>&nbsp;&nbsp;&nbsp;&nbsp;"+grandson.talkingToCaoContext+"</span>";
                                                                                      div += "<span style='color:#c0c0c0;font-size:10px;'>"+((new Date(grandson.talkingToCaoDateTime)).toLocaleString().replace(/年|月/g,'-')).replace(/日/g,'')+"</span>";
                                                                                      div += "<input type='hidden' value='"+grandson.talkingToCaoId+"'/>";
@@ -366,18 +394,19 @@
                                             })
                                             div +="</div>";
                                      }
-                                     div += "<div class='jieda-reply'  ><span  onclick='addZanCount("+a.talkingId+","+a.talkingStudentId+")' class='jieda-zan'  type='zan'><i   class='iconfont icon-zan'></i><em>"+a.talkingThumCount+"</em></span></div>"
-                                     div += "<div style='width:600px;height:40px;border:1px solid red'><textarea id='mainToCaoContext"+a.talkingId+"' style='width:530px;height:40px;' placeholder='评论'></textarea><button onclick='pushTalkingToCao("+a.talkingId+","+a.stuId.studentId+")' style='margin-top:-30px;' class='layui-btn'>评论</button></div>";
+                                     div += "<div class='jieda-reply'  ><span  onclick='addZanCount("+a.talkingId+","+a.talkingStudentId+")' style='margin-left:565px;' class='jieda-zan'  type='zan'><i   class='iconfont icon-zan'></i><em id='thumCount'>"+a.talkingThumCount+"</em></span></div>"
+                                     div += "<div style='width:600px;height:40px;'><textarea id='mainToCaoContext"+a.talkingId+"' style='width:530px;height:40px;resize:none;' placeholder='评论'></textarea><button onclick='pushTalkingToCao("+a.talkingId+","+a.stuId.studentId+")' style='margin-top:-30px;' class='layui-btn'>评论</button></div>";
                                      //说说评论
                                      div += "</div></div></div>";
                            })
                           }else{
-                              div +='暂无说说';
+                        	  div += "<span style='margin-left:300px;'>"
+                              div += '暂无说说';
+                        	  div += "</span>";
                           } 
                           $("#talking").html(div);
                     })
-                   
-                }
+                }  
     
     }
 
@@ -395,40 +424,51 @@
            }
            //点击回复时删除回复框
             $("#hui").click(function(){
-                alert("input的长度1:"+$("#append"+id).find("input").length);
                 //得到一个主评论的回复数量  用于查找最后一个评论的父ID
                 var inputLength = $("#append"+id).find("input").length;
                 //得到被回复的ID
                 var talkingToCaoParentId = $("#append"+id).find("input")[inputLength-1].value;
                 var talkingId = document.getElementById("talkingIdhidden"+id).value;
                 var talkingToCaoContext = document.getElementById("huifuContent").value;
-                alert("被回复的ID:"+talkingToCaoParentId+"评论的说说ID:"+talkingId+"回复内容:"+talkingToCaoContext);
+               if(talkingToCaoContext.length != 0){
+               	 var studentTuCaoId  = document.getElementById("studentTuCaoId"+id).value;
                     $.ajax({
                             type:'post',
                             url:'/Student/insertTalkingToCao.action',
                             contentType:'application/json;charset=utf-8',
                             //数据格式是json串
-                            data:'{"talkingId":'+talkingId+',"talkingToCaoParentId":'+talkingToCaoParentId+',"talkingToCaoContext":"'+talkingToCaoContext+'"}',
+                            data:'{"talkingId":'+talkingId+',"talkingToCaoParentId":'+talkingToCaoParentId+',"talkingToCaoContext":"'+talkingToCaoContext+'","studentId":'+studentTuCaoId+'}',
                             success:function(data){//返回json结果
                                 //回复成功后 刷新页面
-                            	window.location.reload();
+                            	window.location.reload();  
                             }
                         });
-                //删除回复框
-                $('.huifu').remove();
+                    //删除回复框
+                    $('.huifu').remove();   
+               }else{
+            	  layer.msg("回复内容不能为空",{icon:5,time:1500}) 
+               }
+
             })
     }   
+    
     //点赞
     function addZanCount(talkingId,studentId){
-    		$.post("/Student/thumTalking.action",{"talkingId":talkingId,"studentId":studentId,},function(data){
-    		},'json');
-    		window.location.reload();
+    		$.post("/Student/thumTalking.action",{"talkingId":talkingId,"studentId":studentId},function(data){
+    								var count = $("#thumCount").html();
+    								if(data == 'HAVE'){
+    									layer.msg("已经点过赞了",{icon:5,time:1500});
+    								}else if(data == 'FAIL'){
+    									layer.msg("不能点赞自己的说说",{icon: 5,time:1500});
+    								}else if(data == 'SUCCESS'){
+    									layer.msg("成功点赞",{icon: 1,time:1500});
+    									$("#thumCount").html(++count);
+    								}
+    		},'text');
     }
     
     //发表主评论
     function pushTalkingToCao(talkingId,studentId){
-    	alert("说说ID:"+talkingId);
-    	alert("评论的说说发表人:"+studentId);
     	var context = document.getElementById("mainToCaoContext"+talkingId).value;
 		if(context.length!=0){
             $.ajax({
@@ -443,8 +483,24 @@
                 }
             });			
 		}else if(context.length==0){
-			 alert("请填写评论内容");
+			 layer.msg("请填写评论内容",{icon:5,time:1500});
 		}
+    }
+    
+    //删除说说
+    function  deleteTalking(talkingId){
+    	 $.post("/Student/deleteTalkingByTalkigId.action",{"talkingId":talkingId},function(data){
+    		  if(data == "successDelete"){
+    			  layer.msg("删除成功",{icon: 1,time:1500});
+    			  $("#remove"+talkingId).remove();
+    			  if($("#talking").children("div").length==0){
+    			  		$("#talking").html("<span style='margin-left:300px;margin-top:50px;'>暂无说说</span>");
+    			  }
+    			  //window.location.href = "/Student/front/talking/talkingindex.jsp?action=/Student/queryTalkingByStuId.action";  
+    		  }else{
+    			  layer.msg("删除失败",{icon: 5,time:1500});
+    		  }
+    	 });
     }
     
     

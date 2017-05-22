@@ -28,7 +28,7 @@ public class uploadImage {
         Integer count =  1;
         if(file!=null && originalFilename!=null && originalFilename.length()>0){
               // 存储图片的物理路径
-            String  pic_path = "E:\\develop\\";
+            String  pic_path = "D:\\develop\\";
             //新的图片名称
             newFileName = UUID.randomUUID() + originalFilename.substring(originalFilename.lastIndexOf("."));
              newFileNames = newFileName.replaceAll("-", "_");

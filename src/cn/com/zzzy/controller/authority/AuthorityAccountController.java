@@ -108,7 +108,7 @@ public class AuthorityAccountController {
 	}
 	
     /**
-     * 
+     * 更新密码
      * @param session
      * @param studentPwd
      * @param stuId
@@ -119,6 +119,17 @@ public class AuthorityAccountController {
 	    stuId=(Integer)session.getAttribute("stuId");
 	    auAcService.updateStudentPwd(studentPwd, stuId);
 	    System.out.println("修改密码："+stuId);
-	    return "redirect:queryStudentInfoById.action?stuId="+stuId;
+	    return "redirect:/login.jsp";
+	}
+
+	/**
+	 * 注销
+	 * @param session
+	 * @return
+	 */
+	@RequestMapping("logout")
+	public  String   logout(HttpSession session){
+	     session.invalidate();
+	     return "redirect:/login.jsp";
 	}
 }

@@ -21,4 +21,10 @@ public interface TalkingToCaoMapper  extends BaseMapper<TalkingToCao>{
        * @param talkingToCao
        */
       void  insertTalkingToCao(TalkingToCao talkingToCao);
+      
+      /**
+       * 根据说说ID删除说说评论
+       * @param talkingId
+       */
+      void  delTalkTuCaoByTalkingId(@Param("talkingId")Integer talkingId);
 }

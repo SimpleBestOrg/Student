@@ -4,7 +4,7 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<title>Insert title here</title>
+<title>权限分配</title>
 <link rel="stylesheet" type="text/css" href="/Student/back/easyui/themes/bootstrap/easyui.css">
 	<link rel="stylesheet" type="text/css" href="/Student/back/easyui/themes/icon.css">
 	<link rel="stylesheet" type="text/css" href="/Student/back/easyui/demo/demo.css">

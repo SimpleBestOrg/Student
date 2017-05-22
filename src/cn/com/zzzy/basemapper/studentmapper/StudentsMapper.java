@@ -56,4 +56,11 @@ public interface StudentsMapper extends BaseMapper<Student>{
      * @param studentSign
      */
     void updateStudentSign(@Param("stuId") Integer stuId,@Param("studentSign") String studentSign);
+    
+    /**
+     * 更新学生申请加入的社团
+     * @param student
+     */
+    void updateStudentCommunity(Student student);
+    
 }

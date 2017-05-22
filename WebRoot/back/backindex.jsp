@@ -41,6 +41,7 @@
 <script type="text/javascript">
 	$(function(){
 		$.post("/Student/queryAccountMenu.action",function(data){
+			alert();
 			alert("数据长度:"+data.length);
 			if(data.length!=0){
 				$.each(data,function(i,item){

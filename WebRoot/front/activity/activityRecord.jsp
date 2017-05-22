@@ -42,7 +42,7 @@
     </div>
     
     <div class="nav-user">      
-      <a class="avatar" >
+       <a class="avatar" href="/Student/queryStudentInfoById.action">
         <img src="/pic/${loginStudent.studentPhoto}">
         <cite>${loginStudent.studentName}</cite>
         <i>${loginStudent.studentClasses.className}</i>
@@ -50,7 +50,7 @@
       </a>
       <div class="nav">
         <a href="/Student/front/user/set.jsp"><i class="iconfont icon-shezhi"></i>设置</a>
-        <a href=""><i class="iconfont icon-tuichu" style="top: 0; font-size: 22px;"></i>退了</a>
+        <a href="/Student/logout.action"><i class="iconfont icon-tuichu" style="top: 0; font-size: 22px;"></i>退了</a>
       </div>
     </div>
   </div>
@@ -101,6 +101,10 @@
 <script src="/Student/js/jquery.min.js"></script>
 <script>
 $(function(){
+    	var stuId = <%=session.getAttribute("stuId")%>;
+    	if(stuId==null){
+    		window.location="/Student/login.jsp?loginInfo="+1;
+    	}
       var activityId = <%=request.getParameter("activityId")%>
       alert(activityId);
 	  $.post("/Student/queryActivityDetail.action",{"activityId":activityId},function(data){

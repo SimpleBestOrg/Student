@@ -45,14 +45,14 @@
       <%if(session.getAttribute("loginStudent")!=null){ 
             Student student  = (Student)session.getAttribute("loginStudent");
       %>
-          <a class="avatar" href="user/index.html">
+          <a class="avatar" href="/Student/queryStudentInfoById.action">
             <img src="/pic/<%=student.getStudentPhoto()%>">
             <cite><%=student.getStudentName()%></cite>
             <i><%=student.getStudentClasses().getClassName()%></i>
           </a>
           <div class="nav">
             <a href="/Student/front/user/set.jsp"><i class="iconfont icon-shezhi"></i>设置</a>
-            <a href="/user/logout/"><i class="iconfont icon-tuichu" style="top: 0; font-size: 22px;"></i>退了</a>
+            <a href="/Student/logout.action"><i class="iconfont icon-tuichu" style="top: 0; font-size: 22px;"></i>退了</a>
           </div>
       <% } %>
     </div>
@@ -118,6 +118,10 @@
           });
         
         $(function(){
+        	var stuId = <%=session.getAttribute("stuId")%>;
+        	if(stuId==null){
+        		window.location="/Student/login.jsp?loginInfo="+1;
+        	}
         	var div ="";
         	$.post("/Student/queryAllMessage.action",function(data){
         		if(data.length>0){
@@ -150,20 +154,26 @@
         }
         
         //申请加入社团时   同意或者拒绝
-        function  agreeOrRefuseCommunity(){
-        	
+        function  agreeOrRefuseCommunity(communityId,stuId,flag,obj){
+        	//消息ID
+        	var messageId = $(obj).parent().next().val();
+        	$.post("/Student/updateCommunityPeopleFlag.action",{"studentId":stuId,"communityId":communityId,"stuMessageId":messageId,"communityPeoFlag":flag},function(data){
+    			alert(data);
+    		},'json')
         }
         
         //申请加入活动时 同意或者拒绝
         function agreeOrRefuseActivity(stuId,activityId,flag,obj){
         	//消息ID
         	var messageId =  $(obj).parent().next().val();
+        	//得到活动名称
         	var activityName = $(obj).parent().prev().text();
         	alert("消息ID"+messageId);
         	alert("活动名称:"+activityName);
-        	$.post("/Student/updateStudentActivityFlag.action",{"studentsId":stuId,"activityId":activityId,"activityName":activityName,"messageId":messageId,"stuActivityFlag":flag},function(data){
+        	$.post("/Student/updateStudentActivityFlag.action",{"studentsId":stuId,"activityId":activityId,"activityName":activityName,"stuMessageId":messageId,"stuActivityFlag":flag},function(data){
         			alert(data);
         	},'json')
+        	window.location.reload();
         }
         
         //删除学生消息

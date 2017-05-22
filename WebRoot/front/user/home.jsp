@@ -48,8 +48,8 @@
          
       </a>
       <div class="nav">
-        <a href="selectStudentSign.action"><i class="iconfont icon-shezhi"></i>设置</a>
-        <a href=""><i class="iconfont icon-tuichu" style="top: 0; font-size: 22px;"></i>退了</a>
+        <a href="/Student/selectStudentSign.action"><i class="iconfont icon-shezhi"></i>设置</a>
+        <a href="/Student/logout.action"><i class="iconfont icon-tuichu" style="top: 0; font-size: 22px;"></i>退了</a>
       </div>
     </div>
   </div>

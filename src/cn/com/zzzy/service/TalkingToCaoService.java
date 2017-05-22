@@ -37,5 +37,13 @@ public class TalkingToCaoService {
             return msg;
         }
         
+        /**
+         * 根据说说ID删除说说的评论
+         * @param talkingId
+         */
+        public void  delTalkTuCaoByTalkingId(Integer  talkingId){
+             talkingToCaoMapper.delTalkTuCaoByTalkingId(talkingId);
+        }
+        
         
 }

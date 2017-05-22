@@ -10,6 +10,7 @@
 				<result column="stu_Address" property="studentAddress"></result>
 				<result column="stu_Sex" property="studentSex"></result>
 				<result column="stu_signature" property="studentSignature"></result>
+				<result column="stu_CommunityId" property="studentCommunityId"></result>
 				<association property="studentClasses" javaType="cn.com.zzzy.entity.StudentClasses" resultMap="classesResult">
 				</association>
 				<collection property="studentFriends" ofType="cn.com.zzzy.entity.StudentFriend">
@@ -61,6 +62,7 @@
 						stu_Address,
 						stu_Birthday,
 						stu_Photo,
+						stu_CommunityId,
 						stu_signature,
 						sc.cla_Name,
 						sf.frientId,
@@ -114,14 +116,18 @@
 					stu_Id = #{stuId};
 			</select>
 			
-			
 			<!-- 修改学生个性签名 -->
-			<update id="updateStudentSign">
+			<update id="updateStudentSign" parameterType="cn.com.zzzy.entity.Student">
 				UPDATE stu
 					SET 
 						stu_signature = #{studentSign}
 					WHERE
 						stu_Id = #{stuId};	
+			</update>
+			
+			<!-- 更新学生申请加入的社团 -->
+			<update  id="updateStudentCommunity" parameterType="cn.com.zzzy.entity.Student">
+				update stu  set stu_CommunityId = #{studentCommunityId} where stu_Id = #{studentId}
 			</update>
 			
 </mapper>

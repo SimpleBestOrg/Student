@@ -1,6 +1,5 @@
 package cn.com.zzzy.controller.talking;
 
-import java.io.IOException;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
@@ -9,9 +8,7 @@ import javax.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.multipart.MultipartFile;
 
 import cn.com.zzzy.entity.AuthorityAccount;
 import cn.com.zzzy.entity.Student;
@@ -25,7 +22,6 @@ import cn.com.zzzy.service.TalkingStudentThumService;
 import cn.com.zzzy.service.TalkingToCaoService;
 import cn.com.zzzy.service.student.StudentMessageService;
 import cn.com.zzzy.util.PageParam;
-import cn.com.zzzy.util.Util;
 
 @Controller
 public class TalkingController {
@@ -131,13 +127,13 @@ public class TalkingController {
             studentMessage.setMessageContext(messageContext);
             studentMessage.setStudentId(studentId);
             studentMessageService.insertMessage(studentMessage);
-            msg = "成功点赞";
+            msg = "SUCCESS";
         } else if(studentId == loginStudent.getStudentId()  ){
             System.out.println("不能赞自己的说说");
-            msg = "不能点赞自己的说说";
+            msg = "FAIL";
         } else if(studentId != loginStudent.getStudentId()  && talkingStudentThumService.queryCount(talkingStudentThum) == 1){
             System.out.println("已经攒过该说说");   
-            msg  = "已经点赞";
+            msg  = "HAVE";
         }
         return msg;
     }
@@ -157,17 +153,45 @@ public class TalkingController {
         talkingService.insertTalking(talking);
         
         System.out.println("说说ID:"+talking.getTalkingId());
-        //实例化说说图片对象
-        TalkingPhoto talkingPhoto = new TalkingPhoto();
-        if(imgName.length>0){
+
+        System.out.println(imgName!=null);
+        
+        if(imgName!=null){
+            //实例化说说图片对象
+            TalkingPhoto talkingPhoto = new TalkingPhoto();
             for(int i=0;i<imgName.length;i++){
-                 System.out.println("下表:"+i+imgName[i]);
+                 System.out.println("下标:"+i+imgName[i]);
                  talkingPhoto.setTalkingPhoto(imgName[i]);
                  //设置说说的ID   添加说说成功后 返回说说的主键ID                                        
                  talkingPhoto.setTalkingId(talking.getTalkingId());
                  talkingService.insertTalkingPhoto(talkingPhoto);
             }
         }
-        return "/front/talking/talkingindex.jsp";
+        return "redirect:/front/talking/talkingindex.jsp?action=/Student/queryTalkingByStuId.action";
     }
+    
+    /**
+     * 根据说说ID删除说说
+     * 删除说说同时需要删除说说的评论,说说的照片,赞该说说的人
+     * @param talkingId
+     */
+    @RequestMapping("deleteTalkingByTalkigId")
+    @ResponseBody
+    public String  deleteTalkingByTalkingId(Integer talkingId){
+        String msg = "successDelete";
+          try {
+              //删除此条说说
+              talkingService.deleteTalkingByTalkingId(talkingId);
+              //删除说说相关的照片
+              talkingService.deleteTalkingPhotoByTalkingId(talkingId);
+              //删除说说的评论
+              talkingToCaoService.delTalkTuCaoByTalkingId(talkingId);
+              //删除赞过该说说的人
+              talkingStudentThumService.deleteTalkingThumStu(talkingId);
+        } catch (Exception e) {
+            msg  = "failDelete";
+        }
+        return msg ;
+    }
+    
 }

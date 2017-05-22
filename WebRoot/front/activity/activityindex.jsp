@@ -8,7 +8,7 @@
 <html>
 <head>
   <meta charset="utf-8">
-  <title>活动</title>
+  <title>活动首页</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
   <meta name="keywords" content="fly,layui,前端社区">
   <meta name="description" content="Fly社区是模块化前端UI框架Layui的官网社区，致力于为web开发提供强劲动力">
@@ -39,7 +39,7 @@
     </div>
     
     <div class="nav-user">      
-      <a class="avatar" >
+       <a class="avatar" href="/Student/queryStudentInfoById.action">
         <img src="/pic/${loginStudent.studentPhoto}">
         <cite>${loginStudent.studentName}</cite>
         <i>${loginStudent.studentClasses.className}</i>
@@ -47,7 +47,7 @@
       </a>
       <div class="nav">
         <a href="/Student/front/user/set.jsp"><i class="iconfont icon-shezhi"></i>设置</a>
-        <a href=""><i class="iconfont icon-tuichu" style="top: 0; font-size: 22px;"></i>退了</a>
+        <a href="/Student/logout.action"><i class="iconfont icon-tuichu" style="top: 0; font-size: 22px;"></i>退了</a>
       </div>
     </div>
       
@@ -59,9 +59,9 @@
     <div class="content" style="margin-right:0">
       <div class="fly-tab">
         <span>
-          <a onclick="activityPage.friendActivity()" class="tab-this">朋友活动</a>
-          <a onclick="joinActivity()">我参加的活动</a>
-          <a onclick="applyActivity('/Student/queryActivityByCondition.action','1')">我申请的活动</a>
+          <a id = "friendActivity" onclick="activityPage.friendActivity()" class="tab-this">朋友活动</a>
+          <a id = "myJoinActivity" onclick="joinActivity()">我参加的活动</a>
+          <a id = "myApplyActivity" onclick="applyActivity('/Student/queryActivityByCondition.action','1')">我申请的活动</a>
           <a >活动消息</a>
           
           
@@ -70,22 +70,12 @@
           <i class="iconfont icon-sousuo"></i>
           <input class="layui-input" autocomplete="off" placeholder="搜索内容，回车跳转" type="text" name="q">
         </form>
-        <a href="/Student/front/activity/addactivity.jsp" class="layui-btn jie-add">申请活动</a>
+        <a href="/Student/queryAllActivityType.action" class="layui-btn jie-add">申请活动</a>
       </div>
       
       <div  id="activity">
             
       </div>
-      
-      
-      <div style="text-align: center">
-        <div class="laypage-main"><span class="laypage-curr">1</span><a href="/jie/page/2/">2</a><a href="/jie/page/3/">3</a><a href="/jie/page/4/">4</a><a href="/jie/page/5/">5</a><span>…</span><a href="/jie/page/148/" class="laypage-last" title="尾页">尾页</a><a href="/jie/page/2/" class="laypage-next">下一页</a></div>
-      </div>
-      
-      
-      
-      
-      
     </div>
   </div>
 </div>
@@ -113,8 +103,12 @@
               //查询朋友活动
             var activityPage = {
             		friendActivity:function(){
-            				$.post("/Student/queryAllFriendActivity.action",function(data){
-            		    		 var div = "";
+            			    $("#friendActivity").addClass("tab-this");
+            			    $("#myJoinActivity").removeClass("tab-this");
+            			    $("#myApplyActivity").removeClass("tab-this");
+            				$.post("/Student/queryAllActivity.action",function(data){
+            					var div = "";
+            					if(data.length>0){
             		    		 var today =new Date();
             		    		 $.each(data,function(i,a){
             		    			 div += " <div  style='border:1px solid #5DADE2; height:170px; margin-top:10px;'><div  style='width:100%;height:auto;margin-top:10px;margin-left:50px;'><a href='#'>";
@@ -131,10 +125,16 @@
             		            		 }
             		        		 div +="</div>";
             		    		 })
+            					}else{
+            						div += "暂无活动";
+            					}	 
             		    		 $('#activity').html(div);
             		    	},"json");
             		},
             		applyActivity:function(){
+        			    	$("#myApplyActivity").addClass("tab-this");
+        			    	$("#myJoinActivity").removeClass("tab-this");
+        			    	$("#friendActivity").removeClass("tab-this");
             	    		$.post("/Student/queryActivityByCondition.action",function(data){
             		      	 var div = "";
             		   		 var today =new Date()
@@ -169,6 +169,9 @@
             		       	},"json");						
             			},
             			joinActivity:function(){
+        			    	$("#myJoinActivity").addClass("tab-this");
+        			    	$("#myApplyActivity").removeClass("tab-this");
+        			    	$("#friendActivity").removeClass("tab-this");            				
             			   	$.post("/Student/queryMyJoinActivity.action",function(data){
             		    		 var div = "";
             		    		 var today =new Date();

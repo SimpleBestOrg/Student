@@ -33,4 +33,12 @@ public class TalkingStudentThumService {
             return  talkingStudentThumMapper.queryStudentCount(talkingStudentThum); 
         }
         
+        /**
+         * 根据说说ID删除所欲的说说的吐槽内容
+         * @param talkingId
+         */
+        public void deleteTalkingThumStu(Integer talkingId){
+              talkingStudentThumMapper.deleteTalkingThumStu(talkingId);
+        }
+        
 }

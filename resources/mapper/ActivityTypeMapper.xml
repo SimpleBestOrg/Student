@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- 一对多映射  -->
+<mapper namespace="cn.com.zzzy.basemapper.activitymapper.ActivityTypeMapper">
+			
+			<resultMap  id="activityTypeResult" type="cn.com.zzzy.entity.ActivityType">
+					<id column="activity_typeId" property="activityTypeId"/>
+					<result column="community_Id" property="communityId"/>
+					<result column="activity_typeName" property="activityTypeName"/>
+			</resultMap>
+			
+			<!-- 查找活动类型  -->
+			<select id="queryAllActivityType"  resultMap="activityTypeResult">
+				  select activity_typeId,community_Id,activity_typeName  from activity_type  where community_Id in (0,(select stu_communityId from  stu where stu_Id = #{studentId}));
+			</select>
+			
+			
+			
+			
+			
+</mapper>

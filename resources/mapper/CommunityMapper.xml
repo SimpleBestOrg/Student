@@ -13,11 +13,13 @@
 		<result column="community_appliRespon" property="communityAppliRespon"/>
 		<result column="community_flag" property="communityFlag"/>
 		<result column="community_photo" property="communityPhoto"/>
+		<result column="community_appliStu" property="communityApplyStuId"></result>
 		<association column="community_appliSt" property="communityAppliStudent" resultMap="studentResult" javaType="cn.com.zzzy.entity.Student"/>
 		<collection property="communityPeoples" ofType="cn.com.zzzy.entity.CommunityPeople">
 							<id  column="community_PeopleId" property="comunityPeopleId"></id>
 							<result column="community_position" property="communityPosition"></result>
 							<result column="community_peoFlag" property="communityPeoFlag"></result>
+							<result column="stu_messageId" property="stuMessageId"></result>
 							<association column="community_stuId" property="student"  javaType="cn.com.zzzy.entity.Student">
 								<id column="studentId" property="studentId"></id>
 								<result column="studentName" property="studentName"></result>
@@ -30,8 +32,28 @@
 		<result column="applyStuName" property="studentName"/>
 		<result column="applyStuPhoto" property="studentPhoto"></result>
 	</resultMap>
+	<resultMap type="cn.com.zzzy.entity.Activity" id="activityResult">
+		<id column="activity_Id" property="activityId"/>
+		<result column="activity_Name" property="activityName"/>
+		<result column="activityPhoto" property="activityPhoto"/>
+		<association column="activity_typeId" property="activityType" javaType="cn.com.zzzy.entity.ActivityType">
+			<id column="activity_typeId" property="activityTypeId"/>
+			<result column="activity_typeName" property="activityTypeName"/>
+			<association column="community_Id" property="communityId" javaType="cn.com.zzzy.entity.Community">
+				<id column="community_Id" property="communityId"/>
+				<result column="community_Name" property="communityName"/>
+			</association>
+		</association>
+	</resultMap>	
 	
-
+	<resultMap type="cn.com.zzzy.entity.CommunityPeople" id="communityPeopleResult">
+				<id column="community_PeopleId" property="comunityPeopleId"></id>
+				<result column="community_Id" property="communityId"></result>
+				<result column="community_stuId" property="studentId"></result>
+				<result column="community_position" property="communityPosition"></result>
+				<result column="community_peoFlag" property="communityPeoFlag"></result>
+	</resultMap>	
+	
 	<!-- 分页查询所有社团 -->
 	<select id="queryAllCommunity" resultMap="CommunityResult">
 		SELECT
@@ -61,6 +83,7 @@
 		</where>
 		limit #{param.startIndex},#{param.rows}
 	</select>
+
 	<!-- 查询所有社团的数量 -->
 	<select id="queryCountAllCommunity" resultType="Integer">
 		SELECT
@@ -77,18 +100,71 @@
 					and  (c.community_Name like concat('%',concat(#{param.keyWord},'%')) or  c.community_appliRespon like concat('%',concat(#{param.keyWord},'%')) or s.stu_Name like concat('%',concat(#{param.keyWord},'%')))
 				</if>
 		</where>
-		
 	</select>	
- 	<!-- 根据flag（状态）来查询出来所有的社团 -->
+	
+	<!-- 更新社团状态 -->
+ 	<update id="updateCommunityFlag">
+			UPDATE community c
+			SET c.community_flag = #{param.communityFlag} , c.community_createDate = #{param.communityCreateDate}   where c.community_Id =#{param.communityId}
+	</update>
+	
+	
+	<!-- 根据flag（状态）来查询出来所有的社团 -->
 	<select id="select" resultMap="CommunityResult">
-		select c.community_Id,c.community_Name,c.community_perNum,c.community_createDate,s.stu_Name,c.community_appliReason,c.community_appliRespon,c.community_flag,c.community_photo from community c left join stu s
-		on c.community_appliStu = s.stu_Id where c.community_flag = 1
+			SELECT
+				c.community_Id,
+				c.community_Name,
+				c.community_perNum,
+				c.community_createDate,
+				s.stu_Name,
+				c.community_appliReason,
+				c.community_appliRespon,
+				c.community_flag,
+				c.community_photo
+			FROM
+				community c
+			LEFT JOIN stu s ON c.community_appliStu = s.stu_Id
+			WHERE
+				c.community_flag = 1
 	</select>
+	
 	<!-- 根据社团的Id来查询出来社团的详细信息 -->
 	<select id="selectById" resultMap="CommunityResult">
-		select c.community_Id,c.community_Name,c.community_perNum,c.community_createDate,c.community_appliReason,c.community_appliRespon,c.community_flag from community c left join stu s
-on 		c.community_appliStu = s.stu_Id where c.community_Id = #{selectById};
+			SELECT
+				c.community_Id,
+				c.community_appliStu,
+				c.community_Name,
+				c.community_perNum,
+				c.community_createDate,
+				s.stu_Name applyStuName,
+				c.community_appliReason,
+				c.community_appliRespon,
+				c.community_flag,
+				c.community_photo
+			FROM
+				community c
+			LEFT JOIN stu s ON c.community_appliStu = s.stu_Id
+			WHERE
+				c.community_Id = #{selectById}
 	</select>
+	
+	<!-- 申请建立社团 -->
+	<insert id="insert" parameterType="cn.com.zzzy.entity.Community">
+			INSERT INTO community (
+				community.community_Name,
+				community.community_perNum,
+				community.community_appliDate,
+				community.community_appliStu,
+				community.community_appliReason,
+				community.community_appliRespon,
+				community.community_photo
+			)
+			VALUES
+				(
+					#{communityName},#{communityPersonNum},NOW(),#{studentId},#{communityAppliReason},#{communityAppliRespon},#{communityPhoto})
+
+	</insert>
+	
 	<!-- 根据登录者的Id来查询自己社团的详细信息 -->
 	<select id="queryById" resultMap="CommunityResult">
 			SELECT
@@ -107,30 +183,93 @@ on 		c.community_appliStu = s.stu_Id where c.community_Id = #{selectById};
 				s.stu_Id studentId,
 				s.stu_Name studentName,
 				s.stu_Photo studentPhoto
-			FROM
-				community_people cp
-			LEFT JOIN community c  left join  stu s1 
-			on  s1.stu_Id = c.community_appliStu
-			 ON c.community_Id = cp.community_Id
-			LEFT JOIN community_people cp1 ON cp1.community_Id = c.community_Id
-			LEFT JOIN stu s ON s.stu_Id = cp1.community_stuId
-			WHERE  cp.community_stuId = 2
+			FROM community c   left join  stu s1 
+			on  s1.stu_Id = c.community_appliStu LEFT JOIN  community_people cp
+			ON c.community_Id = cp.community_Id LEFT JOIN community_people cp1 
+     		 ON cp1.community_Id = c.community_Id LEFT JOIN stu s 
+			ON s.stu_Id = cp1.community_stuId
+			WHERE  cp.community_stuId = #{studentId} and cp1.community_peoFlag = 1
 	</select>
+	
+	<!-- 查询部门中所有的成员 -->
 	<select id="MyCommunityInfo" resultType="map">
-		select s.stu_Id,s.stu_Name from community_people c left join stu s
-		on c.community_stuId = s.stu_Id where c.community_Id = 1 and c.community_peoFlag = 1;
+			SELECT
+				s.stu_Id,
+				s.stu_Name
+			FROM
+				community_people c
+			LEFT JOIN stu s ON c.community_stuId = s.stu_Id
+			WHERE
+				c.community_Id = 1
+			AND c.community_peoFlag = 1;
 	</select>
-	<insert id="insertAppli" parameterType="cn.com.zzzy.entity.CommunityPeopleVo">
-		insert into community_people(community_Id,community_stuId) values(#{communityId},#{studentId})
-	</insert>
-	<!-- 申请建立社团 -->
-	<insert id="insert" parameterType="cn.com.zzzy.entity.Community">
-		insert into community(community.community_Name,community.community_perNum,community.community_appliDate,community.community_appliStu,community.community_appliReason,community.community_appliRespon,community.community_photo) 
-		values(#{communityName},#{communityPersonNum},now(),#{studentId},#{communityAppliReason},#{communityAppliRespon},#{communityPhoto})
+	
+	<!-- 申请加入社团 -->
+	<insert id="insertAppli" parameterType="cn.com.zzzy.entity.CommunityPeople">
+			INSERT INTO community_people (
+				community_Id,
+				community_stuId,
+				community_position,
+				community_peoFlag,
+				stu_messageId
+			)
+			VALUES
+				(
+					#{communityId},#{studentId},#{communityPosition},#{communityPeoFlag},#{stuMessageId})
+
 	</insert>
 	
-	<!-- 更新社团状态 -->
- 	<update id="updateCommunityFlag">
-			update  community  c  set c.community_flag = #{param.communityFlag} where c.community_Id =#{param.communityId}
-	</update>
+	<!-- 根据社团的ID查询出来社团发出的所有活动 -->
+	 <select id="communityActivity" parameterType="int" resultMap="activityResult" >
+			SELECT
+				a.activity_Id,
+				a.activity_Name,
+				a.activityPhoto
+			FROM
+				activity a
+			LEFT JOIN activity_type t ON a.activity_typeId = t.activity_typeId
+			LEFT JOIN community c ON t.community_Id = c.community_Id
+			WHERE
+				c.community_Id = #{id}
+	 </select>
+	 
+	 <!-- 查询申请加入社团的人员 -->
+	 <select id="selectFlag" resultMap="CommunityResult">
+			SELECT
+				c.community_Id,
+				c.community_Name,
+				s.stu_Id studentId,
+				s.stu_Name studentName,
+				cp.community_peoFlag,
+				cp.stu_messageId,
+				s.stu_Photo studentPhoto
+			FROM
+				community_people cp
+			LEFT JOIN community c ON cp.community_Id = c.community_Id
+			LEFT JOIN stu s ON cp.community_stuId = s.stu_Id
+			WHERE
+				c.community_Id = #{id} and cp.community_peoFlag = 0
+	 </select>
+	 
+	 <!-- 更新申请加入社团的人员（同意或者修改） -->
+	 <update id="updateCommunityPeopleFlag">
+	 	UPDATE community_people
+		SET community_peoFlag = #{communityPeoFlag} where community_Id = #{communityId} and community_stuId = #{studentId}
+	 </update>
+	
+	<!-- 查询学生是否申请加入过社团  -->
+	 <select id="queryStuApplyJoin"  resultMap="communityPeopleResult">
+	 		SELECT
+				community_PeopleId,
+				community_Id,
+				community_stuId,
+				community_position,
+				community_peoFlag
+			FROM
+				community_people
+			WHERE
+				community_stuId = #{studentId}
+	 </select>
+	
+	
 </mapper> 

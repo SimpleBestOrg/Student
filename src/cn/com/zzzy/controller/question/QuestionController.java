@@ -14,29 +14,26 @@ import cn.com.zzzy.entity.Question;
 import cn.com.zzzy.entity.QuestionAnswer;
 import cn.com.zzzy.entity.QuestionTuCao;
 import cn.com.zzzy.entity.QuestionType;
+import cn.com.zzzy.entity.Student;
+import cn.com.zzzy.entity.StudentMessage;
 import cn.com.zzzy.service.question.QuestionAnswerService;
+import cn.com.zzzy.service.question.QuestionService;
 import cn.com.zzzy.service.question.QuestionTuCaoService;
 import cn.com.zzzy.service.question.QuestionTypeService;
+import cn.com.zzzy.service.student.StudentMessageService;
 
 @Controller
 public class QuestionController {
 	@Autowired
-	private cn.com.zzzy.service.question.QuestionService questionService;
+	private QuestionService questionService;
 	@Autowired
 	private QuestionTypeService questionTypeService;
 	@Autowired
 	private QuestionTuCaoService questionTuCaoService;
 	@Autowired
 	private QuestionAnswerService questionAnswerService;
-	
-	@RequestMapping("answerselect")
-	@ResponseBody
-	public List<QuestionAnswer> answerselect(){
-		System.out.println("进来没");
-		List<QuestionAnswer> list=questionAnswerService.answerselect();
-		System.out.println("出来没有");
-		return list;
-	}
+	@Autowired
+	private StudentMessageService studentMessageService;
 	/**
 	 * 查询问题的详细信息
 	 * @param qid
@@ -54,6 +51,7 @@ public class QuestionController {
 		List<Question> groupquestion=questionService.groupquestion();
 		//查询(回复多的)热议
 		List<Question> comment=questionService.commentselect();
+		//实例化ModelAndView
 		ModelAndView mv=new ModelAndView();
 		mv.addObject("answerlist", answerlist);
 		mv.addObject("question", question);
@@ -71,7 +69,9 @@ public class QuestionController {
 	 */
 	@RequestMapping("selecall")
 	public ModelAndView selecall(){
+		//读取全部类型
 		List<QuestionType> questiontype=questionTypeService.selecall();
+		//实例化ModelAndView
 		ModelAndView mv=new ModelAndView();
 		mv.addObject("questiontype", questiontype);
 		mv.setViewName("front/question/addquestion.jsp");
@@ -82,12 +82,16 @@ public class QuestionController {
 	 * @return
 	 */
 	@RequestMapping("squestion")
-	public ModelAndView squestion(){
-		List<Question> quest= questionService.squestion();
+	public ModelAndView squestion(Integer typeid,String content){
+		//调用全部问题查询的service
+		List<Question> quest= questionService.squestion(typeid,content);
+		//调用查询全部类型
 		List<QuestionType> questiontype = questionTypeService.selecall();
+		//实例化ModelAndView
 		ModelAndView mv = new ModelAndView();
 		mv.addObject("quest",quest);
 		mv.addObject("questiontype", questiontype);
+		mv.addObject("typeId",typeid);
 		mv.setViewName("front/question/questionindex.jsp");
 		return mv;
 	}
@@ -99,31 +103,20 @@ public class QuestionController {
 	 * 
 	 */
 	@RequestMapping("stuquestion")
-	public ModelAndView stuquest(Integer sid){
-		List<Question> stuquelist=questionService.stuqueryList(1);
+	public ModelAndView stuquest(HttpSession session,Integer typeid,String content){
+		//调用我的问题查询的service
+		List<Question> stuquelist=questionService.stuqueryList((Integer)session.getAttribute("stuId"),typeid,content);
+		//调用查询全部类型
 		List<QuestionType> questiontype=questionTypeService.selecall();
+		//实例化ModelAndView
 		ModelAndView mv=new ModelAndView();
 		mv.addObject("stuquestion",stuquelist);
 		mv.addObject("questiontype",questiontype);
+		mv.addObject("typeId", typeid);
 		mv.setViewName("front/question/Myquestionindex.jsp");
 		return mv;
 	}
-	/**
-	 * 根据问题类型ID查询问题
-	 * @return
-	 */
-	@RequestMapping("typeQuestion")
-	public ModelAndView typeQuestion(Integer typeId){
-		List<QuestionType> questiontype=questionTypeService.selecall();
-		List<Question> questionlist=questionService.typeQuestion(typeId);
-		System.out.println("得到类型的ID="+typeId);
-		ModelAndView mv=new ModelAndView();
-		mv.addObject("questiontype",questiontype);
-		mv.addObject("questionlist", questionlist);
-		mv.addObject("typeId", typeId);
-		mv.setViewName("front/question/questionTypeindex.jsp");
-		return mv;
-	}
+	
 	/**
 	 * 更新 点赞
 	 * 没有返回值
@@ -132,12 +125,15 @@ public class QuestionController {
 	 * @return
 	 */
 	@RequestMapping("updateStep")
-	public void  updateStep(Integer questionId,HttpSession session){
-		questionTuCaoService.select(questionId);
+	public void  updateStep(Integer questionId,Integer studentId,HttpSession session){
+		//实例化对象
 		QuestionTuCao questionTuCao = new QuestionTuCao();
+		//录入得到的问题Id
 		questionTuCao.setQuestionId(questionId);
-		questionTuCao.setQuestionToCaoStuId(1);
+		//录入是谁吐槽的(只能是登陆的学生)
+		questionTuCao.setQuestionToCaoStuId((Integer)session.getAttribute("stuId"));
 		System.out.println("打印了吗"+questionTuCaoService.queryTuCaoStudent(questionTuCao));
+		//判断吐槽表有无点赞记录  0是无记录
 		if(questionTuCaoService.queryTuCaoStudent(questionTuCao)!=0){
 			//向外打印   已经点过赞 不能再点赞
 		}else if(questionTuCaoService.queryTuCaoStudent(questionTuCao)==0){
@@ -146,33 +142,31 @@ public class QuestionController {
 			questionService.updateStep(questionId);
 			//插入吐槽桥梁表
 			questionTuCaoService.insertTucao(questionTuCao);
+			//得到登陆学生的信息
+			 Student  loginStudent = (Student)session.getAttribute("loginStudent");
+			//如果是自己点赞自己的问题 那么 不用消息通知
+			if(loginStudent.getStudentId() != studentId){
+    			//如果点赞  给对方一个消息
+    			StudentMessage studentMessage = new StudentMessage();
+    			String messageContext = "<a href='/Student/queryStudentInfoById.action?stuId="+loginStudent.getStudentId()+"'><cite>"+loginStudent.getStudentName()+"</cite></a> 对您的问题点赞";
+    			studentMessage.setStudentId(studentId);
+    			studentMessage.setMessageContext(messageContext);
+    			studentMessageService.insertMessage(studentMessage);
+			}
 		}
 	}
 	
-	/**
-	 * 模糊查询
-	 * @param contenTitle
-	 * @return
-	 */
-	@RequestMapping("questiondim")
-	public ModelAndView questiondim(String contenTitle){
-		List<Question> likedim=questionService.questiondim(contenTitle);
-		List<QuestionType> questiontype=questionTypeService.selecall();
-		ModelAndView mv=new ModelAndView();
-		mv.addObject("likedim", likedim);
-		mv.addObject("questiontype", questiontype);
-		mv.setViewName("front/question/questionDim.jsp");
-		return mv;
-	}
 	/**
 	 * @param que
 	 * 增加问题
 	 */
 	@RequestMapping("insertQuestion")
-	public String insertQuestion(Question que){
+	public String insertQuestion(Question que,HttpSession session){
 		//添加学生编号
-		que.setStudentId(1);
+		que.setStudentId((Integer)session.getAttribute("stuId"));
+		//录入问题
 		questionService.insertQuestion(que);
+		//重定向跳转
 		return "redirect:squestion.action";
 	}
 	/**
@@ -181,8 +175,27 @@ public class QuestionController {
 	 * @return
 	 */
 	@RequestMapping("insertanswer")
-	public String insertanswer(QuestionAnswer answer){
-		answer.setAnswerStudentId(1);
+	public String insertanswer(QuestionAnswer answer,Integer huiFuStudent,Integer huiFuType,HttpSession session){
+	    System.out.println("回复的学生ID:"+huiFuStudent);
+	    System.out.println("回复类型:"+huiFuType);
+        //得到登陆者的信息
+        Student  loginStudent = (Student)session.getAttribute("loginStudent");
+	    
+        
+	    StudentMessage studentMessage = new StudentMessage();
+	    String messageContext = null;
+	    //主回复(评论的学生如果是该问题的发表学生)
+	    if(huiFuType==0  &&  huiFuStudent != loginStudent.getStudentId()){
+	        messageContext = "<a href='/Student/queryStudentInfoById.action?stuId="+loginStudent.getStudentId()+"'><cite>"+loginStudent.getStudentName()+"</cite></a>评论了您的问题&nbsp;&nbsp";
+	    }else if(huiFuType==  1  &&  huiFuStudent != loginStudent.getStudentId()){
+	        messageContext = "<a href='/Student/queryStudentInfoById.action?stuId="+loginStudent.getStudentId()+"'><cite>"+loginStudent.getStudentName()+"</cite></a>回复了您的评论&nbsp;&nbsp";
+	    }
+	    studentMessage.setMessageContext(messageContext);
+	    studentMessage.setStudentId(huiFuStudent);
+	    studentMessageService.insertMessage(studentMessage);
+		//得到添加问题回复的Id
+		answer.setAnswerStudentId((Integer)session.getAttribute("stuId"));
+		//添加回复数据
 		questionAnswerService.insertanswer(answer);
 		System.out.println("得到问题ID"+answer.getAnswerQuestionId());
 		Integer qid=answer.getAnswerQuestionId();

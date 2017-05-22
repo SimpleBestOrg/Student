@@ -1,6 +1,5 @@
 package cn.com.zzzy.controller.student;
 
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.request;
 
 import java.io.File;
 import java.io.IOException;
@@ -21,7 +20,6 @@ import cn.com.zzzy.entity.AuthorityAccount;
 import cn.com.zzzy.entity.Student;
 import cn.com.zzzy.entity.StudentFriend;
 import cn.com.zzzy.service.authority.AuthorityAccountService;
-import cn.com.zzzy.service.authority.AuthorityMenuService;
 import cn.com.zzzy.service.student.StudentFriendService;
 import cn.com.zzzy.service.student.StudentService;
 import cn.com.zzzy.util.PageData;
@@ -127,7 +125,7 @@ public class StudentController {
         String originalFilename = photoFile.getOriginalFilename();
         if (photoFile != null && originalFilename != null && originalFilename.length() > 0) {
             // 存储图片的物理路径
-            String pic_path = "E:\\develop\\";
+            String pic_path = "D:\\develop\\";
             // 新的图片名称
             String newFileName = UUID.randomUUID() + originalFilename.substring(originalFilename.lastIndexOf("."));
             // 新图片

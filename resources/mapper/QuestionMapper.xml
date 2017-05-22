@@ -36,8 +36,8 @@
 		<result column="stu_BirthPlace" property="studentName"></result>
 		<result column="questionStuPhoto" property="studentPhoto"></result>
 	</resultMap>
-	<!-- 根据学生id查询问题 -->
-	<select id="stuquerylist" resultType="Map" >
+	<!-- 根据学生id查询问题 如果Id为空查询全部-->
+	<select id="stuquerylist" parameterType="cn.com.zzzy.entity.Student" resultType="Map" >
 		SELECT
 			*, count(ques_answer_Id) AS answerCount
 		FROM
@@ -45,7 +45,21 @@
 		RIGHT JOIN ques Question ON Student.stu_Id = Question.question_StudentId
 		LEFT JOIN ques_type QuestionType ON Question.question_typeId = QuestionType.que_typeId
 		LEFT JOIN ques_answer qa ON qa.ques_answer_questionId = Question.question_Id
-		 where Student.stu_Id=#{sid}
+		<!-- 如果没传进来学生Id就查询全部问题 -->
+		<where>
+			<if test="sid!=null">
+				Student.stu_Id=#{sid} 
+			</if>
+			<!-- 根据类型查询 -->
+			<if test="typeid!=null">
+				and QuestionType.que_typeId =#{typeid}
+			</if>
+			<!-- 根据关键字模糊查询 -->
+			<if test="content!=null">
+				and (Question.question_Title like concat(concat('%',#{content}),'%') 
+				or Question.question_Content like concat(concat('%',#{content}),'%'))
+			</if>
+		</where>
 		GROUP BY
 			student.stu_Id,
 			Student.stu_Name,
@@ -91,10 +105,21 @@
 		SELECT
 			*, count(ques_answer_Id) AS answerCount
 		FROM
-			stu Student
+			stu Student 
 		RIGHT JOIN ques Question ON Student.stu_Id = Question.question_StudentId
 		LEFT JOIN ques_type QuestionType ON Question.question_typeId = QuestionType.que_typeId
 		LEFT JOIN ques_answer qa ON qa.ques_answer_questionId = Question.question_Id
+		<where>
+			<!-- 根据类型查询 -->
+			<if test="typeid!=null">
+				QuestionType.que_typeId = #{typeid}
+			</if>
+			<!-- 根据关键字模糊查询 -->
+			<if test="content!=null">
+				Question.question_Title like concat(concat('%',#{content}),'%') 
+				or Question.question_Content like concat(concat('%',#{content}),'%')
+			</if>
+		</where>
 		GROUP BY
 			student.stu_Id,
 			Student.stu_Name,
@@ -106,7 +131,14 @@
 	</select>
 	<!-- 热帖查询 -->  
 	<select id="groupquestion" resultType="Map">
-		SELECT question_Id,question_Title,question_step FROM ques group by question_step DESC
+		SELECT
+			question_Id,
+			question_Title,
+			question_step
+		FROM
+			ques
+		ORDER BY
+			question_step DESC;
 	</select>
 	<!-- 热议查询 -->
 	<select id="commentselect" resultType="Map">
@@ -117,52 +149,6 @@
 		RIGHT JOIN ques q ON q.question_Id = qa.ques_answer_questionId
 		GROUP BY
 			ques_answer_questionId ASC
-	</select>
-	<!-- 根据问题类型ID查询问题 -->
-	<select id="typeQuestion" resultType="Map">
-		SELECT
-			*, count(ques_answer_Id) AS answerCount
-		FROM
-			stu Student
-		RIGHT JOIN ques Question ON Student.stu_Id = Question.question_StudentId
-		LEFT JOIN ques_type QuestionType ON Question.question_typeId = QuestionType.que_typeId
-		LEFT JOIN ques_answer qa ON qa.ques_answer_questionId = Question.question_Id
-		 where QuestionType.que_typeId =#{typeid}
-		GROUP BY
-			student.stu_Id,
-			Student.stu_Name,
-			Question.question_Id,
-			Question.question_Content,
-			Question.question_Title,
-			Question.question_step,
-			QuestionType.que_typeName
-	</select>
-	<!-- 模糊查询(根据内容,标题) -->
-	<select id="questiondim" resultType="Map">
-		SELECT
-			*, count(ques_answer_Id) AS answerCount
-		FROM
-			stu Student
-		RIGHT JOIN ques Question ON Student.stu_Id = Question.question_StudentId
-		LEFT JOIN ques_type QuestionType ON Question.question_typeId = QuestionType.que_typeId
-		LEFT JOIN ques_answer qa ON qa.ques_answer_questionId = Question.question_Id
-		<where>
-			<if test="1==1">
-				Question.question_Title like concat(concat('%',#{contenTitle}),'%')
-			</if>
-			<if test="1==1">
-				or Question.question_Content LIKE concat(concat('%',#{contenTitle}),'%')
-			</if>
-		</where>
-			GROUP BY
-				student.stu_Id,
-				Student.stu_Name,
-				Question.question_Id,
-				Question.question_Content,
-				Question.question_Title,
-				Question.question_step,
-				QuestionType.que_typeName
-		
 	</select>
 	<!-- 更新(赞+1) -->
 	<update id="updateStep" parameterType="cn.com.zzzy.entity.Question">

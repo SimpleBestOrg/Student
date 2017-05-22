@@ -38,6 +38,18 @@ public class ActivityController {
 
     @Autowired
     private StudentMessageService studentMessageService;
+    
+
+    /**
+     * 查询所有活动
+     * @return
+     */
+    @RequestMapping("queryAllActivity")
+    public List<Activity>  queryAllActivity(){
+        return  activityService.queryActivityByCondition(null , null);
+    }
+    
+    
     /**
      * 根据条件分页查询所有的活动
      * @param param   分页查询
@@ -57,6 +69,12 @@ public class ActivityController {
         return list;
     }
 
+    /**
+     * 根据条件查询活动的
+     * @param param
+     * @param activityQueryVo
+     * @return
+     */
     @RequestMapping("queryActivityCountByCondition")
     @ResponseBody
     public int queryActivityCountByCondition(PageParam param,ActivityQueryVo activityQueryVo){
@@ -129,20 +147,8 @@ public class ActivityController {
      * @return
      */
     @RequestMapping(value = "/insertApplyActivity")
-    public String insertApplyActivity(ActivityQueryVo activityQueryVo,String imgName) {
-        System.out.println(activityQueryVo.getActivityInfo().getActivityName());
-        System.out.println(activityQueryVo.getActivityInfo().getActivityBeginTime());
-        System.out.println(activityQueryVo.getActivityInfo().getActivityEndTime());
-        System.out.println(activityQueryVo.getActivityInfo().getActivityAppliReason());
-        System.out.println(activityQueryVo.getActivityInfo().getActivityTypeId());
-        System.out.println(activityQueryVo.getActivityInfo().getStudentId());
-        String msg = "申请失败";
-        try {
-            activityService.insertActivity(activityQueryVo);
-            msg = "申请成功";
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+    public String insertApplyActivity(ActivityQueryVo activityQueryVo,String imgName,HttpSession session) {
+        activityService.insertActivity(activityQueryVo);
         return "front/activity/activityindex.jsp";
     }
     

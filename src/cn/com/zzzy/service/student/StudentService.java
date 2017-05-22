@@ -104,4 +104,12 @@ public class StudentService {
     public void updateStudentSign(Integer stuId,String studentSign){
         studentMapper.updateStudentSign(stuId, studentSign);    
     }
+    
+    /**
+     * 更新学生加入的社团信息
+     * @param student
+     */
+    public  void updateStudentCommunity(Student student){
+        studentMapper.updateStudentCommunity(student);
+    }
 }

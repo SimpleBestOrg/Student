@@ -15,6 +15,7 @@ public class ActivityStudent {
     private Integer stuActivityFlag;// 学生申请加入活动的状态
     private Activity  activity;
     private Student  students;
+    private Integer  stuMessageId;//用于在活动管理页面同意或者拒绝时  更新消息
     
     private String activityName;  //辅助需要
 
@@ -82,6 +83,14 @@ public class ActivityStudent {
 
     public void setActivityName(String activityName) {
         this.activityName = activityName;
+    }
+
+    public Integer getStuMessageId() {
+        return stuMessageId;
+    }
+
+    public void setStuMessageId(Integer stuMessageId) {
+        this.stuMessageId = stuMessageId;
     }
 
 

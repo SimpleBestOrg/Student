@@ -34,7 +34,12 @@ public class talkingToCaoController {
           System.out.println(talkingToCao.getStudentId());
           //如果是自己评论自己  那么不用消息通知
           if(talkingToCao.getStudentId() != loginStudent.getStudentId()){
-              String messageContext = "<a href='/Student/queryStudentInfoById.action?stuId="+loginStudent.getStudentId()+"'><cite>"+loginStudent.getStudentName()+"</cite></a>评论了您的说说";
+              String messageContext  = null;
+              if(talkingToCao.getTalkingToCaoParentId()==0){
+                       messageContext = "<a href='/Student/queryStudentInfoById.action?stuId="+loginStudent.getStudentId()+"'><cite>"+loginStudent.getStudentName()+"</cite></a>评论了您的说说";    
+              }else {
+                       messageContext = "<a href='/Student/queryStudentInfoById.action?stuId="+loginStudent.getStudentId()+"'><cite>"+loginStudent.getStudentName()+"</cite></a>回复了你";
+              }
               StudentMessage studentMessage = new StudentMessage();
               studentMessage.setStudentId(talkingToCao.getStudentId());
               studentMessage.setMessageContext(messageContext);

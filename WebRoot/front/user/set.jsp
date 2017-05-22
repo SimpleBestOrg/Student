@@ -45,14 +45,14 @@
       <%if(session.getAttribute("loginStudent")!=null){ 
             Student student  = (Student)session.getAttribute("loginStudent");
       %>
-          <a class="avatar" href="user/index.html">
+          <a class="avatar" href="/Student/queryStudentInfoById.action">
             <img src="/pic/<%=student.getStudentPhoto()%>">
             <cite><%=student.getStudentName()%></cite>
             <i><%=student.getStudentClasses().getClassName()%></i>
           </a>
           <div class="nav">
             <a href="/Student/front/user/set.jsp"><i class="iconfont icon-shezhi"></i>设置</a>
-            <a href="/user/logout/"><i class="iconfont icon-tuichu" style="top: 0; font-size: 22px;"></i>退了</a>
+            <a href="/Student/logout.action"><i class="iconfont icon-tuichu" style="top: 0; font-size: 22px;"></i>退了</a>
           </div>
       <% } %>
     </div>
@@ -94,7 +94,7 @@
       </ul>
       <div class="layui-tab-content" style="padding: 20px 0;">
         <div class="layui-form layui-form-pane layui-tab-item layui-show">
-          <form action="updateStudentSign.action" method="post">
+          <form action="/Student/updateStudentSign.action" method="post">
             <div class="layui-form-item layui-form-text">
               <label for="L_sign" class="layui-form-label">签名</label>
               <div class="layui-input-block">
@@ -155,6 +155,12 @@
 <script src="/Student/front/res/layui/layui.js"></script>
 <script src="/Student/js/jquery.min.js"></script>
 <script>
+$(function(){
+	var stuId = <%=session.getAttribute("stuId")%>;
+	if(stuId==null){
+		window.location="/Student/login.jsp?loginInfo="+1;
+	}
+})
 layui.cache.page = 'user';
 layui.cache.user = {
   username: '游客'
@@ -250,7 +256,6 @@ function verifyNewPwd(){
  * 点击修改密码验证
  */
 function updatePwdForm(){
-	alert("你好");
 		if( verifyNowPwd && verifyNewPwd()  && verifyRePwd()){
 			$("#udpatePwdForm").submit();
 		}

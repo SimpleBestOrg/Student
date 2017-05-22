@@ -3,12 +3,20 @@
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="cn.com.zzzy.basemapper.talkingmapper.TalkingStudentThumMapper">
 		
+		<!-- 查询该学生是否赞过该条说说 -->
 		<select id="queryStudentCount"   resultType="Integer">
 			select count(*) from talking_stu_thum  where talking_Id = #{obj.talkingId}  and stu_Id = #{obj.studentId}
 		</select>
 		
+		<!-- 学生赞过该说说之后   录入数据库学生ID和说说ID 用于以后 学生赞说说时 判断学生是否赞过了  该条说说-->
 		<insert id="saveTalkingStudent">
 			insert into talking_stu_thum(talking_Id,stu_Id) values(#{obj.talkingId},#{obj.studentId})
 		</insert>
+		
+		
+		<!-- 删除赞过该说说的学生 -->
+		<delete id="deleteTalkingThumStu">
+			delete  from  talking_stu_thum where talking_Id = #{talkingId}
+		</delete>
 		
 </mapper>

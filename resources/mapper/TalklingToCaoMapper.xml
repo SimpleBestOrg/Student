@@ -16,8 +16,16 @@
 						<result column="stu_Photo" property="studentPhoto"/>
 			</resultMap>
 			
+			<!-- 添加评论 -->
 			<insert  id="insertTalkingToCao">
 					insert into talking_tocao(talking_id,talking_tocao_Context,talking_tocao_parentId,talking_tocao_studentId,talking_tocao_Time) values (#{talkingId},#{talkingToCaoContext},#{talkingToCaoParentId},#{talkingToCaoStudentID},now())
 			</insert>
+			
+			<!--根据说说的ID 删除说说评论-->
+			<delete  id="delTalkTuCaoByTalkingId">
+					delete  from  talking_tocao where talking_id =  #{talkingId}
+			</delete>
+			
+			
 			
 </mapper>

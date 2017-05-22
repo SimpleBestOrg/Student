@@ -83,4 +83,23 @@ public class TalkingService {
     public void  insertTalkingPhoto(TalkingPhoto talkingPhoto){
          talkingMapper.insertTalkingPhoto(talkingPhoto);
     }
+    
+    /**
+     * 根据说说ID删除说说
+     * @param talkingId
+     */
+    public void  deleteTalkingByTalkingId(Integer talkingId){
+         talkingMapper.deleteTalkingByTalkingId(talkingId);
+    }
+    
+    /**
+     * 根据说说ID删除说说的照片
+     * @param talkingId
+     */
+    public void  deleteTalkingPhotoByTalkingId(Integer talkingId){
+        talkingMapper.deleteTalkingPhotoByTalkingId(talkingId);
+    }
+    
+    
+    
 }

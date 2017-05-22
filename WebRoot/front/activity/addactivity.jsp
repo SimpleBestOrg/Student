@@ -4,6 +4,7 @@
   String path = request.getContextPath();
   request.setAttribute("path", path);
 %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <!DOCTYPE html>
 <html>
 <head>
@@ -40,15 +41,14 @@
       </a>  
     </div>
     <div class="nav-user">      
-      <a class="avatar" >
+       <a class="avatar" href="/Student/queryStudentInfoById.action">
         <img src="/pic/${loginStudent.studentPhoto}">
         <cite>${loginStudent.studentName}</cite>
         <i>${loginStudent.studentClasses.className}</i>
-         
       </a>
       <div class="nav">
         <a href="/Student/front/user/set.jsp"><i class="iconfont icon-shezhi"></i>设置</a>
-        <a href=""><i class="iconfont icon-tuichu" style="top: 0; font-size: 22px;"></i>退了</a>
+        <a href="/Student/logout.action"><i class="iconfont icon-tuichu" style="top: 0; font-size: 22px;"></i>退了</a>
       </div>
     </div>
   </div>
@@ -61,7 +61,7 @@
     <!--  <div class="fly-none">并无权限</div>--> 
 
            <form class="layui-form" style="display:inline-block;" action="/Student/insertApplyActivity.action"  method="post"  >
-              <input type="hidden" value="3"  name="activityInfo.studentId"/>
+              <input type="hidden" value=""  id="studentId" name="activityInfo.studentId"/>
               <div class="layui-form-item ptop">
                     <label class="layui-form-label" style="width:200px">活动名称</label>
                     <div class="layui-input-block">
@@ -73,8 +73,9 @@
                   <label class="layui-form-label" style="width:200px">活动类型</label>
                      <div class="layui-input-inline">
                           <select  style="width:200px;height:30px"   name="activityInfo.activityTypeId">
-                            <option value="1" >个人活动</option>
-                            <option value="2" >社团活动</option>
+                            <c:forEach items="${activiyType}" var="type">
+                                    <option value="${type.activityTypeId}">${type.activityTypeName}</option>
+                            </c:forEach>
                           </select>
                      </div>
                 </div>
@@ -123,6 +124,13 @@
 <script src="/Student/front/res/layui/layui.js"></script>
 <script src="/Student/js/jquery-1.8.3.js"></script>
 <script>
+		$(function(){
+        	var stuId = <%=session.getAttribute("stuId")%>;
+        	if(stuId==null){
+        		window.location="/Student/login.jsp?loginInfo="+1;
+        	}
+        	$("#studentId").val(stuId);
+		})
 		   //layui模块
             layui.use(['form','laydate','upload'],function(){
                  var form = layui.form()
@@ -169,7 +177,7 @@
                   }
                   form.verify({
                 	  activityName:function(value){
-                		  if(value.length<3 ||  value.length>5){
+                		  if(value.length<5 ||  value.length>20){
                 			  return "活动名称至少三个字符之多五个字符";
                 		  }
                 	  },

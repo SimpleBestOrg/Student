@@ -17,7 +17,9 @@
 			<collection property="activityStudents" ofType="cn.com.zzzy.entity.ActivityStudent">
 						<id column="activity_studentId"  property="activityStudentsId"></id>
 						<result column="stu_activityFlag" property="stuActivityFlag"></result>
+						<result column="stu_messageId" property="stuMessageId"></result>
 						<association column="stus_Id"  property="students" resultMap="studentsResult" javaType="cn.com.zzzy.entity.Student"/>
+						
 			</collection>
 			<collection property="activityRecords" ofType="cn.com.zzzy.entity.ActivityRecord"  resultMap="activityRecordResult" />
 		</resultMap>

@@ -1,0 +1,29 @@
+.clear{
+ 	 	clear:both;
+	}
+	.style-button{
+		margin-top:220px;
+		margin-left:70px;
+		}
+	#communityInsert{
+		display: none;
+	}
+	.front{
+		border:1px solid red;
+		width:90%;
+		height:auto;
+		overflow: hidden;
+	}
+	.front-community{
+		border:1px solid red;
+		width:230px;
+		height:250px;
+		float:left;
+		margin-left:80px;
+		margin-bottom: 30px;
+	}
+	.front-photo{
+		border:1px solid black;
+		widht:198px;
+		height:200px;
+	}

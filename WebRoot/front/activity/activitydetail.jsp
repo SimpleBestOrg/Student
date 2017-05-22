@@ -8,7 +8,7 @@
 <html>
 <head>
   <meta charset="utf-8">
-  <title>活动首页</title>
+  <title>活动详情</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
   <meta name="keywords" content="fly,layui,前端社区">
   <meta name="description" content="Fly社区是模块化前端UI框架Layui的官网社区，致力于为web开发提供强劲动力">
@@ -21,8 +21,7 @@
 <body>
 
 <div class="header">
-  <div class="main">
-    <a class="logo" href="/" title="Fly">Fly社区</a>
+   <div class="main">
      <div class="nav" style="margin-left:-50px;">
       <a  href="${path}/squestion.action">
         <i class="iconfont icon-wenda"></i>问答
@@ -43,15 +42,15 @@
     </div>
     
     <div class="nav-user">      
-      <a class="avatar" >
+       <a class="avatar" href="/Student/queryStudentInfoById.action">
         <img src="/pic/${loginStudent.studentPhoto}">
         <cite>${loginStudent.studentName}</cite>
         <i>${loginStudent.studentClasses.className}</i>
          
       </a>
       <div class="nav">
-        <a href="/Student/front/user/set.jsp"><i class="iconfont icon-shezhi"></i>设置</a>
-        <a href=""><i class="iconfont icon-tuichu" style="top: 0; font-size: 22px;"></i>退了</a>
+        <a href="/Student/selectStudentSign.action"><i class="iconfont icon-shezhi"></i>设置</a>
+        <a href="/Student/logout.action"><i class="iconfont icon-tuichu" style="top: 0; font-size: 22px;"></i>退了</a>
       </div>
     </div>
   </div>
@@ -102,6 +101,10 @@
 <script src="/Student/js/jquery.min.js"></script>
       <script type="text/javascript">
                 $(function(){
+                	var stuId = <%=session.getAttribute("stuId")%>;
+                	if(stuId==null){
+                		window.location="/Student/login.jsp?loginInfo="+1;
+                	}
               	  layui.use(['layer', 'laytpl', 'form', 'upload', 'util','upload'], function(){
             		  var $ = layui.jquery
             		  ,layer = layui.layer
@@ -313,7 +316,7 @@
 
 														
                                   				div += "</fieldset>";
-														div +="</div>";	
+												div +="</div>";	
                                   			}
                     	}else{
                     		//我的活动
@@ -368,6 +371,10 @@
                             div += "</span>";
                        	  div +="</div>";      
                        	  div +="<div style='border:1px solid ;width:80%;margin:0 auto;margin-top:5px;'>";
+                 		 div +="<fieldset class='layui-elem-field' style='margin-top:25px;'>";
+                     		 	div+="<legend>申请原因</legend>";
+                     		 	div+="<div class='layui-field-box'>"+data.activityAppliReason+"</div>";
+                     		 div +="</fieldset>";
                 			//判断活动是什么类型活动 如果是社团活动 那么则显示社团的一些信息
                         	if(data.activityType.activityTypeId!=1){
                      		 div +="<fieldset class='layui-elem-field' style='margin-top:25px;'>";
@@ -423,9 +430,9 @@
                                      	div += "<div class='layui-field-box'>";
                                      	  $.each(data.activityStudents,function(i,as){
                                      		if(as.stuActivityFlag == 1){  
-                                           	div += "<div class='layui-inline' style='float:left'><img src='/pic/"+as.students.studentPhoto+"' class='ayui-circle'>";
+                                           	div += "<a href='/Student/queryStudentInfoById.action?stuId="+as.students.studentId+"'><div class='layui-inline' style='float:left'><img src='/pic/"+as.students.studentPhoto+"' class='ayui-circle'>";
                                            	div += "<p style='margin-top:5px;margin-left:90px;'>"+as.students.studentName+"</p>";
-                                         	div += "</div>";
+                                         	div += "</div></a>";
                                      		}
                                      	  })
                                      	 div += "</div></fieldset>"; 
@@ -435,11 +442,11 @@
                                          	div += "<legend>待审批人员</legend>";
                                          	  $.each(data.activityStudents,function(i,as){
                                          		if(as.stuActivityFlag == 0){  
-                                               	div += "<div class='layui-field-box'><div class='layui-inline'><img src='/pic/"+as.students.studentPhoto+"' class='ayui-circle'>";
+                                               	div += "<a href='/Student/queryStudentInfoById.action?stuId="+p.students.studentId+"'><div class='layui-field-box'><div class='layui-inline'><img src='/pic/"+as.students.studentPhoto+"' class='ayui-circle'>";
                                                	div += "<p style='margin-top:5px;margin-left:90px;'>"+as.students.studentName+"</p>";
-                                               	div += "<button style='margin-left:35px;' onclick='agreeOrrefuse("+as.students.studentId+","+data.activityId+",1)' class='layui-btn layui-btn-normal  layui-btn-small'>同意</button>";
-                                                div += "<button style='margin-left:30px;' onclick='agreeOrrefuse("+as.students.studentId+","+data.activityId+",2)' class='layui-btn layui-btn-normal  layui-btn-small'>拒绝</button>";
-                                             	div += "</div></div>";
+                                               	div += "<button style='margin-left:35px;' onclick='agreeOrrefuse("+as.students.studentId+","+data.activityId+",1,"+as.stuMessageId+")' class='layui-btn layui-btn-normal  layui-btn-small'>同意</button>";
+                                                div += "<button style='margin-left:30px;' onclick='agreeOrrefuse("+as.students.studentId+","+data.activityId+",2,"+as.stuMessageId+")' class='layui-btn layui-btn-normal  layui-btn-small'>拒绝</button>";
+                                             	div += "</div></div></a>";
                                          		}
                                          	  })   
                                          	 div += "</fieldset>"; 
@@ -638,8 +645,8 @@
                 		   alert("活动管理人:"+stuId);
                 		   var activityName = $("#activityName").html();
                 		   $.post("/Student/insertStudentActivity.action",{"activityId":activityId,"activityApplyStuId":stuId,"activityName":activityName},function(data){
-                			     alert(data);
-                		   },'json')
+                		   },'json');
+							window.location.reload();                		   
                 	   } 
                 	  
                 	  //点击记录活动 页面滚最底部
@@ -649,12 +656,13 @@
                       }
                 	  
                 	  //点击同意或者拒绝方法
-                	  function  agreeOrrefuse(stuId,activityId,flag){
-                		  		layer.msg("学生ID:"+stuId+"活动ID:"+activityId);
+                	  function  agreeOrrefuse(stuId,activityId,flag,messageId){
+                		  		layer.msg("学生ID:"+stuId+"活动ID:"+activityId+"消息ID:"+messageId);
                      		    var activityName = $("#activityName").html();                		  		
-								$.post("/Student/updateStudentActivityFlag.action",{"studentId":stuId,"activityId":activityId,"stuActivityFlag":flag,"activityName":activityName},function(data){
+								$.post("/Student/updateStudentActivityFlag.action",{"studentId":stuId,"activityId":activityId,"stuActivityFlag":flag,"activityName":activityName,"stuMessageId":messageId},function(data){
 										
 								},'json')
+								window.location.reload();
                 	  }
                 	  
                   	//发起活动

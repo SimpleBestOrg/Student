@@ -138,6 +138,13 @@
 				update   talking  set talking.talking_thumCount = talking.talking_thumCount+1  where talking_Id = #{talkingId}
 		</update>
 		
-		
+		<!-- 根据说说ID 删除说说 -->
+		<delete id="deleteTalkingByTalkingId">
+				delete from talking where talking_Id = #{talkingId}
+		</delete>
+		<!-- 根据说说ID 删除说说的照片 -->
+		<delete id="deleteTalkingPhotoByTalkingId">
+				delete from  talking_photos where  talkingId = #{talkingId}
+		</delete>
 		
 </mapper>

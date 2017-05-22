@@ -7,22 +7,20 @@ import org.springframework.stereotype.Service;
 
 import cn.com.zzzy.basemapper.questionmapper.QuestionMapper;
 import cn.com.zzzy.entity.Question;
+import cn.com.zzzy.entity.Student;
 
 @Service
 public class QuestionService {
 	@Autowired
 	private QuestionMapper questionMapper;  
-	@Autowired
-	private QuestionAnswerService questionAnswerService;
-	@Autowired
-	private QuestionTuCaoService questionTuCaoService;
+
 	/**
 	 * 学生id查问题
 	 * @param sid
 	 * @return
 	 */
-	public List<Question> stuqueryList(Integer sid){
-		List<Question> list=questionMapper.stuquerylist(sid);
+	public List<Question> stuqueryList(Integer sid,Integer typeid,String content){
+		List<Question> list=questionMapper.stuquerylist(sid,typeid,content);
 		return list;
 	}
 	/**
@@ -37,8 +35,8 @@ public class QuestionService {
 	 * 查询所有问题 
 	 * @return
 	 */
-	public List<Question> squestion(){
-		List<Question> list = questionMapper.squestion();
+	public List<Question> squestion(Integer typeid,String content){
+		List<Question> list = questionMapper.squestion(typeid,content);
 		return list;
 	}
 	/**
@@ -65,39 +63,11 @@ public class QuestionService {
 		return list;
 	}
 	/**
-	 * 根据问题类别ID查询问题
-	 *------------ @return
-	 */
-	public List<Question> typeQuestion(Integer typeid){
-		List<Question> list=questionMapper.typeQuestion(typeid);
-		return list;
-	}
-	/**
-	 * 模糊查询(内容 标题)
-	 * @param contenTitle
-	 * @return
-	 */
-	public List<Question> questiondim(String contenTitle){
-		List<Question> list=questionMapper.questiondim(contenTitle);
-		return list;
-	}
-	/**
 	 * 更新 赞+1
 	 * @param step
 	 * @param questionId
 	 */
 	public void updateStep(Integer questionId){
 		questionMapper.updateStep(questionId);
-	}
-	/*
-	 * 删除问题
-	 * 调用答案查询有数据删除答案
-	 * 调用吐槽查询有数据删除吐槽
-	 * */
-	public void delete(Integer deid){
-		questionAnswerService.select(deid);
-		questionTuCaoService.select(deid);
-		questionMapper.delete(deid);
-		
 	}
 }

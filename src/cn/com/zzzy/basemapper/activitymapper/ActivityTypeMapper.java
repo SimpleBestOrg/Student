@@ -1,6 +1,9 @@
 package cn.com.zzzy.basemapper.activitymapper;
 
+import java.util.List;
+
 import cn.com.zzzy.basemapper.BaseMapper;
+import cn.com.zzzy.entity.ActivityType;
 
 
 /**
@@ -8,6 +11,12 @@ import cn.com.zzzy.basemapper.BaseMapper;
  * @author Admin
  *
  */
-public interface ActivityTypeMapper extends BaseMapper{
-
+public interface ActivityTypeMapper {
+        
+    
+    /**
+     * 查找所有的活动类型
+     * @return
+     */
+    List<ActivityType>  queryAllActivityType(Integer studentId);
 }

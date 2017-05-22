@@ -57,9 +57,7 @@ public class StudentFriendController {
         ModelAndView mav = new ModelAndView();
         AuthorityAccount account = (AuthorityAccount) request.getSession().getAttribute("Account");
         List<Student> listFriendInfo = studentFriendService.queryFriendInfo(param, account.getStudentId());
-        for(int i = 0;i<listFriendInfo.size();i++){
-                System.out.println(listFriendInfo.get(i));
-        }
+        System.out.println("朋友长度"+listFriendInfo.size());
         mav.addObject("listFriendInfo", listFriendInfo);
         mav.setViewName("/front/user/studentFriend.jsp");
         return mav;

@@ -1,5 +1,9 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+<%
+  String path = request.getContextPath();
+  request.setAttribute("path", path);
+%>    
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <!DOCTYPE html>
 <html>
@@ -16,30 +20,36 @@
 
 <div class="header">
   <div class="main">
-    <a class="logo" href="/" title="Fly">Fly社区</a>
-    <div class="nav">
-      <a class="nav-this" href="jie/index.html">
+     <div class="nav" style="margin-left:-50px;">
+      <a  href="${path}/squestion.action">
         <i class="iconfont icon-wenda"></i>问答
       </a>
-      <a href="#" target="_blank">
-        <i class="layui-icon">&#xe617;</i>社团
+      <a href="${path}/getAllCommunity.action">
+        <i  class="layui-icon">&#xe600;</i>社团
       </a>
-      <a href="" target="_blank">
-        <i class="layui-icon">&#xe633;</i>活动 
+      <a href="${path}/front/activity/activityindex.jsp">
+        <i  class="layui-icon">&#xe62e;</i>活动 
       </a>
-            <a href="" target="_blank">
-        <i class="layui-icon">&#xe611;</i>说说
-      </a>
+      <a  href="${path}/front/talking/talkingindex.jsp">
+        <i  class="layui-icon">&#xe606;</i>说说
+      </a >
+      <a href="${path}/queryFriendsInfo.action">
+        <i  class="layui-icon">&#xe613;</i>朋友
+            
+      </a>  
     </div>
     
-    <div class="nav-user">
-      <!-- 未登入状态 -->
-      <a class="unlogin" href="user/login.html"><i class="iconfont icon-touxiang"></i></a>
-      <span><a href="user/login.html">登入</a><a href="user/reg.html">注册</a></span>
-      <p class="out-login">
-        <a href="" onclick="layer.msg('正在通过QQ登入', {icon:16, shade: 0.1, time:0})" class="iconfont icon-qq" title="QQ登入"></a>
-        <a href="" onclick="layer.msg('正在通过微博登入', {icon:16, shade: 0.1, time:0})" class="iconfont icon-weibo" title="微博登入"></a>
-      </p>   
+    <div class="nav-user">      
+       <a class="avatar" href="/Student/queryStudentInfoById.action">
+        <img src="/pic/${loginStudent.studentPhoto}">
+        <cite>${loginStudent.studentName}</cite>
+        <i>${loginStudent.studentClasses.className}</i>
+         
+      </a>
+      <div class="nav">
+        <a href="selectStudentSign.action"><i class="iconfont icon-shezhi"></i>设置</a>
+        <a href="/Student/logout.action"><i class="iconfont icon-tuichu" style="top: 0; font-size: 22px;"></i>退了</a>
+      </div>
     </div>
   </div>
 </div>
@@ -48,19 +58,19 @@
     <div class="content" style="margin-right:0">
       <div class="fly-tab">
         <span>
-          <a href="" class="tab-this">全部</a>
+          <a href="" class="tab-this">所有全部</a>
           <a href="stuquestion.action">我的问题</a>
-           <a href="typeQuestion.action?typeId=1" style="width:100px;">
-	          <select lay-verify="required" name="quesetionTypeId.quesetionTypeId" id="quesetionTypeId" style="display:inline-block;height:36px;width:100px;border-radius: 5px;border-color: initial;color: initial; border-color: rgb(169, 169, 169); white-space: pre;">
-	          <c:forEach items="${questiontype}" var="questiontype">
-	          	<option value="${questiontype.quesetionTypeId}">${questiontype.quesetionTypeName}</option>
-	          </c:forEach>
-	          </select>
-          </a>
+           <a style="width:100px;">
+          <select onchange="questiontype()" lay-verify="required" name="quesetionTypeId.quesetionTypeId" id="quesetionTypeId" style="display:inline-block;height:36px;width:100px;border-radius: 5px;border-color: initial;color: initial; border-color: rgb(169, 169, 169); white-space: pre;">
+          	<option value="null">全部</option>
+          	<c:forEach items="${questiontype}" var="questiontype">
+          				<option <c:if test="${questiontype.quesetionTypeId==typeId}">selected="selected"</c:if>   value="${questiontype.quesetionTypeId}">${questiontype.quesetionTypeName}</option>
+          	</c:forEach>
+          </select></a>
         </span>
-        <form action="questiondim.action" method="post" class="fly-search">
+        <form action="squestion.action" method="post" class="fly-search">
           <i class="iconfont icon-sousuo"></i>
-          <input name="contenTitle" id="contenTitle" class="layui-input"  autocomplete="off" placeholder="搜索内容，回车跳转" type="text" >
+          <input name="content" id="content" class="layui-input"  autocomplete="off" placeholder="搜索内容，回车跳转" type="text" >
         </form>
         <a href="selecall.action" class="layui-btn jie-add">发表问题</a>
       </div>
@@ -103,7 +113,7 @@
     <a href="http://fly.layui.com/jie/2461.html" target="_blank">微信公众号</a>
   </p>
 </div>
-<script src="../../res/layui/layui.js"></script>
+<script src="/Student/front/res/layui/layui.js"></script>
 <script>
 layui.cache.page = 'jie';
 layui.cache.user = {
@@ -120,6 +130,25 @@ layui.config({
   fly: 'index'
 }).use('fly');
 </script>
-
+<script src="/Student/js/jquery-1.8.3.js"></script>
+<script type="text/javascript">
+        $(function(){
+        	var stuId = <%=session.getAttribute("stuId")%>;
+        	if(stuId==null){
+        		window.location="/Student/login.jsp?loginInfo="+1;
+        	}
+        })
+		   function questiontype(){
+			    var quesetionTypeId = $("#quesetionTypeId").val();
+			   	alert(quesetionTypeId);
+			   	alert(quesetionTypeId  == 'null');
+			   	if(quesetionTypeId== 'null' ){
+			   		quesetionTypeId = 0;
+			   		window.location = "squestion.action";
+			   	}else {
+			        window.location = "squestion.action?typeid="+quesetionTypeId;
+			   	}
+		   }
+</script>	
 </body>
 </html>

@@ -91,13 +91,8 @@ public class ActivityService {
      * @param activityQueryVo
      * @return
      */
-    public int  insertActivity(ActivityQueryVo activityQueryVo){
-                if(activityQueryVo.getActivityInfo().getActivityAppliReason()!=null && activityQueryVo.getActivityInfo().getActivityBeginTime()!=null && activityQueryVo.getActivityInfo().getActivityEndTime()!=null && activityQueryVo.getActivityInfo().getActivityName()!=null && activityQueryVo.getActivityInfo().getActivityTypeId() != 0){
+    public void  insertActivity(ActivityQueryVo activityQueryVo){
                       activityMapper.insertActivity(activityQueryVo);
-                      return 1;
-                 }else{
-                      return  2;
-                 }
     }
     
     /**

@@ -82,4 +82,5 @@ public class AuthorityMenuController {
 	public void updateAuthorityMenu(Integer authorityId,String ids){
 		auMeService.updateAuthorityMenu(authorityId,ids);
 	}
+	
 }

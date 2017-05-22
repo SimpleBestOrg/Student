@@ -11,17 +11,7 @@ import cn.com.zzzy.entity.QuestionTuCao;
 public class QuestionTuCaoService {
 	@Autowired
 	private QuestionTuCaoMapper questionTuCaoMapper;
-	public List<QuestionTuCao> select(Integer qid){
-		List<QuestionTuCao> list=questionTuCaoMapper.select(qid);
-		return list;
-	}
-	public void delete(Integer qid){
-		if(qid!=null){
-			questionTuCaoMapper.delete(qid);
-		}else{
-			System.out.println("你的问题还没有人吐槽");
-		}
-	}
+	
 	/**
 	 * 添加吐槽表信息
 	 * @param questiontiontu

@@ -1,5 +1,9 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+<%
+  String path = request.getContextPath();
+  request.setAttribute("path", path);
+%>    
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 <!DOCTYPE html>
@@ -16,24 +20,36 @@
 <body>
 <div class="header">
   <div class="main">
-    <a class="logo" href="/" title="Fly">Fly社区</a>
-    <div class="nav">
-      <a class="nav-this" href="squestion.action">
+     <div class="nav" style="margin-left:-50px;">
+      <a  href="${path}/squestion.action">
         <i class="iconfont icon-wenda"></i>问答
       </a>
-      <a href="http://www.layui.com/" target="_blank">
-        <i class="iconfont icon-ui"></i>框架
+      <a href="${path}/getAllCommunity.action">
+        <i  class="layui-icon">&#xe600;</i>社团
       </a>
+      <a href="${path}/front/activity/activityindex.jsp">
+        <i  class="layui-icon">&#xe62e;</i>活动 
+      </a>
+      <a  href="${path}/front/talking/talkingindex.jsp">
+        <i  class="layui-icon">&#xe606;</i>说说
+      </a >
+      <a href="${path}/queryFriendsInfo.action">
+        <i  class="layui-icon">&#xe613;</i>朋友
+            
+      </a>  
     </div>
     
-    <div class="nav-user">
-      <!-- 未登入状态 -->
-      <a class="unlogin" href="user/login.html"><i class="iconfont icon-touxiang"></i></a>
-      <span><a href="user/login.html">登入</a><a href="user/reg.html">注册</a></span>
-      <p class="out-login">
-        <a href="" onclick="layer.msg('正在通过QQ登入', {icon:16, shade: 0.1, time:0})" class="iconfont icon-qq" title="QQ登入"></a>
-        <a href="" onclick="layer.msg('正在通过微博登入', {icon:16, shade: 0.1, time:0})" class="iconfont icon-weibo" title="微博登入"></a>
-      </p>   
+    <div class="nav-user">      
+       <a class="avatar" href="/Student/queryStudentInfoById.action">
+        <img src="/pic/${loginStudent.studentPhoto}">
+        <cite>${loginStudent.studentName}</cite>
+        <i>${loginStudent.studentClasses.className}</i>
+         
+      </a>
+      <div class="nav">
+        <a href="selectStudentSign.action"><i class="iconfont icon-shezhi"></i>设置</a>
+        <a href="/Student/logout.action"><i class="iconfont icon-tuichu" style="top: 0; font-size: 22px;"></i>退了</a>
+      </div>
     </div>
   </div>
 </div>
@@ -47,6 +63,7 @@
           <span class="fly-tip-jing">精帖</span>
           <span>未结贴</span>
           <input type="hidden" id="questionId" value="${question.quesetionId}"/>
+          <input type="hidden" id="studentId"  value="${question.quesetionStudentId.studentId}">
           <div class="fly-list-hint jieda-reply"> 
             <!--  <a href="updateStep.action?questionId=${question.quesetionId}"><span class="jieda-zan"><i class="iconfont icon-zan"></i><em> ${question.questionStep}</em></span></a>
             -->
@@ -98,6 +115,7 @@
             <!-- 点击获得答案的ID -->
               <span class="pan" id="pan" type="reply">
               	<input type="hidden" class="questionStudnetName" value="${answer.student.studentName}">
+                <input type="hidden" class="questionStudentId"  value="${answer.student.studentId}" />
               	<input  type="hidden" class="quesetionAnswerId" value="${answer.quesetionAnswerId}"/>
                 <i class="iconfont icon-svgmoban53"></i>
               	回复</span>
@@ -113,6 +131,8 @@
               	<input type="hidden" id="answerQuestionId" name="answerQuestionId" value="${qid}"/>
               	<input type="hidden" id="quesetionAnswerParentId" name="quesetionAnswerParentId" value=""/>
               	<input type="hidden" id="questionName" name="questionName" value=""/>
+                <input type="hidden" id="huiFuStudent" name="huiFuStudent" value="" />
+                <input type="hidden" id="huiFuType"    name="huiFuType" value=""/>
               </div>
             </div>
             <div class="layui-form-item">
@@ -132,8 +152,8 @@
       	<c:forEach items="${answerlist}" var="answerlist">
         <dd>
         <!-- 跳转到个人详细页面 -->
-          <a href="xxx.action?stuid=${answerlist.stu_Id}">
-            <img src="../../res/images/avatar/default.png" alt="${answerlist.stu_Photo}">
+          <a href="/Student/queryStudentInfoById.action?stuId=${answerlist.stu_Id}">
+            <img src="pic/${answerlist.stu_Photo}" alt="${answerlist.stu_Photo}">
             <cite>${answerlist.stu_Name}</cite>
             <i>${answerlist.count}次回答</i>
           </a>
@@ -172,7 +192,14 @@
   </p>
 </div>
 <script src="/Student/front/res/layui/layui.js"></script>
+<script src="/Student/js/jquery.min.js"></script>
 <script>
+$(function(){
+	var stuId = <%=session.getAttribute("stuId")%>;
+	if(stuId==null){
+		window.location="/Student/login.jsp?loginInfo="+1;
+	}
+})
 layui.cache.page = 'jie';
 layui.cache.user = {
   username: '游客'
@@ -203,7 +230,9 @@ layui.config({
 		/* 获得滑倒底部  */
 		document.getElementById("quesetionAnswerContent").scrollIntoView();
 		$("#quesetionAnswerParentId").val(null);
-		$("questionStudnetName").val(null);
+		$("#questionStudnetName").val(null);
+		$("#huiFuStudent").val($("#studentId").val());
+		$("#huiFuType").val(0);
 		/* 获得焦点 */
 		$("#quesetionAnswerContent")[0].focus();
 	})
@@ -215,9 +244,14 @@ layui.config({
 		var panid = $(this).parent().parent().find(".quesetionAnswerId").val();
 		/* 获取被回复的姓名  */
 		var paname = $(this).parent().parent().find(".questionStudnetName").val();
+		/*获取被回复的学生ID*/
+		var stuId = $(this).parent().parent().find(".questionStudentId").val();
+		$("#huiFuStudent").val(stuId);
+		$("#huiFuType").val(1);
 		/* 弹窗(测试用的) */
 		alert(panid);
 		alert(paname);
+		alert("学生ID:"+stuId);
 		/* 给隐藏框赋值 */
 		$("#quesetionAnswerParentId").val(panid);
 		/* 给隐藏框赋值  */
@@ -233,8 +267,10 @@ layui.config({
 	 $("#step").click(function(){
 		 	/* 得到问题的Id */
 		   var questionId =  $("#questionId").val();
+		    //得到发表问题的学生ID
+		   var studentId  = $("#studentId").val();
 		   /* 跳转到updateStep.action方法中并把问题ID传进去 */
-		 	$.post("/Student/updateStep.action",{"questionId":questionId});
+		 	$.post("/Student/updateStep.action",{"questionId":questionId,"studentId":studentId});
 		   /* 从新刷新页面 */
 		   window.location.reload();
 	 })

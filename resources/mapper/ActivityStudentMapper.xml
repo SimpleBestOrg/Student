@@ -5,7 +5,7 @@
 		
 		<!-- 申请加入活动 -->
 		<insert id="insertActivityStudent" parameterType="cn.com.zzzy.entity.ActivityStudent">
-			insert into activity_student(activity_Id,stus_Id,stu_activityFlag) values(#{activityId},#{studentsId},#{stuActivityFlag})	
+			insert into activity_student(activity_Id,stus_Id,stu_activityFlag,stu_messageId) values(#{activityId},#{studentsId},#{stuActivityFlag},#{stuMessageId})	
 		</insert>
 		
 		<update id="updateStudentActivityFlag" >
