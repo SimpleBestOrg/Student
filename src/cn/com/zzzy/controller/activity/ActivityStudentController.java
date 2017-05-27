@@ -41,7 +41,7 @@ public class ActivityStudentController {
         
         StudentMessage studentMessage = new StudentMessage();
         studentMessage.setStudentId(activity.getActivityApplyStuId());
-        String messageContext = "<a href='/Student/queryStudentInfoById.action?stuId="+loginStudent.getStudentId()+"'><cite>"+loginStudent.getStudentName()+"</cite></a>申请加入&nbsp;&nbsp;<a href='/student/queryActivityDetail.action?activityId="+activity.getActivityId()+"'><cite>"+activity.getActivityName()+"</cite></a>&nbsp;&nbsp;活动<span style='margin-left:450px;'><button onclick='agreeOrRefuseActivity("+loginStudent.getStudentId()+","+activity.getActivityId()+",1,this)' class='layui-btn layui-btn-danger layui-btn-small'>同意</button><button onclick='agreeOrRefuseActivity("+activity.getActivityApplyStuId()+","+activity.getActivityId()+",2,this)' class='layui-btn layui-btn-danger layui-btn-small'>拒绝</button></span>";
+        String messageContext = "<a href='/Student/queryStudentInfoById.action?stuId="+loginStudent.getStudentId()+"'><cite>"+loginStudent.getStudentName()+"</cite></a>申请加入&nbsp;&nbsp;<a href='/Student/front/activity/activitydetail.jsp?activityId="+activity.getActivityId()+"'><cite>"+activity.getActivityName()+"</cite></a>&nbsp;&nbsp;活动<span style='margin-left:450px;'><button onclick='agreeOrRefuseActivity("+loginStudent.getStudentId()+","+activity.getActivityId()+",1,this)' class='layui-btn layui-btn-danger layui-btn-small'>同意</button><button onclick='agreeOrRefuseActivity("+loginStudent.getStudentId()+","+activity.getActivityId()+",2,this)' class='layui-btn layui-btn-danger layui-btn-small'>拒绝</button></span>";
         studentMessage.setMessageContext(messageContext);
         studentMessageService.insertMessage(studentMessage);
         
@@ -90,12 +90,12 @@ public class ActivityStudentController {
          String messageContext = "";
          //同意加入活动
          if(activityStudent.getStuActivityFlag()==1){
-             messageContext = "<a href='/Student/front/user/home.jsp?stuId="+loginStudent.getStudentId()+"'>"+loginStudent.getStudentName()+"</a>同意您加入&nbsp;&nbsp;<a href='/student/front/activity/activitydetail.jsp?activityId="+activityStudent.getActivityId()+"'>"+activityStudent.getActivityName()+"</a>&nbsp;&nbsp;活动";
-             updateLogStuMessageContext = "<a href='/Student/queryStudentInfoById.action?stuId="+applyActivitystudent.getStudentId()+"'>"+applyActivitystudent.getStudentName()+"</a>申请加入&nbsp;&nbsp;<a href='/student/queryActivityDetail.action?activityId="+activityStudent.getActivityId()+"'>"+activityStudent.getActivityName()+"</a>&nbsp;&nbsp;活动<span style='margin-left:500px;'><button  class='layui-btn layui-btn-danger layui-btn-small layui-btn-disabled'>已同意</button></span>";
+             messageContext = "<a href='/Student/queryStudentInfoById.action?stuId="+loginStudent.getStudentId()+"'>"+loginStudent.getStudentName()+"</a>同意您加入&nbsp;&nbsp;<a href='/Student/front/activity/activitydetail.jsp?activityId="+activityStudent.getActivityId()+"'>"+activityStudent.getActivityName()+"</a>&nbsp;&nbsp;活动";
+             updateLogStuMessageContext = "<a href='/Student/queryStudentInfoById.action?stuId="+applyActivitystudent.getStudentId()+"'>"+applyActivitystudent.getStudentName()+"</a>申请加入&nbsp;&nbsp;<a href='/Student/front/activity/activitydetail.jsp?activityId="+activityStudent.getActivityId()+"'>"+activityStudent.getActivityName()+"</a>&nbsp;&nbsp;活动<span style='margin-left:500px;'><button  class='layui-btn layui-btn-danger layui-btn-small layui-btn-disabled'>已同意</button></span>";
          }else if(activityStudent.getStuActivityFlag()==2){
          //拒绝加入这个活动    
-             messageContext = "<a href='/Student/front/user/home.jsp?stuId="+loginStudent.getStudentId()+"'>"+loginStudent.getStudentName()+"</a>拒绝您加入&nbsp;&nbsp;<a href='/student/front/activity/activitydetail.jsp?activityId="+activityStudent.getActivityId()+"'>"+activityStudent.getActivityName()+"</a>&nbsp;&nbsp;活动";
-             updateLogStuMessageContext = "<a href='/Student/queryStudentInfoById.action?stuId="+applyActivitystudent.getStudentId()+"'>"+applyActivitystudent.getStudentName()+"</a>申请加入&nbsp;&nbsp;<a href='/student/queryActivityDetail.action?activityId="+activityStudent.getActivityId()+"'>"+activityStudent.getActivityName()+"</a>&nbsp;&nbsp;活动<span style='margin-left:500px;'><button  class='layui-btn layui-btn-danger layui-btn-small layui-btn-disabled'>已拒绝</button></span>";
+             messageContext = "<a href='/Student/queryStudentInfoById.action?stuId="+loginStudent.getStudentId()+"'>"+loginStudent.getStudentName()+"</a>拒绝您加入&nbsp;&nbsp;<a href='/Student/front/activity/activitydetail.jsp?activityId="+activityStudent.getActivityId()+"'>"+activityStudent.getActivityName()+"</a>&nbsp;&nbsp;活动";
+             updateLogStuMessageContext = "<a href='/Student/queryStudentInfoById.action?stuId="+applyActivitystudent.getStudentId()+"'>"+applyActivitystudent.getStudentName()+"</a>申请加入&nbsp;&nbsp;<a href='/Student/front/activity/activitydetail.jsp?activityId="+activityStudent.getActivityId()+"'>"+activityStudent.getActivityName()+"</a>&nbsp;&nbsp;活动<span style='margin-left:500px;'><button  class='layui-btn layui-btn-danger layui-btn-small layui-btn-disabled'>已拒绝</button></span>";
          }
          System.out.println("你好");
          System.out.println("给对方的消息"+messageContext);
@@ -104,6 +104,7 @@ public class ActivityStudentController {
          studentMessage.setStudentId(applyActivitystudent.getStudentId());
          updateLoginStuMessage.setMessageContext(updateLogStuMessageContext);
          updateLoginStuMessage.setStuMessageId(activityStudent.getStuMessageId());
+         
          studentMessageService.insertMessage(studentMessage);
          studentMessageService.updateMessageContext(updateLoginStuMessage);
          return "你好";

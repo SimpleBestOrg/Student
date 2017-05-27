@@ -121,14 +121,14 @@
               <div class="layui-form-item">
                 <label for="L_pass" class="layui-form-label">新密码</label>
                 <div class="layui-input-inline">
-                  <input type="password" id="studentPwd" name="studentPwd" onblur="verifyNewPwd()" required lay-verify="required" autocomplete="off" class="layui-input">
+                  <input type="password" id="studentPwd"  name="studentPwd" onblur="verifyNewPwd()" required lay-verify="required" autocomplete="off" class="layui-input">
                 </div>
                 <div class="layui-form-mid layui-word-aux">6到16个字符</div>
               </div>
               <div class="layui-form-item">
                 <label for="L_repass" class="layui-form-label">确认密码</label>
                 <div class="layui-input-inline">
-                  <input type="password" id="repwd" name="repwd" onblur="verifyRePwd()" required lay-verify="required" autocomplete="off" class="layui-input">
+                  <input type="password" id="repwd"   name="repwd" onblur="verifyRePwd()" required lay-verify="required" autocomplete="off" class="layui-input">
                 </div>
               </div>
               <div class="layui-form-item">
@@ -205,8 +205,8 @@ function verifyNowPwd(){
 			   skin: 'layui-layer-molv' //样式类名
 			   ,closeBtn: 0
 			 }, function(index){
-				 $("#L_nowpass").val(null);
 				 layer.close(index);
+				 $("#L_nowpass").val(null);
 			 });
 		   return false;
 	   }else{

@@ -85,7 +85,6 @@
                   <div class="layui-form-item" style="display: inline-block;">
                     <div class="layui-input-block" style="margin-left: 0px;">
                       <select name="talkingAuthorityId" >
-                        <option value="0">所有人可见</option>
                         <option value="1">仅好友可见</option>
                         <option value="2">仅自己可见</option>
                       </select>

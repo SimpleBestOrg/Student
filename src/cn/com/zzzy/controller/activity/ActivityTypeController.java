@@ -15,6 +15,11 @@ public class ActivityTypeController {
       @Autowired  
       private ActivityTypeService activityTypeService;
         
+      /**
+       * 查找所有的活动类型
+       * @param session
+       * @return
+       */
       @RequestMapping("queryAllActivityType")
       public ModelAndView queryAllActivityType(HttpSession session){
           ModelAndView modelAndView = new ModelAndView();
@@ -22,4 +27,6 @@ public class ActivityTypeController {
           modelAndView.setViewName("/front/activity/addactivity.jsp");
           return  modelAndView;
       }  
+      
+      
 }

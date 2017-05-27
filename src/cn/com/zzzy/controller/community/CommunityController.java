@@ -19,17 +19,18 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
+import cn.com.zzzy.entity.ActivityType;
 import cn.com.zzzy.entity.Community;
 import cn.com.zzzy.entity.CommunityPeople;
 import cn.com.zzzy.entity.CommunityVo;
 import cn.com.zzzy.entity.Student;
 import cn.com.zzzy.entity.StudentMessage;
+import cn.com.zzzy.service.activity.ActivityTypeService;
 import cn.com.zzzy.service.community.CommunityService;
 import cn.com.zzzy.service.student.StudentMessageService;
 import cn.com.zzzy.service.student.StudentService;
 import cn.com.zzzy.util.PageData;
 import cn.com.zzzy.util.PageParam;
-
 
 @Controller
 public class CommunityController {
@@ -42,6 +43,9 @@ public class CommunityController {
     
     @Autowired
     private StudentService studentService;
+    
+    @Autowired
+    private ActivityTypeService activityTypeService;
     
     
     
@@ -83,10 +87,16 @@ public class CommunityController {
                 stu.setStudentCommunityId(community.getCommunityId());
                 stu.setStudentId(community.getCommunityApplyStuId());
                 studentService.updateStudentCommunity(stu);
-            messageContext = "同意您创建&nbsp;&nbsp;<cite><a href='/Student/getCommunity.action?id="+community.getCommunityId()+"'>"+community.getCommunityName()+"</a></cite>&nbsp;&nbsp;社团 &nbsp;&nbsp;&nbsp;&nbsp;回馈信息:"+reviewCommunityReason;
-            
+                messageContext = "同意您创建&nbsp;&nbsp;<cite><a href='/Student/getCommunity.action?id="+community.getCommunityId()+"'>"+community.getCommunityName()+"</a></cite>&nbsp;&nbsp;社团 &nbsp;&nbsp;&nbsp;&nbsp;回馈信息:"+reviewCommunityReason;
+                
+                //当同意创建一个社团时 需在活动类型添加对应的活动类型(比如同意创建学习部,那么应该在活动类型里面添加对应的学习部活动)
+                ActivityType activityType = new ActivityType();
+                activityType.setCommunityId(community.getCommunityId());
+                activityType.setActivityTypeName(community.getCommunityName()+"活动");
+                activityTypeService.insertActivityType(activityType);
+                
         }else if(community.getCommunityFlag()==2){
-            messageContext = "拒绝您创建&nbsp;&nbsp;<cite><a href='/Student/getCommunity.action?id="+community.getCommunityId()+"'>"+community.getCommunityName()+"</a></cite>&nbsp;&nbsp;社团 &nbsp;&nbsp;&nbsp;&nbsp;回馈信息:"+reviewCommunityReason;
+                messageContext = "拒绝您创建&nbsp;&nbsp;<cite><a href='/Student/getCommunity.action?id="+community.getCommunityId()+"'>"+community.getCommunityName()+"</a></cite>&nbsp;&nbsp;社团 &nbsp;&nbsp;&nbsp;&nbsp;回馈信息:"+reviewCommunityReason;
         }
         //用于通知  申请创建社团的学生 的消息
         StudentMessage studentMessage = new StudentMessage();
@@ -141,15 +151,45 @@ public class CommunityController {
         ModelAndView mv = new ModelAndView();
       //把查询出来的数据封装到listCommunity里面
         mv.addObject("listCommunity",communityService.selectById(id));
+        
+        /**
+         * 在查询所有社团中，根据保存到session中的学生ID，点击自己申请的社团
+         * 进入的是我的社团的页面，在导航栏上点击我的社团，进入的是同一个页面
+         * 调用的是点击我的社团的同一个方法
+         * 
+         */
+        
+        
         //查询该学生是否申请加入过社团  如果申请加入过社团    则在页面中禁用申请创建社团按钮   
         CommunityPeople communityPeople =  communityService.queryStuApplyJoin((Integer)session.getAttribute("stuId"));
         mv.addObject("communityPeople", communityPeople);
+        
+        
+        Integer   studentId = (Integer)session.getAttribute("stuId");
+       //根据学生ID查询出来我的社团的详细信息
+       Community community = communityService.queryById(studentId);
+        mv.addObject("queryById",community);
+        if(community != null){
+            //把根据社团的ID查询出来社团发出的所有活动封装到communityActivity中 
+            mv.addObject("communityActivity",communityService.communityActivity(community.getCommunityId()));
+            //把查询的申请反馈信息封装到selectFlag
+            mv.addObject("selectFlag",communityService.selectFlag(community.getCommunityId()));
+        }
+        
+        
         //表示已经   申请加入的有社团  查询已经申请加入的社团  用于页面  弹框提示
         if(communityPeople != null){
                     mv.addObject("communityInfo", communityService.queryById(communityPeople.getStudentId()));
         }
         //将返回的页面封装到ModelAndView里面
-        mv.setViewName("/front/community/communitydetail.jsp");
+        Student student =  (Student) session.getAttribute("loginStudent");
+        System.out.println("社团申请人:"+communityService.selectById(id).getCommunityApplyStuId());
+        if(student.getStudentId().equals(communityService.selectById(id).getCommunityApplyStuId())){
+            mv.setViewName("/front/community/Mycommunity.jsp");
+        }else{
+            mv.setViewName("/front/community/communitydetail.jsp");    
+        }
+        
         //返回实例化的ModelAndView
         return mv;
     }
@@ -214,8 +254,6 @@ public class CommunityController {
            //把查询的申请反馈信息封装到selectFlag
            mv.addObject("selectFlag",communityService.selectFlag(community.getCommunityId()));
        }
-
-       
        //返回前台的路径
        mv.setViewName("/front/community/Mycommunity.jsp");
      //返回实例化的ModelAndView
@@ -239,7 +277,7 @@ public class CommunityController {
         System.out.println("社团申请人:"+community.getCommunityApplyStuId());
         //消息通知社团管理员 
         StudentMessage  studentMessage = new StudentMessage();
-        String messageContext = "<a href='/Student/queryStudentInfoById.action?stuId="+loginStudent.getStudentId()+"'><cite>"+loginStudent.getStudentName()+"</cite></a>申请加入&nbsp;&nbsp;<a href='/student/queryById.action'><cite>"+community.getCommunityName()+"</cite></a>&nbsp;&nbsp;社团<span style='margin-left:450px;'><button onclick='agreeOrRefuseCommunity("+community.getCommunityId()+","+loginStudent.getStudentId()+",1,this)' class='layui-btn layui-btn-danger layui-btn-small'>同意</button><button onclick='agreeOrRefuseCommunity("+community.getCommunityId()+","+loginStudent.getStudentId()+"1,this)' class='layui-btn layui-btn-danger layui-btn-small'>拒绝</button></span>";
+        String messageContext = "<a href='/Student/queryStudentInfoById.action?stuId="+loginStudent.getStudentId()+"'><cite>"+loginStudent.getStudentName()+"</cite></a>申请加入&nbsp;&nbsp;<a href='/student/queryById.action'><cite>"+community.getCommunityName()+"</cite></a>&nbsp;&nbsp;社团<span style='margin-left:450px;'><button onclick='agreeOrRefuseCommunity("+community.getCommunityId()+","+loginStudent.getStudentId()+",1,this)' class='layui-btn layui-btn-danger layui-btn-small'>同意</button><button onclick='agreeOrRefuseCommunity("+community.getCommunityId()+","+loginStudent.getStudentId()+",2,this)' class='layui-btn layui-btn-danger layui-btn-small'>拒绝</button></span>";
         System.out.println("社团消息内容:"+messageContext);
         System.out.println(messageContext);
         //社团申请人 就为社团管理员 所以这个消息是通知该学生的
@@ -258,7 +296,7 @@ public class CommunityController {
      * 同意或者拒绝申请加入
      */
     @RequestMapping("updateCommunityPeopleFlag")
-    public void updateAllFlag(CommunityPeople communityPeople,Integer stuMessageId,HttpSession session){
+    public String updateAllFlag(CommunityPeople communityPeople,Integer stuMessageId,HttpSession session){
         System.out.println("社团ID:"+communityPeople.getCommunityId());
         System.out.println("申请加入这个社团的学生状态:"+communityPeople.getCommunityPeoFlag());
         System.out.println("申请加入这个社团的学生:"+communityPeople.getStudentId());
@@ -296,7 +334,7 @@ public class CommunityController {
         }else if(communityPeople.getCommunityPeoFlag() == 2){
             //拒绝学生加入这个社团
             updateMessageContext = "<a href='/Student/queryStudentInfoById.action?stuId="+applyJoinStudent.getStudentId()+"'><cite>"+applyJoinStudent.getStudentName()+"</cite></a>申请加入&nbsp;&nbsp;<a href='/student/queryById.action'><cite>"+community.getCommunityId()+"</cite></a>&nbsp;&nbsp;社团<span style='margin-left:450px;'><button  class='layui-btn layui-btn-danger layui-btn-small  layui-btn-disabled'>已拒绝</button></span>";
-            messageContext = "<a href='/Student/queryStudentInfoById.action?stuId="+loginStudent.getStudentId()+"'><cite>"+loginStudent.getStudentName()+"</cite></a>&nbsp;&nbsp;拒绝你加入&nbsp;<cite><a href='/Student/getCommunity.action?id="+community.getCommunityId()+">"+community.getCommunityName()+"</a></cite>社团";
+            messageContext = "<a href='/Student/queryStudentInfoById.action?stuId="+loginStudent.getStudentId()+"'><cite>"+loginStudent.getStudentName()+"</cite></a>&nbsp;&nbsp;拒绝你加入&nbsp;<a href='/Student/getCommunity.action?id="+community.getCommunityId()+"><cite>"+community.getCommunityName()+"</cite></a>社团";
         }
         System.out.println("更新的消息内容:"+updateMessageContext);
         System.out.println("消息内容:"+messageContext);
@@ -306,8 +344,6 @@ public class CommunityController {
         updateStudentMessage.setMessageContext(updateMessageContext);       
         studentMessageService.insertMessage(studentMessage);
         studentMessageService.updateMessageContext(updateStudentMessage);
+        return "1";
     }
-  
-    
-    
 }

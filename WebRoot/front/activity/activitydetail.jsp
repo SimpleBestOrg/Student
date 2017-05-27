@@ -213,16 +213,17 @@
            				var count = 0;
             			var joinActivityFlag = 5;
            				$.each(data.activityStudents,function(i,a){
-           					
            					//判断登录学生加入了这个活动
-           					if(a.students.studentId==stuId   && a.stuActivityFlag == 1){
+           					if(a.activityStudentsId==stuId   && a.stuActivityFlag == 1){
            						count++;
 							   //登录学生已经加入这个活动 显示  我要加入 的禁用按钮
            						joinActivityFlag = 1;
-           					}else if(a.students.studentId == stuId  && a.stuActivityFlag == 0){
+           					}else if(a.activityStudentsId == stuId  && a.stuActivityFlag == 0){
            						joinActivityFlag = 0;// 已申请 待审核按钮
-           					}else if(a.students.studentId == stuId  && a.stuActivityFlag == 2){
-           						joinActivityFlag = 2;//被拒绝加入这个社团
+           					}else if(a.activityStudentsId == stuId  && a.stuActivityFlag == 2){
+           						joinActivityFlag = 2;//  被拒绝加入这个社团
+           					}else if(a.activityStudentsId != stuId && a.stuActivityFlag == 1){
+           						count ++;
            					}
            				})                    	
                     	if(data.student.studentId!=stuId){
@@ -247,18 +248,22 @@
                                	  				}
                                	  				
                                	  			}else if(new Date(data.activityBeginTime)<today  && new Date(data.activityEndTime)>today){
-                               	  				div+="<li><span id='applyStudent' style='font-size:18px;margin-left:30px;'>"+count+"人参与)</span>";
+                               	  				div+="<li><span id='applyStudent' style='font-size:18px;margin-left:30px;'>("+count+"人参与)</span>";
                                	  			div+="<li><span id='applyStudent' style='font-size:18px;margin-left:30px;'>活动正在进行中</span>";
                                	  			}else if(new Date(data.activityEndTime)<today){
-                               	  			div+="<li><span id='applyStudent' style='font-size:18px;margin-left:30px;'>"+count+"人参与</span>";
+                               	  			div+="<li><span id='applyStudent' style='font-size:18px;margin-left:30px;'>("+count+"人参与</span>";
                                	  				div+="<li><span id='applyStudent' style='font-size:18px;margin-left:30px;'>活动已结束</span>";	
                                	  			}
                                     div += "</ul>";
                                     div += "<span>";
  											if(joinActivityFlag == 5 && count<data.activityLaunch.activityPersonNum &&  (new Date(data.activityBeginTime))>today ){
  													div+="<button style='margin-top:45px;margin-left:30px' class='layui-btn layui-btn-big layui-btn-normal' onclick='signUp("+data.activityId+","+data.student.studentId+")' >我要报名</button>";	
- 											}else {
- 													div+="<button style='margin-top:45px;margin-left:30px' class='layui-btn layui-btn-big layui-btn-normal layui-btn-disabled'>我要报名</button>";
+ 											}else  if(joinActivityFlag == 2){
+ 													div+="<button style='margin-top:45px;margin-left:30px' class='layui-btn layui-btn-big layui-btn-normal layui-btn-disabled'>申请被拒</button>";
+ 											}else  if(joinActivityFlag == 0){
+ 												div+="<button style='margin-top:45px;margin-left:30px' class='layui-btn layui-btn-big layui-btn-normal layui-btn-disabled'>待管理审核</button>";
+ 											}else  if(joinActivityFlag == 1){
+ 												div+="<button style='margin-top:45px;margin-left:30px' class='layui-btn layui-btn-big layui-btn-normal layui-btn-disabled'>已加入</button>";
  											}                                   		
                                     div += "</span>";
                                	  div +="</div>";
@@ -344,10 +349,10 @@
                    	  				div+="<li><span id='applyStudent' style='font-size:18px;margin-left:30px;'>火热报名中</span>";
                	  				}
                	  			}else if(new Date(data.activityBeginTime)<today  && new Date(data.activityEndTime)>today){
-               	  				div+="<li><span id='applyStudent' style='font-size:18px;margin-left:30px;'>"+count+"人参与)</span>";
+               	  				div+="<li><span id='applyStudent' style='font-size:18px;margin-left:30px;'>("+count+"人参与)</span>";
                	  			div+="<li><span id='applyStudent' style='font-size:18px;margin-left:30px;'>活动正在进行中</span>";
                	  			}else if(new Date(data.activityEndTime)<today){
-               	  			div+="<li><span id='applyStudent' style='font-size:18px;margin-left:30px;'>"+count+"人参与</span>";
+               	  			div+="<li><span id='applyStudent' style='font-size:18px;margin-left:30px;'>("+count+"人参与)</span>";
                	  				div+="<li><span id='applyStudent' style='font-size:18px;margin-left:30px;'>活动已结束</span>";	
                	  			}
                	  		}

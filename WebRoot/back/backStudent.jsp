@@ -93,8 +93,8 @@
             	                            pagination:true,//在底部显示分页工具栏
             	                            singleSelect:true,//只能单选一条数据
             	                            toolbar:'#tb',
-            	                            pageSize:2,
-            	                            pageList:[1,2,3,4,5],
+            	                            pageSize:10,
+            	                            pageList:[5,10,15,20],
             	                            columns:[[    
             									{field:'ck',title:'',checkbox:true}, 
             	                                {field:'stu_Id',title:'ID',width:50,align:'center'},    
@@ -108,7 +108,7 @@
                 															}																													 
                 												 }																						            	                                	
             	                                	},
-            	                                {field:'stu_Birthday',title:'年龄',width:100,align:'center'},
+            	                                {field:'stu_Birthday',title:'出生日期',width:100,align:'center'},
             	                                {field:'cla_Name',title:'班级',width:100,align:'center'},
             	                                {field:'community_Name',title:'社团',width:100,align:'center',
             													 formatter:function(value,row,index){

@@ -22,4 +22,13 @@ public class ActivityTypeService {
             return   activityTypeMapper.queryAllActivityType(studentId);
         }
         
+        
+        /**
+         * 添加活动类型(创建社团时  经过后台审核同意后 才可以添加活动类型)
+         * @param acitvityType
+         */
+        public  void insertActivityType(ActivityType acitvityType){
+                    activityTypeMapper.insertActivityType(acitvityType);
+        }
+        
 }

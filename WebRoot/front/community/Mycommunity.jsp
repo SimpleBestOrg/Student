@@ -18,13 +18,6 @@
   <link rel="stylesheet" href="${path}/front/res/css/front.css">
 </head>
 <style type="text/css">
-		.right{
-		border: 1px solid red;
-		width:480px;
-		height: 500px;
-		margin-left: 730px;
-		background-image: url("/Student/front/image/11.jpg");
-	}
 	.pre-size{
 	font-size: 20px;
 }
@@ -178,7 +171,7 @@
                             <span style="margin-left: 30px;">${Tell.student.studentName}</span>
                             <div>
                                 <input type="submit" class="layui-btn" onclick="agreeCommunityPeople(1,${selectFlag.communityId},${Tell.student.studentId},${Tell.stuMessageId})"  value="同意" />
-                                <input type="submit" class="layui-btn" onclick="refuseCommunityPeople(2,${selectFlag.communityId},${Tell.student.studentId},${Tell.stuMessageId})"  value="拒绝" />
+                                <input type="submit" class="layui-btn" onclick="agreeCommunityPeople(2,${selectFlag.communityId},${Tell.student.studentId},${Tell.stuMessageId})"  value="拒绝" />
                                 </div>
                         </div>  
                     </c:forEach>
@@ -190,8 +183,14 @@
         </c:if>        
       </div>
 </div>
-<div class="right">
-</div>
+
+  <div class="edge">
+          <div>
+              <img  style="width:500px;height:300px;" src="/pic/20170522000525.jpg"/>
+              <img  style="margin-top:30px;;width:500px;height:300px;" src="/pic/psb.jpg"/>
+          </div>
+
+  </div>
 
 
 
@@ -209,7 +208,7 @@
  		function  agreeCommunityPeople(flag,communityId,studentId,stuMessageId){
  			$.post("/Student/updateCommunityPeopleFlag.action",{"studentId":studentId,"communityId":communityId,"communityPeoFlag":flag,"stuMessageId":stuMessageId});
  			window.location.reload();
- 		}
+         }
  		
  </script>
 </body>

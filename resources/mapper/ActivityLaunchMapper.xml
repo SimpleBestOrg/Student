@@ -4,5 +4,6 @@
 <mapper namespace="cn.com.zzzy.basemapper.activitymapper.ActivityLaunchMapper">
 	<insert  id="insertlaunchActivity" parameterType="cn.com.zzzy.entity.ActivityLaunch" keyProperty="activityLaunchId" useGeneratedKeys="true">
 		insert into activity_launch(activity_lanDesc,activity_perNum)  values(#{activityLaunchDesc},#{activityPersonNum});
-	</insert>
+</insert>
+
 </mapper>

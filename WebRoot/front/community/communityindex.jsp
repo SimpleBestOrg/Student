@@ -75,12 +75,7 @@
         <span>
           <a class="tab-this">全部社团</a>
           <a onclick="myCommunityDetail()">我的社团</a> 
-          <a href="">我的消息</a>
         </span>
-        <form action="http://cn.bing.com/search" class="fly-search">
-          <i class="iconfont icon-sousuo"></i>
-          <input class="layui-input" autocomplete="off" placeholder="搜索内容，回车跳转" type="text" name="q">
-        </form>
         
         <c:if test="${communityPeople == null}" >
         	<button onclick="applyCommunity()" class="layui-btn jie-add">申请部门</button>
@@ -108,6 +103,10 @@
      
     </div>
   </div>
+  <div class="edge">
+
+  </div>  
+  
 </div>
 <form class="layui-form" action="InsertCommunity.action" enctype="multipart/form-data" method="post"  id="communityInsert" onsubmit="return checkAll()">
 	<div>

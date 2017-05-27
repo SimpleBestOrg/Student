@@ -19,4 +19,10 @@ public interface ActivityTypeMapper {
      * @return
      */
     List<ActivityType>  queryAllActivityType(Integer studentId);
+    
+    /**
+     * 添加活动类型(创建社团时  经过后台审核同意后 才可以添加活动类型)
+     * @param activityType
+     */
+    void    insertActivityType(ActivityType activityType);
 }

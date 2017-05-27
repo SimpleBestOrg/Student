@@ -169,9 +169,9 @@ public class ActivityController {
          String messageContext = "";
          if(activity.getActivityFlag()==1){
              System.out.println("同意");
-             messageContext += "同意创建<a href='/Student/queryActivityDetail.action?activityId="+activity.getActivityId()+"'>"+activity.getActivityName()+"</a>活动 回馈信息:"+reviewActivityReason;
+             messageContext += "同意创建<a href='/Student/front/activity/activitydetail.jsp?activityId="+activity.getActivityId()+"'><cite>"+activity.getActivityName()+"</cite></a>活动 回馈信息:&nbsp;&nbsp;"+reviewActivityReason;
          }else if(activity.getActivityFlag()==2){
-             messageContext += "拒绝创建<a href='/Student/queryActivityDetail.action?activityId="+activity.getActivityId()+"'>"+activity.getActivityName()+"</a>活动 回馈信息:"+reviewActivityReason;
+             messageContext += "拒绝创建<a href='/Student/front/activity/activitydetail.jsp?activityId="+activity.getActivityId()+"'><cite>"+activity.getActivityName()+"</cite></a>活动 回馈信息:&nbsp;&nbsp;"+reviewActivityReason;
          }
          StudentMessage  studentMessage = new StudentMessage();
          studentMessage.setStudentId(activity.getActivityApplyStuId());

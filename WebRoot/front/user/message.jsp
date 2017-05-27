@@ -159,7 +159,8 @@
         	var messageId = $(obj).parent().next().val();
         	$.post("/Student/updateCommunityPeopleFlag.action",{"studentId":stuId,"communityId":communityId,"stuMessageId":messageId,"communityPeoFlag":flag},function(data){
     			alert(data);
-    		},'json')
+    		},'text')
+    		window.location.reload();
         }
         
         //申请加入活动时 同意或者拒绝

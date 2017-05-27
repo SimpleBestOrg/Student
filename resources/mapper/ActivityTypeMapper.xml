@@ -4,6 +4,7 @@
 <!-- 一对多映射  -->
 <mapper namespace="cn.com.zzzy.basemapper.activitymapper.ActivityTypeMapper">
 			
+		    <!-- 结果查询映射 -->
 			<resultMap  id="activityTypeResult" type="cn.com.zzzy.entity.ActivityType">
 					<id column="activity_typeId" property="activityTypeId"/>
 					<result column="community_Id" property="communityId"/>
@@ -11,11 +12,14 @@
 			</resultMap>
 			
 			<!-- 查找活动类型  -->
-			<select id="queryAllActivityType"  resultMap="activityTypeResult">
+			<select id="queryAllActivityType"  resultMap="activityTypeResult" >
 				  select activity_typeId,community_Id,activity_typeName  from activity_type  where community_Id in (0,(select stu_communityId from  stu where stu_Id = #{studentId}));
 			</select>
 			
-			
+			<!-- 添加活动类型 -->
+			<insert id="insertActivityType"   parameterType="cn.com.zzzy.entity.ActivityType">
+				insert into activity_type(community_Id,activity_typeName) values(#{communityId},#{activityTypeName})
+			</insert>
 			
 			
 			

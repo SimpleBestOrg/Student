@@ -78,7 +78,7 @@
       <c:forEach var="qu" items="${quest}">
         <li class="fly-list-li">
           <a href="user/home.html" class="fly-list-avatar">
-            <img src="../../res/images/avatar/default.png" alt="${qu.stu_Photo}">
+            <img src="/pic/${qu.stu_Photo}" alt="${qu.stu_Photo}">
           </a>
           <h2 class="fly-tip">
             <a href="questionselect.action?qid=${qu.question_Id}"><c:out value="${qu.question_Title}"></c:out></a>
@@ -97,9 +97,6 @@
         </li>
         </c:forEach>
       </ul>
-      <div style="text-align: center">
-        <div class="laypage-main"><span class="laypage-curr">1</span><a href="/jie/page/2/">2</a><a href="/jie/page/3/">3</a><a href="/jie/page/4/">4</a><a href="/jie/page/5/">5</a><span>…</span><a href="/jie/page/148/" class="laypage-last" title="尾页">尾页</a><a href="/jie/page/2/" class="laypage-next">下一页</a></div>
-      </div>
       
     </div>
   </div>

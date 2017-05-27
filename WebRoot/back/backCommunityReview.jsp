@@ -166,7 +166,7 @@
     	                    	    },{
     	                    	    	text:'拒绝',
     	                    	    	handler:function(){
-    	                    	    		if($('#reviewActivityReason').val().length!=0){
+    	                    	    		if($('#reviewCommunityReason').val().length!=0){
     	                    	    			//点击拒绝按钮时  说明活动审核通过  给活动状态隐藏栏赋值2
     											$('#communityFlag').val(2);
     											$("#updateCommunityForm").form("submit",{
@@ -176,14 +176,14 @@
     	                           	    					$('#communityForm').dialog("close");
     	                    	    				 }
     											})
-    	                    	    		}else if($('#reviewActivityReason').val().length==0){
+    	                    	    		}else if($('#reviewCommunityReason').val().length==0){
     	                    	    			$.messager.alert('警告','请填写拒绝理由'); 
     	                    	    		}		                    	    		
     	                    	    	}		                    	    	
     	                    	    },{
     	                    	    	text:'关闭',
     	                    	    	handler:function(){
-    	                    	    		alert($('#reviewActivityDialog').dialog("close"));
+    	                    	    		$('#communityForm').dialog("close")
     	                    	    	}		                    	    	
     	                    	    }]
     						 })

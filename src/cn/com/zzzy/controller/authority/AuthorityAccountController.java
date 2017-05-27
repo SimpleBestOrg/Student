@@ -38,7 +38,6 @@ public class AuthorityAccountController {
 	    String loginInfo = "login.jsp";
 		try {
 			AuthorityAccount account = auAcService.queryAccountLanding(vo);
-			
 			if(account!=null){
 			    request.getSession().setAttribute("Account", account);
 				if(account.getStudentId() != null  && account.getStudentId() != 0){

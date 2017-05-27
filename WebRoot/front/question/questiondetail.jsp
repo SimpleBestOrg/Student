@@ -71,7 +71,7 @@
         </div>
         <div class="detail-about">
           <a class="jie-user" href="/Student/queryStudentInfoById.action?stuId=${question.quesetionStudentId.studentId}">
-            <img src="http://tp4.sinaimg.cn/1345566427/180/5730976522/0" alt=" ${question.quesetionStudentId.studentPhoto}">
+            <img src="/pic/${question.quesetionStudentId.studentPhoto}" alt=" ${question.quesetionStudentId.studentPhoto}">
             <cite>
              	  ${question.quesetionStudentId.studentName}
               <em><fmt:formatDate pattern="yyyy-MM-dd hh:MM:ss" value="${question.quesetionDateTime}"></fmt:formatDate></em>
@@ -98,7 +98,7 @@
             <a name="item-121212121212"></a>
             <div class="detail-about detail-about-reply">
               <a class="jie-user" href="/Student/queryStudentInfoById.action?stuId=${answer.student.studentId}">
-                <img src="../../res/images/avatar/default.png" alt="${answer.student.studentPhoto}">
+                <img src="/pic/${answer.student.studentPhoto}" alt="${answer.student.studentPhoto}">
                 <cite>
                   <i>${answer.student.studentName}</i>
                 </cite>
@@ -131,8 +131,8 @@
               	<input type="hidden" id="answerQuestionId" name="answerQuestionId" value="${qid}"/>
               	<input type="hidden" id="quesetionAnswerParentId" name="quesetionAnswerParentId" value=""/>
               	<input type="hidden" id="questionName" name="questionName" value=""/>
-                <input type="text" id="huiFuStudent" name="huiFuStudent" value="${question.quesetionStudentId.studentId}" />
-                <input type="text" id="huiFuType"    name="huiFuType" value="0"/>
+                <input type="hidden" id="huiFuStudent" name="huiFuStudent" value="${question.quesetionStudentId.studentId}" />
+                <input type="hidden" id="huiFuType"    name="huiFuType" value="0"/>
               </div>
             </div>
             <div class="layui-form-item">
@@ -250,10 +250,6 @@ layui.config({
 		var stuId = $(this).parent().parent().find(".questionStudentId").val();
 		$("#huiFuStudent").val(stuId);
 		$("#huiFuType").val(1);
-		/* 弹窗(测试用的) */
-		alert(panid);
-		alert(paname);
-		alert("学生ID:"+stuId);
 		/* 给隐藏框赋值 */
 		$("#quesetionAnswerParentId").val(panid);
 		/* 给隐藏框赋值  */

@@ -74,16 +74,17 @@
     
     <i class="iconfont icon-shijian"></i><span><fmt:formatDate pattern="yyyy-MM-dd" value="${student.studentBirthday}"></fmt:formatDate></span>
     <i class="iconfont icon-chengshi"></i><span>来自${student.studentAddress}</span>
-    <c:if  test="${count==0}">
-                    <span><button  class="layui-btn layui-btn-primary layui-btn-small">待审核</button></span>                
-    </c:if>
-    <c:if  test="${count!=0 && count!=1 && count!=2}">
-                    <span><button onclick="addFriend(${student.studentId})" class="layui-btn layui-btn-primary layui-btn-small">加为好友</button></span>
-    </c:if>
-    <c:if test="${count==2}">
-                    <span><button  class="layui-btn layui-btn-primary layui-btn-small">被拒绝</button></span>
-    </c:if>
-    
+    <span id="friendFlag">
+        <c:if  test="${count==0}">
+                        <span><button  class="layui-btn layui-btn-primary layui-btn-small">待审核</button></span>                
+        </c:if>
+        <c:if  test="${count!=0 && count!=1 && count!=2}">
+                        <span><button onclick="addFriend(${student.studentId})" class="layui-btn layui-btn-primary layui-btn-small">加为好友</button></span>
+        </c:if>
+        <c:if test="${count==2}">
+                        <span><button  class="layui-btn layui-btn-primary layui-btn-small">被拒绝</button></span>
+        </c:if>
+    </span>
   </p>
   <c:if test="${student.studentSignature!=null}">
           <p class="fly-home-sign">(${student.studentSignature})</p>
@@ -115,8 +116,8 @@
 		//添加好友
 		function addFriend(stuId){
 		       $.post("/Student/addFriend.action",{"friend":stuId},function(data){
-		    	   
-		       },"json");
+		    	   		$("#friendFlag").html("<span><button  class='layui-btn layui-btn-primary layui-btn-small'>待审核</button></span>");
+		       },"text");
 		}
 </script>
 
